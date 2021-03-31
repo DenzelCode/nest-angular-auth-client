@@ -17,7 +17,7 @@ const initialize = (authService: AuthService) => async () => {
   try {
     await authService.getProfile().toPromise();
   } catch (e) {
-    console.error(e);
+    console.log(e);
   }
 };
 

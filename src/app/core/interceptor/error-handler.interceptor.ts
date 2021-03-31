@@ -19,8 +19,8 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    if (request.headers.get('skip')) {
-      return;
+    if (request.headers?.has('skipNotifier')) {
+      return next.handle(request);
     }
 
     return next.handle(request).pipe(

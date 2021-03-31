@@ -54,7 +54,7 @@ export class AuthService {
     return this.http
       .get<User>(`${api}/auth/me`, {
         headers: {
-          skip: 'true',
+          skipNotifier: 'true',
         },
       })
       .pipe(
