@@ -1,0 +1,14 @@
+<div class="container" *ngIf="!user; else logged">
+  <a routerLink="/login" mat-button mat-raised-button>Login</a>
+  <a routerLink="/register" mat-button mat-raised-button>Register</a>
+</div>
+
+<ng-template #logged>
+  <div class="container">
+    <h3>
+      Welcome, <b>{{ user.username }}</b
+      >!
+    </h3>
+    <button (click)="logout()" mat-button mat-raised-button>Logout</button>
+  </div>
+</ng-template>

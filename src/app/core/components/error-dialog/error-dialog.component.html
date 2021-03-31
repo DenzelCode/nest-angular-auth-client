@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+<mat-dialog-content class="mat-typography">
+  <p *ngIf="message.length === 1; else multiple">{{ message[0] }}</p>
+
+  <ng-template #multiple>
+    <ul>
+      <li *ngFor="let msg of message">
+        {{ msg }}
+      </li>
+    </ul>
+  </ng-template>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
