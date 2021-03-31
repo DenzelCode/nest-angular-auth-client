@@ -19,7 +19,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    if ((request as any).notifier === false) {
+    if (request.headers.get('skip')) {
       return;
     }
 

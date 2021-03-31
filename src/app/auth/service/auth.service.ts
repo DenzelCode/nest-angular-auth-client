@@ -28,11 +28,7 @@ export class AuthService {
     return this.user != null;
   }
 
-  private httpIndependentClient: HttpClient;
-
-  constructor(private http: HttpClient, httpBackend: HttpBackend) {
-    this.httpIndependentClient = new HttpClient(httpBackend);
-  }
+  constructor(private http: HttpClient) {}
 
   login(user: Partial<User>) {
     return this.http.post<TokenResponse>(`${api}/auth/login`, user).pipe(
@@ -55,14 +51,20 @@ export class AuthService {
   }
 
   getProfile() {
-    return this.httpIndependentClient.get<User>(`${api}/auth/me`).pipe(
-      tap(
-        (user) => {
-          this.userSubject.next(user);
+    return this.http
+      .get<User>(`${api}/auth/me`, {
+        headers: {
+          skip: 'true',
         },
-        () => this.userSubject.next(null)
-      )
-    );
+      })
+      .pipe(
+        tap(
+          (user) => {
+            this.userSubject.next(user);
+          },
+          () => this.userSubject.next(null)
+        )
+      );
   }
 
   logout() {
