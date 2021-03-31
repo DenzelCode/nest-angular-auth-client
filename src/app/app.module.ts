@@ -16,9 +16,7 @@ import { APP_BASE_HREF } from '@angular/common';
 const initialize = (authService: AuthService) => async () => {
   try {
     await authService.getProfile().toPromise();
-  } catch (e) {
-    console.log(e);
-  }
+  } catch {}
 };
 
 @NgModule({
