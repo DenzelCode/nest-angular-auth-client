@@ -31,23 +31,15 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(user: Partial<User>) {
-    return this.http.post<TokenResponse>(`${api}/auth/login`, user).pipe(
-      tap(async (response) => {
-        localStorage.setItem('accessToken', response.access_token);
-
-        await this.getProfile().toPromise();
-      })
-    );
+    return this.http
+      .post<TokenResponse>(`${api}/auth/login`, user)
+      .pipe(tap((response) => this.setToken(response.access_token)));
   }
 
   register(user: Partial<User>) {
-    return this.http.post<TokenResponse>(`${api}/auth/register`, user).pipe(
-      tap(async (response) => {
-        localStorage.setItem('accessToken', response.access_token);
-
-        await this.getProfile().toPromise();
-      })
-    );
+    return this.http
+      .post<TokenResponse>(`${api}/auth/register`, user)
+      .pipe(tap((response) => this.setToken(response.access_token)));
   }
 
   getProfile() {
@@ -65,6 +57,16 @@ export class AuthService {
           () => this.userSubject.next(null)
         )
       );
+  }
+
+  getToken() {
+    return localStorage.getItem('accessToken');
+  }
+
+  async setToken(token: string) {
+    localStorage.setItem('accessToken', token);
+
+    await this.getProfile().toPromise();
   }
 
   logout() {
