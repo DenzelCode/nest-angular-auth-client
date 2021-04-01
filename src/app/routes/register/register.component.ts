@@ -27,7 +27,13 @@ export class RegisterComponent implements OnInit {
 
     const subscriber = this.authService.register(user).subscribe(
       () => this.router.navigate(['/']),
-      () => subscriber.unsubscribe()
+      () => {
+        this.registerForm.patchValue({
+          password: '',
+        });
+
+        subscriber.unsubscribe();
+      }
     );
   }
 }

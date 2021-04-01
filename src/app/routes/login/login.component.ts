@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { tap } from 'rxjs/operators';
 import { AuthService } from '../../auth/service/auth.service';
 
 @Component({
@@ -26,7 +27,13 @@ export class LoginComponent implements OnInit {
 
     const subscriber = this.authService.login(user).subscribe(
       () => this.router.navigate(['/']),
-      () => subscriber.unsubscribe()
+      () => {
+        this.loginForm.patchValue({
+          password: '',
+        });
+
+        subscriber.unsubscribe();
+      }
     );
   }
 }
