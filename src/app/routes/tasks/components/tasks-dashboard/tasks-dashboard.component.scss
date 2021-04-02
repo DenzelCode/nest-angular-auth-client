@@ -1,0 +1,15 @@
+.full-width {
+  width: 100%;
+}
+
+mat-card-footer {
+  margin: 5px;
+}
+
+.task-container {
+  display: flex;
+  .description {
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+}

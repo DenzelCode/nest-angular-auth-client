@@ -3,6 +3,7 @@ import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from '../auth/guard/auth.guard';
+import { TasksDashboardComponent } from './tasks/components/tasks-dashboard/tasks-dashboard.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
@@ -21,6 +22,11 @@ export const routes: Routes = [
     data: {
       requireAuth: false,
     },
+  },
+  {
+    path: 'tasks',
+    component: TasksDashboardComponent,
+    canActivate: [AuthGuard],
   },
   { path: '**', redirectTo: '/' },
 ];

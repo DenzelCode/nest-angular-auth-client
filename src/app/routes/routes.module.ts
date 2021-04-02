@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
+import { TasksModule } from './tasks/tasks.module';
 
 @NgModule({
   declarations: [MainComponent, LoginComponent, RegisterComponent],
@@ -16,6 +17,7 @@ import { RegisterComponent } from './register/register.component';
     AngularMaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    TasksModule,
   ],
   exports: [RouterModule],
 })
