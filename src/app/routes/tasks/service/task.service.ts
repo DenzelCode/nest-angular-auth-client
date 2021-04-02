@@ -23,7 +23,7 @@ export class TaskService {
   }
 
   update(id: string, task: Task) {
-    return this.httpClient.put<Task>(`${api}/task/${task._id}`, task);
+    return this.httpClient.put<Task>(`${api}/task/${id}`, task);
   }
 
   delete(task: Task) {

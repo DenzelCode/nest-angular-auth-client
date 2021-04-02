@@ -44,10 +44,10 @@ export class TasksDashboardComponent implements OnInit {
   }
 
   create() {
-    const task = this.createForm.value;
+    const inputTask = this.createForm.value;
 
     if (!this.updateTask) {
-      const subscriber = this.taskService.create(task).subscribe(
+      const subscriber = this.taskService.create(inputTask).subscribe(
         (task) => this.tasks.push(task),
         () => subscriber.unsubscribe()
       );
@@ -58,7 +58,7 @@ export class TasksDashboardComponent implements OnInit {
       });
     } else {
       const subscriber = this.taskService
-        .update(this.updateTask._id, task)
+        .update(this.updateTask._id, inputTask)
         .subscribe(
           (task) => {
             const nativeTask = this.tasks.find((t) => t._id === task._id);
@@ -67,12 +67,12 @@ export class TasksDashboardComponent implements OnInit {
               return;
             }
 
-            Object.apply(nativeTask, task);
+            Object.assign(nativeTask, inputTask);
+
+            this.backToCreate();
           },
           () => subscriber.unsubscribe()
         );
-
-      this.backToCreate();
     }
   }
 
