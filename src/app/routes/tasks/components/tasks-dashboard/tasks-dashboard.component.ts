@@ -46,11 +46,16 @@ export class TasksDashboardComponent implements OnInit {
   create() {
     const task = this.createForm.value;
 
-    if (this.updateTask) {
+    if (!this.updateTask) {
       const subscriber = this.taskService.create(task).subscribe(
         (task) => this.tasks.push(task),
         () => subscriber.unsubscribe()
       );
+
+      this.createForm.patchValue({
+        title: '',
+        description: '',
+      });
     } else {
       const subscriber = this.taskService
         .update(this.updateTask._id, task)
@@ -66,12 +71,9 @@ export class TasksDashboardComponent implements OnInit {
           },
           () => subscriber.unsubscribe()
         );
-    }
 
-    this.createForm.patchValue({
-      title: '',
-      description: '',
-    });
+      this.backToCreate();
+    }
   }
 
   updateMode(task: Task) {
