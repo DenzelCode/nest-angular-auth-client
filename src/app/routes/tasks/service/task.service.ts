@@ -15,7 +15,7 @@ const { api } = environment;
   providedIn: 'root',
 })
 export class TaskService implements OnDestroy {
-  constructor(private httpClient: HttpClient, public socket: MainSocket) {
+  constructor(private httpClient: HttpClient, private socket: MainSocket) {
     socket.connect();
   }
 
@@ -37,5 +37,9 @@ export class TaskService implements OnDestroy {
 
   delete(task: Task) {
     return this.httpClient.delete<Task>(`${api}/task/${task._id}`);
+  }
+
+  testSocket() {
+    this.socket.emit('test', 'test message');
   }
 }

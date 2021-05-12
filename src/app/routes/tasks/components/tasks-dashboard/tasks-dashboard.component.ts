@@ -101,4 +101,8 @@ export class TasksDashboardComponent implements OnInit {
         lodash.remove(this.tasks, (t) => t._id === task._id)
       );
   }
+
+  testSocket() {
+    this.taskService.testSocket();
+  }
 }
