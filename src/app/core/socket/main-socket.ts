@@ -9,8 +9,12 @@ export class MainSocket extends Base {
     super({
       url: environment.socket,
       options: {
-        query: {
-          accessToken: authService.getAccessToken(),
+        transportOptions: {
+          polling: {
+            extraHeaders: {
+              Authorization: `Bearer ${authService.getAccessToken()}`,
+            },
+          },
         },
       },
     });
