@@ -9,6 +9,7 @@ import { take } from 'rxjs/operators';
 @Component({
   templateUrl: './tasks-dashboard.component.html',
   styleUrls: ['./tasks-dashboard.component.scss'],
+  providers: [TaskService],
 })
 export class TasksDashboardComponent implements OnInit {
   createForm = this.formBuilder.group({

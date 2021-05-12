@@ -14,7 +14,7 @@ import { AuthService } from './auth/service/auth.service';
 import { APP_BASE_HREF } from '@angular/common';
 
 const initialize = (authService: AuthService) => async () => {
-  if (authService.getToken()) {
+  if (authService.getAccessToken()) {
     try {
       await authService.getProfile().toPromise();
     } catch {}

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { api } from '../../../../../config.json';
-import { Socket } from 'ngx-socket-io';
+import { MainSocket } from 'src/app/core/socket/main-socket';
+import { environment } from 'src/environments/environment';
 
 export interface Task {
   _id: string;
@@ -9,11 +9,19 @@ export interface Task {
   description: string;
 }
 
+const { api } = environment;
+
 @Injectable({
   providedIn: 'root',
 })
-export class TaskService {
-  constructor(private httpClient: HttpClient, private socket: Socket) {}
+export class TaskService implements OnDestroy {
+  constructor(private httpClient: HttpClient, public socket: MainSocket) {
+    socket.connect();
+  }
+
+  ngOnDestroy() {
+    this.socket.disconnect();
+  }
 
   getAll() {
     return this.httpClient.get<Task[]>(`${api}/task`);
