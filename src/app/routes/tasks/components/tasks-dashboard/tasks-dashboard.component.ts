@@ -4,11 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Task, TaskService } from '../../service/task.service';
 import { ConfirmDialogComponent } from '../../../../core/components/confirm-dialog/confirm-dialog.component';
 import * as lodash from 'lodash';
-
-enum Mode {
-  Update,
-  Create,
-}
+import { take } from 'rxjs/operators';
 
 @Component({
   templateUrl: './tasks-dashboard.component.html',
@@ -22,9 +18,7 @@ export class TasksDashboardComponent implements OnInit {
 
   tasks: Task[];
 
-  updateTask: Task = null;
-
-  Mode = Mode;
+  updateTask: Task;
 
   constructor(
     private taskService: TaskService,
@@ -33,46 +27,40 @@ export class TasksDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getAll();
-  }
-
-  getAll() {
-    const subscriber = this.taskService.getAll().subscribe(
-      (tasks) => (this.tasks = tasks),
-      () => subscriber.unsubscribe()
-    );
+    this.taskService
+      .getAll()
+      .pipe(take(1))
+      .subscribe((tasks) => (this.tasks = tasks));
   }
 
   create() {
     const inputTask = this.createForm.value;
 
     if (!this.updateTask) {
-      const subscriber = this.taskService.create(inputTask).subscribe(
-        (task) => this.tasks.push(task),
-        () => subscriber.unsubscribe()
-      );
+      this.taskService
+        .create(inputTask)
+        .pipe(take(1))
+        .subscribe((task) => this.tasks.push(task));
 
       this.createForm.patchValue({
         title: '',
         description: '',
       });
     } else {
-      const subscriber = this.taskService
+      this.taskService
         .update(this.updateTask._id, inputTask)
-        .subscribe(
-          (task) => {
-            const nativeTask = this.tasks.find((t) => t._id === task._id);
+        .pipe(take(1))
+        .subscribe((task) => {
+          const nativeTask = this.tasks.find((t) => t._id === task._id);
 
-            if (!nativeTask) {
-              return;
-            }
+          if (!nativeTask) {
+            return;
+          }
 
-            Object.assign(nativeTask, inputTask);
+          Object.assign(nativeTask, inputTask);
 
-            this.backToCreate();
-          },
-          () => subscriber.unsubscribe()
-        );
+          this.backToCreate();
+        });
     }
   }
 
@@ -105,9 +93,11 @@ export class TasksDashboardComponent implements OnInit {
   }
 
   delete(task: Task) {
-    const subscriber = this.taskService.delete(task).subscribe(
-      (task) => lodash.remove(this.tasks, (t) => t._id === task._id),
-      () => subscriber.unsubscribe()
-    );
+    this.taskService
+      .delete(task)
+      .pipe(take(1))
+      .subscribe((task) =>
+        lodash.remove(this.tasks, (t) => t._id === task._id)
+      );
   }
 }

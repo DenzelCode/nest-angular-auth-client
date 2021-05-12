@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { api } from '../../../../../config.json';
+import { Socket } from 'ngx-socket-io';
 
 export interface Task {
   _id: string;
@@ -12,7 +13,7 @@ export interface Task {
   providedIn: 'root',
 })
 export class TaskService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private socket: Socket) {}
 
   getAll() {
     return this.httpClient.get<Task[]>(`${api}/task`);
