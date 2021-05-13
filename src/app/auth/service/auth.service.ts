@@ -53,10 +53,8 @@ export class AuthService {
       })
       .pipe(
         tap(
-          (user) => {
-            this.userSubject.next(user);
-          },
-          () => this.userSubject.next(null)
+          (user) => this.userSubject.next(user),
+          () => this.logout()
         )
       );
   }
