@@ -97,8 +97,8 @@ export class TasksDashboardComponent implements OnInit {
     this.taskService
       .delete(task)
       .pipe(take(1))
-      .subscribe((task) =>
-        lodash.remove(this.tasks, (t) => t._id === task._id)
+      .subscribe((response) =>
+        lodash.remove(this.tasks, (t) => t._id === response._id)
       );
   }
 
