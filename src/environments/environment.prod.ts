@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  api: '/api',
-  socket: 'http://nest-auth.ubbly.club:3000',
+  api: 'https://nest-auth.ubbly.club/api',
+  socket: 'https://nest-auth.ubbly.club/',
 };
