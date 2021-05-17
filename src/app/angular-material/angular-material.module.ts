@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [],
@@ -23,6 +24,7 @@ import { MatListModule } from '@angular/material/list';
     MatDialogModule,
     MatDividerModule,
     MatListModule,
+    MatIconModule,
   ],
 })
 export class AngularMaterialModule {}
