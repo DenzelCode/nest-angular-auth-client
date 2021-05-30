@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class MainSocket extends Base {
-  constructor(authService: AuthService) {
+  constructor(private authService: AuthService) {
     super({
       url: environment.socket,
       options: {
@@ -18,5 +18,19 @@ export class MainSocket extends Base {
         },
       },
     });
+  }
+
+  connect() {
+    Object.assign(this.ioSocket?.io?.opts || {}, {
+      transportOptions: {
+        polling: {
+          extraHeaders: {
+            Authorization: `Bearer ${this.authService.getAccessToken()}`,
+          },
+        },
+      },
+    });
+
+    super.connect();
   }
 }
