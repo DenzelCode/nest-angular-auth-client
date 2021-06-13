@@ -8,9 +8,10 @@ import { AngularMaterialModule } from '../angular-material/angular-material.modu
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 import { TasksModule } from './tasks/tasks.module';
+import { RecoverComponent } from './recover/recover.component';
 
 @NgModule({
-  declarations: [MainComponent, LoginComponent, RegisterComponent],
+  declarations: [MainComponent, LoginComponent, RegisterComponent, RecoverComponent],
   imports: [
     CommonModule,
     RouterModule.forRoot(routes),

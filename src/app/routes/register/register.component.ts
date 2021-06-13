@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/service/auth.service';
@@ -7,7 +7,7 @@ import { AuthService } from 'src/app/auth/service/auth.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
   registerForm = this.formBuilder.group({
     username: '',
     password: '',
@@ -19,8 +19,6 @@ export class RegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService
   ) {}
-
-  ngOnInit(): void {}
 
   submit() {
     const user = this.registerForm.value;

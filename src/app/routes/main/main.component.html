@@ -1,6 +1,7 @@
 <div class="container" *ngIf="!user; else logged">
   <a routerLink="/login" mat-button mat-raised-button>Login</a>
   <a routerLink="/register" mat-button mat-raised-button>Register</a>
+  <a routerLink="/recover" mat-button mat-raised-button>Forgot my password</a>
 </div>
 
 <ng-template #logged>

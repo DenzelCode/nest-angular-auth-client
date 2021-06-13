@@ -1,0 +1,23 @@
+<div class="container">
+  <mat-card>
+    <h2 mat-card-title>Forgot my password</h2>
+    <p mat-card-subtitle>Recover your password</p>
+
+    <form [formGroup]="recoverForm" (ngSubmit)="submit()">
+      <mat-form-field class="full-width">
+        <mat-label>Email</mat-label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Type in your username"
+          matInput
+        />
+      </mat-form-field>
+
+      <mat-card-actions align="end">
+        <a routerLink="/" mat-button mat-raised-button>Back</a>
+        <button mat-button mat-raised-button color="primary">Recover</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>
