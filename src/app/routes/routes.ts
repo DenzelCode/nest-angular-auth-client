@@ -5,6 +5,7 @@ import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { TasksDashboardComponent } from './tasks/components/tasks-dashboard/tasks-dashboard.component';
 import { RecoverComponent } from './recover/recover.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
@@ -26,7 +27,17 @@ export const routes: Routes = [
   },
   {
     path: 'recover',
+    pathMatch: 'full',
     component: RecoverComponent,
+    canActivate: [AuthGuard],
+    data: {
+      requireAuth: false,
+    },
+  },
+  {
+    path: 'recover/:code',
+    pathMatch: 'full',
+    component: ChangePasswordComponent,
     canActivate: [AuthGuard],
     data: {
       requireAuth: false,

@@ -12,6 +12,7 @@ import { ErrorHandlerInterceptor } from './core/interceptor/error-handler.interc
 import { CoreModule } from './core/core.module';
 import { AuthService } from './auth/service/auth.service';
 import { APP_BASE_HREF } from '@angular/common';
+import { CommonModule } from './common/common.module';
 
 const initialize = (authService: AuthService) => async () => {
   if (authService.getAccessToken()) {
@@ -31,6 +32,7 @@ const initialize = (authService: AuthService) => async () => {
     BrowserAnimationsModule,
     AuthModule,
     CoreModule,
+    CommonModule,
   ],
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' },
