@@ -21,6 +21,8 @@ export class TasksDashboardComponent implements OnInit {
 
   updateTask: Task;
 
+  loading = true;
+
   constructor(
     private taskService: TaskService,
     private formBuilder: FormBuilder,
@@ -31,37 +33,59 @@ export class TasksDashboardComponent implements OnInit {
     this.taskService
       .getAll()
       .pipe(take(1))
-      .subscribe((tasks) => (this.tasks = tasks));
+      .subscribe((tasks) => {
+        this.loading = false;
+
+        this.tasks = tasks;
+      });
   }
 
   create() {
+    if (this.loading) {
+      return;
+    }
+
+    this.loading = true;
+
     const inputTask = this.createForm.value;
 
     if (!this.updateTask) {
       this.taskService
         .create(inputTask)
         .pipe(take(1))
-        .subscribe((task) => this.tasks.push(task));
+        .subscribe(
+          (task) => {
+            this.loading = false;
 
-      this.createForm.patchValue({
-        title: '',
-        description: '',
-      });
+            this.tasks.push(task);
+
+            this.createForm.patchValue({
+              title: '',
+              description: '',
+            });
+          },
+          () => (this.loading = false)
+        );
     } else {
       this.taskService
         .update(this.updateTask._id, inputTask)
         .pipe(take(1))
-        .subscribe((task) => {
-          const nativeTask = this.tasks.find((t) => t._id === task._id);
+        .subscribe(
+          (task) => {
+            this.loading = false;
 
-          if (!nativeTask) {
-            return;
-          }
+            const nativeTask = this.tasks.find((t) => t._id === task._id);
 
-          Object.assign(nativeTask, inputTask);
+            if (!nativeTask) {
+              return;
+            }
 
-          this.backToCreate();
-        });
+            Object.assign(nativeTask, inputTask);
+
+            this.backToCreate();
+          },
+          () => (this.loading = false)
+        );
     }
   }
 
@@ -94,11 +118,22 @@ export class TasksDashboardComponent implements OnInit {
   }
 
   delete(task: Task) {
+    if (this.loading) {
+      return;
+    }
+
+    this.loading = true;
+
     this.taskService
       .delete(task)
       .pipe(take(1))
-      .subscribe((response) =>
-        lodash.remove(this.tasks, (t) => t._id === response._id)
+      .subscribe(
+        (response) => {
+          this.loading = false;
+
+          lodash.remove(this.tasks, (t) => t._id === response._id);
+        },
+        () => (this.loading = false)
       );
   }
 

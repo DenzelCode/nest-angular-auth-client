@@ -9,3 +9,8 @@ body {
 mat-card-footer {
   margin: 5px;
 }
+
+.position-absolute {
+  position: absolute !important;
+  z-index: 3;
+}

@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs/operators';
 import { AuthService } from '../../auth/service/auth.service';
 
 @Component({
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   loginForm = this.formBuilder.group({
     username: '',
     password: '',
   });
+
+  loading = false;
 
   constructor(
     private router: Router,
@@ -20,14 +21,24 @@ export class LoginComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  ngOnInit(): void {}
-
   submit() {
+    if (this.loading) {
+      return;
+    }
+
+    this.loading = true;
+
     const user = this.loginForm.value;
 
     const subscriber = this.authService.login(user).subscribe(
-      () => this.router.navigate(['/']),
       () => {
+        this.loading = false;
+
+        this.router.navigate(['/']);
+      },
+      () => {
+        this.loading = false;
+
         this.loginForm.patchValue({
           password: '',
         });

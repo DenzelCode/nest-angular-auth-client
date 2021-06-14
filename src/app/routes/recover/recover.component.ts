@@ -13,23 +13,36 @@ export class RecoverComponent {
     email: '',
   });
 
+  loading = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private recoverService: RecoverService
   ) {}
 
   submit() {
+    if (this.loading) {
+      return;
+    }
+
+    this.loading = true;
+
     const clear = () => this.recoverForm.patchValue({ email: '' });
 
     this.recoverService
       .recoverPassword(this.recoverForm.value.email)
       .pipe(tap(clear, clear))
-      .subscribe(() => {
-        Swal.fire({
-          title: 'Good job!',
-          text: 'Check your email and change your password!',
-          icon: 'success',
-        });
-      });
+      .subscribe(
+        () => {
+          this.loading = false;
+
+          Swal.fire({
+            title: 'Good job!',
+            text: 'Check your email and change your password!',
+            icon: 'success',
+          });
+        },
+        () => (this.loading = false)
+      );
   }
 }

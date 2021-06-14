@@ -20,6 +20,8 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
   paramsSubscription: Subscription;
 
+  loading = true;
+
   constructor(
     private formBuilder: FormBuilder,
     private recoverService: RecoverService,
@@ -37,7 +39,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(
-        () => {},
+        () => (this.loading = false),
         () => this.router.navigate(['/'])
       );
   }
@@ -47,11 +49,26 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    const clear = () => this.changePasswordForm.patchValue({ pass: '' });
+    if (this.loading) {
+      return;
+    }
+
+    this.loading = true;
+
+    const clear = () => {
+      this.loading = false;
+
+      this.changePasswordForm.patchValue({
+        password: '',
+        confirmPassword: '',
+      });
+    };
 
     this.recoverService
       .changePassword(this.code, this.changePasswordForm.value)
       .subscribe(() => {
+        this.loading = false;
+
         Swal.fire({
           title: 'Good job!',
           text: 'Your password was sucessfully updated!',

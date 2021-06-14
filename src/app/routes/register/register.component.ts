@@ -14,6 +14,8 @@ export class RegisterComponent {
     email: '',
   });
 
+  loading = false;
+
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
@@ -21,11 +23,19 @@ export class RegisterComponent {
   ) {}
 
   submit() {
+    this.loading = true;
+
     const user = this.registerForm.value;
 
     const subscriber = this.authService.register(user).subscribe(
-      () => this.router.navigate(['/']),
       () => {
+        this.loading = false;
+
+        this.router.navigate(['/']);
+      },
+      () => {
+        this.loading = false;
+
         this.registerForm.patchValue({
           password: '',
         });
