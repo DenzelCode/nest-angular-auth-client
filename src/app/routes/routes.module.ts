@@ -9,6 +9,7 @@ import { RegisterComponent } from './register/register.component';
 import { TasksModule } from './tasks/tasks.module';
 import { RecoverComponent } from './recover/recover.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     RegisterComponent,
     RecoverComponent,
     ChangePasswordComponent,
+    SettingsComponent,
   ],
   imports: [
     RouterModule.forRoot(routes),

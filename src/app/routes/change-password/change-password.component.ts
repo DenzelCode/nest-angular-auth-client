@@ -4,7 +4,7 @@ import { RecoverService } from 'src/app/common/service/recover.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
-import { mergeMap, take, tap } from 'rxjs/operators';
+import { mergeMap, take } from 'rxjs/operators';
 
 @Component({
   templateUrl: './change-password.component.html',
@@ -66,6 +66,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
 
     this.recoverService
       .changePassword(this.code, this.changePasswordForm.value)
+      .pipe(take(1))
       .subscribe(() => {
         this.loading = false;
 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { tap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { RecoverService } from 'src/app/common/service/recover.service';
 import Swal from 'sweetalert2';
 
@@ -31,7 +31,7 @@ export class RecoverComponent {
 
     this.recoverService
       .recoverPassword(this.recoverForm.value.email)
-      .pipe(tap(clear, clear))
+      .pipe(tap(clear, clear), take(1))
       .subscribe(
         () => {
           this.loading = false;

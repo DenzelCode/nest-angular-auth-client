@@ -6,6 +6,7 @@ import { AuthGuard } from '../auth/guard/auth.guard';
 import { TasksDashboardComponent } from './tasks/components/tasks-dashboard/tasks-dashboard.component';
 import { RecoverComponent } from './recover/recover.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { SettingsComponent } from './settings/settings.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
@@ -46,6 +47,11 @@ export const routes: Routes = [
   {
     path: 'tasks',
     component: TasksDashboardComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
     canActivate: [AuthGuard],
   },
   { path: '**', redirectTo: '/' },

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 import { AuthService } from '../../auth/service/auth.service';
 
 @Component({
@@ -30,21 +31,18 @@ export class LoginComponent {
 
     const user = this.loginForm.value;
 
-    const subscriber = this.authService.login(user).subscribe(
-      () => {
-        this.loading = false;
+    this.authService
+      .login(user)
+      .pipe(take(1))
+      .subscribe(
+        () => this.router.navigate(['/']),
+        () => {
+          this.loading = false;
 
-        this.router.navigate(['/']);
-      },
-      () => {
-        this.loading = false;
-
-        this.loginForm.patchValue({
-          password: '',
-        });
-
-        subscriber.unsubscribe();
-      }
-    );
+          this.loginForm.patchValue({
+            password: '',
+          });
+        }
+      );
   }
 }

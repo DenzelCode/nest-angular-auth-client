@@ -1,0 +1,63 @@
+<mat-spinner
+  class="position-absolute"
+  diameter="30"
+  *ngIf="loading"
+></mat-spinner>
+<div class="container">
+  <mat-card>
+    <h2 mat-card-title>Change your password</h2>
+    <p mat-card-subtitle>Change your password by completing the form</p>
+
+    <form [formGroup]="settingsForm" (ngSubmit)="submit()">
+      <h3>Username</h3>
+      <mat-form-field class="full-width mb-1">
+        <mat-label>Username</mat-label>
+        <input
+          type="text"
+          formControlName="username"
+          placeholder="Type in your username"
+          matInput
+        />
+      </mat-form-field>
+
+      <h3>Email</h3>
+      <mat-form-field class="full-width mb-1">
+        <mat-label>Email</mat-label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="Type in your email"
+          matInput
+        />
+      </mat-form-field>
+
+      <h3>Password</h3>
+      <mat-form-field class="full-width">
+        <mat-label>Password</mat-label>
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Type in your password"
+          matInput
+        />
+      </mat-form-field>
+
+      <mat-form-field class="full-width mb-1">
+        <mat-label>Confirm Password</mat-label>
+        <input
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="Type in your password"
+          matInput
+        />
+      </mat-form-field>
+
+      <mat-card-actions align="end">
+        <a routerLink="/" mat-button mat-raised-button>Back</a>
+        <button mat-button mat-raised-button color="primary">
+          Change password
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>
