@@ -33,11 +33,21 @@
 
       <h3>Password</h3>
       <mat-form-field class="full-width">
-        <mat-label>Password</mat-label>
+        <mat-label>Current Password</mat-label>
+        <input
+          type="password"
+          formControlName="currentPassword"
+          placeholder="Type in your current password"
+          matInput
+        />
+      </mat-form-field>
+
+      <mat-form-field class="full-width">
+        <mat-label>New Password</mat-label>
         <input
           type="password"
           formControlName="password"
-          placeholder="Type in your password"
+          placeholder="Type in your new password"
           matInput
         />
       </mat-form-field>
@@ -47,7 +57,7 @@
         <input
           type="password"
           formControlName="confirmPassword"
-          placeholder="Type in your password"
+          placeholder="Confirm your new password"
           matInput
         />
       </mat-form-field>

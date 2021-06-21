@@ -15,6 +15,7 @@ export class SettingsComponent implements OnInit {
   settingsForm = this.formBuilder.group({
     username: '',
     email: '',
+    currentPassword: '',
     password: '',
     confirmPassword: '',
   });
@@ -47,6 +48,7 @@ export class SettingsComponent implements OnInit {
       this.loading = false;
 
       this.settingsForm.patchValue({
+        currentPassword: '',
         password: '',
         confirmPassword: '',
       });
@@ -55,13 +57,13 @@ export class SettingsComponent implements OnInit {
     const data: UpdateUserBody = this.settingsForm.value;
 
     this.userService.updateUser(data).subscribe(() => {
-      this.loading = false;
-
       this.authService.userSubject.next({
         ...this.authService.user,
         username: data.username,
         email: data.email,
       });
+
+      clear();
 
       Swal.fire({
         title: 'Good job!',

@@ -7,6 +7,7 @@ const { api } = environment;
 export interface UpdateUserBody {
   username: string;
   email: string;
+  currentPassword?: string;
   password?: string;
   confirmPassword?: string;
 }
