@@ -15,9 +15,9 @@ export class SettingsComponent implements OnInit {
   settingsForm = this.formBuilder.group({
     username: '',
     email: '',
-    currentPassword: '',
-    password: '',
-    confirmPassword: '',
+    currentPassword: null,
+    password: null,
+    confirmPassword: null,
   });
 
   loading = false;
@@ -48,9 +48,9 @@ export class SettingsComponent implements OnInit {
       this.loading = false;
 
       this.settingsForm.patchValue({
-        currentPassword: '',
-        password: '',
-        confirmPassword: '',
+        currentPassword: null,
+        password: null,
+        confirmPassword: null,
       });
     };
 
