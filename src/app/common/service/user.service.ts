@@ -4,9 +4,7 @@ import { environment } from '../../../environments/environment';
 
 const { api } = environment;
 
-export interface UpdateUserBody {
-  username: string;
-  email: string;
+export interface UpdatePasswordBody {
   currentPassword?: string;
   password?: string;
   confirmPassword?: string;
@@ -18,7 +16,15 @@ export interface UpdateUserBody {
 export class UserService {
   constructor(private http: HttpClient) {}
 
-  updateUser(data: UpdateUserBody) {
-    return this.http.put(`${api}/user/update`, data);
+  updateUsername(username: string) {
+    return this.http.put(`${api}/settings/username`, { username });
+  }
+
+  updateEmail(email: string) {
+    return this.http.put(`${api}/settings/email`, { email });
+  }
+
+  updatePassword(data: UpdatePasswordBody) {
+    return this.http.put(`${api}/settings/password`, data);
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/auth/service/auth.service';
 import {
-  UpdateUserBody,
+  UpdatePasswordBody,
   UserService,
 } from 'src/app/common/service/user.service';
 import Swal from 'sweetalert2';
@@ -22,10 +22,14 @@ export class SettingsComponent implements OnInit {
 
   loading = false;
 
+  get user() {
+    return this.authService.user;
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {
@@ -37,7 +41,63 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  submit() {
+  updateUsername() {
+    const { username } = this.settingsForm.value;
+
+    if (this.loading || this.user.username === username) {
+      return;
+    }
+
+    this.loading = true;
+
+    this.userService.updateUsername(username).subscribe(
+      () => {
+        this.authService.userSubject.next({
+          ...this.authService.user,
+          username,
+        });
+
+        this.loading = false;
+
+        Swal.fire({
+          title: 'Good job!',
+          text: 'Your username was sucessfully updated!',
+          icon: 'success',
+        });
+      },
+      () => (this.loading = false),
+    );
+  }
+
+  updateEmail() {
+    const { email } = this.settingsForm.value;
+
+    if (this.loading || this.user.email === email) {
+      return;
+    }
+
+    this.loading = true;
+
+    this.userService.updateEmail(email).subscribe(
+      () => {
+        this.authService.userSubject.next({
+          ...this.authService.user,
+          email,
+        });
+
+        this.loading = false;
+
+        Swal.fire({
+          title: 'Good job!',
+          text: 'Your email was sucessfully updated!',
+          icon: 'success',
+        });
+      },
+      () => (this.loading = false),
+    );
+  }
+
+  updatePassword() {
     if (this.loading) {
       return;
     }
@@ -54,20 +114,14 @@ export class SettingsComponent implements OnInit {
       });
     };
 
-    const data: UpdateUserBody = this.settingsForm.value;
+    const data: UpdatePasswordBody = this.settingsForm.value;
 
-    this.userService.updateUser(data).subscribe(() => {
-      this.authService.userSubject.next({
-        ...this.authService.user,
-        username: data.username,
-        email: data.email,
-      });
-
+    this.userService.updatePassword(data).subscribe(() => {
       clear();
 
       Swal.fire({
         title: 'Good job!',
-        text: 'Your account was sucessfully updated!',
+        text: 'Your password was sucessfully updated!',
         icon: 'success',
       });
     }, clear);

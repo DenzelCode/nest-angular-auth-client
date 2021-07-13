@@ -8,7 +8,7 @@
     <h2 mat-card-title>Settings</h2>
     <p mat-card-subtitle>Update your account</p>
 
-    <form [formGroup]="settingsForm" (ngSubmit)="submit()">
+    <form [formGroup]="settingsForm" (ngSubmit)="updateUsername()">
       <h3>Username</h3>
       <mat-form-field class="full-width mb-1">
         <mat-label>Username</mat-label>
@@ -20,6 +20,14 @@
         />
       </mat-form-field>
 
+      <mat-card-actions align="end">
+        <button mat-button mat-raised-button color="primary">
+          Update username
+        </button>
+      </mat-card-actions>
+    </form>
+
+    <form [formGroup]="settingsForm" (ngSubmit)="updateEmail()">
       <h3>Email</h3>
       <mat-form-field class="full-width mb-1">
         <mat-label>Email</mat-label>
@@ -31,6 +39,14 @@
         />
       </mat-form-field>
 
+      <mat-card-actions align="end">
+        <button mat-button mat-raised-button color="primary">
+          Update email
+        </button>
+      </mat-card-actions>
+    </form>
+
+    <form [formGroup]="settingsForm" (ngSubmit)="updatePassword()">
       <h3>Password</h3>
       <mat-form-field class="full-width">
         <mat-label>Current Password</mat-label>
@@ -65,7 +81,7 @@
       <mat-card-actions align="end">
         <a routerLink="/" mat-button mat-raised-button>Back</a>
         <button mat-button mat-raised-button color="primary">
-          Update account
+          Update password
         </button>
       </mat-card-actions>
     </form>
