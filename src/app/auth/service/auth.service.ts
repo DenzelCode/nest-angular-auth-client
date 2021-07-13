@@ -36,28 +36,36 @@ export class AuthService {
   login(user: Partial<User>) {
     return this.http
       .post<TokenResponse>(`${api}/auth/login`, user)
-      .pipe(tap((response) => this.setTokens(response)));
+      .pipe(tap(response => this.setTokens(response)));
   }
 
   register(user: Partial<User>) {
     return this.http
       .post<TokenResponse>(`${api}/auth/register`, user)
-      .pipe(tap((response) => this.setTokens(response)));
+      .pipe(tap(response => this.setTokens(response)));
   }
 
   getProfile() {
+    const fail = () => {
+      if (this.getRefreshToken()) {
+        this.loginWithRefreshToken().subscribe(
+          () => {},
+          () => this.logout(),
+        );
+
+        return;
+      }
+
+      this.logout();
+    };
+
     return this.http
       .get<User>(`${api}/auth/me`, {
         headers: {
           skipNotifier: 'true',
         },
       })
-      .pipe(
-        tap(
-          (user) => this.userSubject.next(user),
-          () => this.logout()
-        )
-      );
+      .pipe(tap(user => this.userSubject.next(user), fail));
   }
 
   loginWithRefreshToken() {
@@ -65,7 +73,7 @@ export class AuthService {
       .post<TokenResponse>(`${api}/auth/refresh-token`, {
         refreshToken: this.getRefreshToken(),
       })
-      .pipe(tap((response) => this.setTokens(response)));
+      .pipe(tap(response => this.setTokens(response)));
   }
 
   async setTokens(response: TokenResponse) {
