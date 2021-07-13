@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { RecoverService } from 'src/app/common/service/recover.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { mergeMap, take } from 'rxjs/operators';
+import { RecoverService } from '../recover/service/recover.service';
 
 @Component({
   templateUrl: './change-password.component.html',

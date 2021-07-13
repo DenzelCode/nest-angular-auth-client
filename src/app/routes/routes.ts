@@ -4,9 +4,9 @@ import { MainComponent } from './main/main.component';
 import { RegisterComponent } from './register/register.component';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { TasksDashboardComponent } from './tasks/components/tasks-dashboard/tasks-dashboard.component';
-import { RecoverComponent } from './recover/recover.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { SettingsComponent } from './settings/settings.component';
+import { RecoverComponent } from './recover/components/recover/recover.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },

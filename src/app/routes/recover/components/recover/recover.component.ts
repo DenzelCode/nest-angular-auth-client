@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { take, tap } from 'rxjs/operators';
-import { RecoverService } from 'src/app/common/service/recover.service';
 import Swal from 'sweetalert2';
+import { RecoverService } from '../../service/recover.service';
 
 @Component({
   templateUrl: './recover.component.html',

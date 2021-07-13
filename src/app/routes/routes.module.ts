@@ -7,16 +7,15 @@ import { AngularMaterialModule } from '../angular-material/angular-material.modu
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterComponent } from './register/register.component';
 import { TasksModule } from './tasks/tasks.module';
-import { RecoverComponent } from './recover/recover.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { SettingsComponent } from './settings/settings.component';
+import { RecoverModule } from './recover/recover.module';
 
 @NgModule({
   declarations: [
     MainComponent,
     LoginComponent,
     RegisterComponent,
-    RecoverComponent,
     ChangePasswordComponent,
     SettingsComponent,
   ],
