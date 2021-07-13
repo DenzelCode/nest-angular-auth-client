@@ -21,17 +21,26 @@ export class AuthGuard implements CanActivate {
 
     const { isAuthenticated } = this.authService;
 
-    if (!isAuthenticated && redirect) {
-      if (redirect instanceof Array) {
-        this.router.navigate([...redirect]);
-      } else {
-        this.router.navigate([redirect]);
+    const isAccessAllowed =
+      ((requireAuth == null || requireAuth === true) && isAuthenticated) ||
+      (requireAuth === false && !isAuthenticated);
+
+    if (!isAccessAllowed) {
+      if (redirect) {
+        if (redirect instanceof Array) {
+          this.router.navigate([...redirect]);
+        } else {
+          this.router.navigate([redirect]);
+        }
+
+        return isAccessAllowed;
+      }
+
+      if (this.router.routerState.snapshot.url === '') {
+        this.router.navigate(['/']);
       }
     }
 
-    return (
-      ((requireAuth == null || requireAuth === true) && isAuthenticated) ||
-      (requireAuth === false && !isAuthenticated)
-    );
+    return isAccessAllowed;
   }
 }
