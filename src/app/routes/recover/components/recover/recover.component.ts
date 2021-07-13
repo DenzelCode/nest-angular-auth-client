@@ -27,22 +27,21 @@ export class RecoverComponent {
 
     this.loading = true;
 
-    const clear = () => this.recoverForm.patchValue({ email: '' });
+    const clear = () => {
+      this.loading = false;
+
+      this.recoverForm.patchValue({ email: '' });
+    };
 
     this.recoverService
       .recoverPassword(this.recoverForm.value.email)
       .pipe(tap(clear, clear), take(1))
-      .subscribe(
-        () => {
-          this.loading = false;
-
-          Swal.fire({
-            title: 'Good job!',
-            text: 'Check your email and change your password!',
-            icon: 'success',
-          });
-        },
-        () => (this.loading = false)
+      .subscribe(() =>
+        Swal.fire({
+          title: 'Good job!',
+          text: 'Check your email and change your password!',
+          icon: 'success',
+        })
       );
   }
 }
