@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 
 export interface TokenResponse {
   access_token: string;
+  refresh_token: string;
 }
 
 export interface User {
@@ -35,13 +36,13 @@ export class AuthService {
   login(user: Partial<User>) {
     return this.http
       .post<TokenResponse>(`${api}/auth/login`, user)
-      .pipe(tap((response) => this.setAccessToken(response.access_token)));
+      .pipe(tap((response) => this.setTokens(response)));
   }
 
   register(user: Partial<User>) {
     return this.http
       .post<TokenResponse>(`${api}/auth/register`, user)
-      .pipe(tap((response) => this.setAccessToken(response.access_token)));
+      .pipe(tap((response) => this.setTokens(response)));
   }
 
   getProfile() {
@@ -59,6 +60,20 @@ export class AuthService {
       );
   }
 
+  loginWithRefreshToken() {
+    return this.http
+      .post<TokenResponse>(`${api}/auth/refresh-token`, {
+        refreshToken: this.getRefreshToken(),
+      })
+      .pipe(tap((response) => this.setTokens(response)));
+  }
+
+  async setTokens(response: TokenResponse) {
+    this.setRefreshToken(response.refresh_token);
+
+    await this.setAccessToken(response.access_token);
+  }
+
   getAccessToken() {
     return localStorage.getItem('accessToken');
   }
@@ -67,6 +82,14 @@ export class AuthService {
     localStorage.setItem('accessToken', token);
 
     await this.getProfile().toPromise();
+  }
+
+  getRefreshToken() {
+    return localStorage.getItem('refreshToken');
+  }
+
+  setRefreshToken(token: string) {
+    localStorage.setItem('refreshToken', token);
   }
 
   logout() {
