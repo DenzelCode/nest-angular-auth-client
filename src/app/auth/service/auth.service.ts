@@ -46,26 +46,13 @@ export class AuthService {
   }
 
   getProfile() {
-    const fail = () => {
-      if (this.getRefreshToken()) {
-        this.loginWithRefreshToken().subscribe(
-          () => {},
-          () => this.logout(),
-        );
-
-        return;
-      }
-
-      this.logout();
-    };
-
     return this.http
       .get<User>(`${api}/auth/me`, {
         headers: {
           skipNotifier: 'true',
         },
       })
-      .pipe(tap(user => this.userSubject.next(user), fail));
+      .pipe(tap(user => this.userSubject.next(user)));
   }
 
   loginWithRefreshToken() {

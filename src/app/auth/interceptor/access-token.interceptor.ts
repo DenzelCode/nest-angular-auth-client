@@ -4,17 +4,45 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
+import { tap, take, mergeMap, catchError } from 'rxjs/operators';
+import { AuthService } from '../service/auth.service';
 
 @Injectable()
 export class AccessTokenInterceptor implements HttpInterceptor {
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   intercept(
     request: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
+    request = this.handleRequest(request);
+
+    return next.handle(request).pipe(
+      catchError(response => {
+        if (response instanceof HttpErrorResponse && response.status === 401) {
+          if (this.authService.getRefreshToken()) {
+            return this.authService.loginWithRefreshToken().pipe(
+              take(1),
+              tap(
+                () => {},
+                () => this.authService.logout(),
+              ),
+              mergeMap(() => next.handle(this.handleRequest(request))),
+            );
+          }
+
+          this.authService.logout();
+        }
+
+        return throwError(response);
+      }),
+    );
+  }
+
+  handleRequest(request: HttpRequest<unknown>) {
     const token = localStorage.getItem('accessToken');
 
     request = request.clone({
@@ -29,6 +57,6 @@ export class AccessTokenInterceptor implements HttpInterceptor {
       headers: request.headers.set('Accept', 'application/json'),
     });
 
-    return next.handle(request);
+    return request;
   }
 }
