@@ -12,6 +12,8 @@ import { AuthService } from '../service/auth.service';
 
 @Injectable()
 export class AccessTokenInterceptor implements HttpInterceptor {
+  static skipHeader = 'skipTokenInterceptor';
+
   constructor(private authService: AuthService) {}
 
   intercept(
@@ -19,6 +21,10 @@ export class AccessTokenInterceptor implements HttpInterceptor {
     next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     request = this.handleRequest(request);
+
+    if (request.headers.has('skipTokenInterceptor')) {
+      return next.handle(request);
+    }
 
     return next.handle(request).pipe(
       catchError(response => {
@@ -30,7 +36,14 @@ export class AccessTokenInterceptor implements HttpInterceptor {
                 () => {},
                 () => this.authService.logout(),
               ),
-              mergeMap(() => next.handle(this.handleRequest(request))),
+              mergeMap(() =>
+                next.handle(this.skipRequest(request)).pipe(
+                  tap(
+                    () => {},
+                    () => this.authService.logout(),
+                  ),
+                ),
+              ),
             );
           }
 
@@ -40,6 +53,14 @@ export class AccessTokenInterceptor implements HttpInterceptor {
         return throwError(response);
       }),
     );
+  }
+
+  skipRequest(request: HttpRequest<unknown>) {
+    request = request.clone({
+      headers: request.headers.set('skipTokenInterceptor', 'true'),
+    });
+
+    return this.handleRequest(request);
   }
 
   handleRequest(request: HttpRequest<unknown>) {

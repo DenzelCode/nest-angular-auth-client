@@ -57,9 +57,17 @@ export class AuthService {
 
   loginWithRefreshToken() {
     return this.http
-      .post<TokenResponse>(`${api}/auth/refresh-token`, {
-        refreshToken: this.getRefreshToken(),
-      })
+      .post<TokenResponse>(
+        `${api}/auth/refresh-token`,
+        {
+          refreshToken: this.getRefreshToken(),
+        },
+        {
+          headers: {
+            skipTokenInterceptor: 'true',
+          },
+        },
+      )
       .pipe(tap(response => this.setTokens(response)));
   }
 
