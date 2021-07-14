@@ -55,7 +55,7 @@ export class AccessTokenInterceptor implements HttpInterceptor {
     );
   }
 
-  skipRequest(request: HttpRequest<unknown>) {
+  private skipRequest(request: HttpRequest<unknown>) {
     request = request.clone({
       headers: request.headers.set('skipTokenInterceptor', 'true'),
     });
@@ -63,7 +63,7 @@ export class AccessTokenInterceptor implements HttpInterceptor {
     return this.handleRequest(request);
   }
 
-  handleRequest(request: HttpRequest<unknown>) {
+  private handleRequest(request: HttpRequest<unknown>) {
     const token = localStorage.getItem('accessToken');
 
     request = request.clone({
