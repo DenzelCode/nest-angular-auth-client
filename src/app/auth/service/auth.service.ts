@@ -71,6 +71,12 @@ export class AuthService {
       .pipe(tap(response => this.setTokens(response)));
   }
 
+  logoutFromAllDevices() {
+    return this.http
+      .delete<TokenResponse>(`${api}/auth/logout-from-all-devices`)
+      .pipe(tap(response => this.setTokens(response)));
+  }
+
   async setTokens(response: TokenResponse) {
     this.setRefreshToken(response.refresh_token);
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { take } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/service/auth.service';
 import {
   UpdatePasswordBody,
@@ -50,23 +51,26 @@ export class SettingsComponent implements OnInit {
 
     this.loading = true;
 
-    this.userService.updateUsername(username).subscribe(
-      () => {
-        this.authService.userSubject.next({
-          ...this.authService.user,
-          username,
-        });
+    this.userService
+      .updateUsername(username)
+      .pipe(take(1))
+      .subscribe(
+        () => {
+          this.authService.userSubject.next({
+            ...this.authService.user,
+            username,
+          });
 
-        this.loading = false;
+          this.loading = false;
 
-        Swal.fire({
-          title: 'Good job!',
-          text: 'Your username was sucessfully updated!',
-          icon: 'success',
-        });
-      },
-      () => (this.loading = false),
-    );
+          Swal.fire({
+            title: 'Good job!',
+            text: 'Your username was sucessfully updated!',
+            icon: 'success',
+          });
+        },
+        () => (this.loading = false),
+      );
   }
 
   updateEmail() {
@@ -78,23 +82,26 @@ export class SettingsComponent implements OnInit {
 
     this.loading = true;
 
-    this.userService.updateEmail(email).subscribe(
-      () => {
-        this.authService.userSubject.next({
-          ...this.authService.user,
-          email,
-        });
+    this.userService
+      .updateEmail(email)
+      .pipe(take(1))
+      .subscribe(
+        () => {
+          this.authService.userSubject.next({
+            ...this.authService.user,
+            email,
+          });
 
-        this.loading = false;
+          this.loading = false;
 
-        Swal.fire({
-          title: 'Good job!',
-          text: 'Your email was sucessfully updated!',
-          icon: 'success',
-        });
-      },
-      () => (this.loading = false),
-    );
+          Swal.fire({
+            title: 'Good job!',
+            text: 'Your email was sucessfully updated!',
+            icon: 'success',
+          });
+        },
+        () => (this.loading = false),
+      );
   }
 
   updatePassword() {
@@ -116,14 +123,17 @@ export class SettingsComponent implements OnInit {
 
     const data: UpdatePasswordBody = this.settingsForm.value;
 
-    this.userService.updatePassword(data).subscribe(() => {
-      clear();
+    this.userService
+      .updatePassword(data)
+      .pipe(take(1))
+      .subscribe(() => {
+        clear();
 
-      Swal.fire({
-        title: 'Good job!',
-        text: 'Your password was sucessfully updated!',
-        icon: 'success',
-      });
-    }, clear);
+        Swal.fire({
+          title: 'Good job!',
+          text: 'Your password was sucessfully updated!',
+          icon: 'success',
+        });
+      }, clear);
   }
 }
