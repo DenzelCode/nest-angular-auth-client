@@ -9,5 +9,6 @@ import { MainSocket } from './socket/main-socket';
   declarations: [ErrorDialogComponent, ConfirmDialogComponent],
   imports: [CommonNativeModule, AngularMaterialModule],
   providers: [MainSocket],
+  exports: [ErrorDialogComponent, ConfirmDialogComponent],
 })
 export class CoreModule {}

@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-export interface InputData {
+export interface ConfirmDialogData {
   title: string;
   description: string | string[];
 }
@@ -12,11 +12,11 @@ export interface InputData {
   styleUrls: ['./confirm-dialog.component.scss'],
 })
 export class ConfirmDialogComponent implements OnInit {
-  title: InputData['title'];
-  description: InputData['description'];
+  title: ConfirmDialogData['title'];
+  description: ConfirmDialogData['description'];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) data: InputData,
+    @Inject(MAT_DIALOG_DATA) data: ConfirmDialogData,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>
   ) {
     this.title = data?.title || 'Are you sure?';

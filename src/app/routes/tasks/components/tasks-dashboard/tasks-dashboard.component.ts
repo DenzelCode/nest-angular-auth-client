@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Task, TaskService } from '../../service/task.service';
-import { ConfirmDialogComponent } from '../../../../core/components/confirm-dialog/confirm-dialog.component';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from '../../../../core/components/confirm-dialog/confirm-dialog.component';
 import * as lodash from 'lodash';
 import { take } from 'rxjs/operators';
 
@@ -26,14 +29,14 @@ export class TasksDashboardComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private formBuilder: FormBuilder,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
     this.taskService
       .getAll()
       .pipe(take(1))
-      .subscribe((tasks) => {
+      .subscribe(tasks => {
         this.loading = false;
 
         this.tasks = tasks;
@@ -54,7 +57,7 @@ export class TasksDashboardComponent implements OnInit {
         .create(inputTask)
         .pipe(take(1))
         .subscribe(
-          (task) => {
+          task => {
             this.loading = false;
 
             this.tasks.push(task);
@@ -64,17 +67,17 @@ export class TasksDashboardComponent implements OnInit {
               description: '',
             });
           },
-          () => (this.loading = false)
+          () => (this.loading = false),
         );
     } else {
       this.taskService
         .update(this.updateTask._id, inputTask)
         .pipe(take(1))
         .subscribe(
-          (task) => {
+          task => {
             this.loading = false;
 
-            const nativeTask = this.tasks.find((t) => t._id === task._id);
+            const nativeTask = this.tasks.find(t => t._id === task._id);
 
             if (!nativeTask) {
               return;
@@ -84,7 +87,7 @@ export class TasksDashboardComponent implements OnInit {
 
             this.backToCreate();
           },
-          () => (this.loading = false)
+          () => (this.loading = false),
         );
     }
   }
@@ -108,13 +111,16 @@ export class TasksDashboardComponent implements OnInit {
   }
 
   confirmDelete(task: Task) {
-    const dialog = this.dialog.open(ConfirmDialogComponent);
+    const dialog = this.dialog.open<ConfirmDialogData>(ConfirmDialogComponent);
 
-    dialog.afterClosed().subscribe((confirm) => {
-      if (confirm) {
-        this.delete(task);
-      }
-    });
+    dialog
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(confirm => {
+        if (confirm) {
+          this.delete(task);
+        }
+      });
   }
 
   delete(task: Task) {
@@ -128,12 +134,12 @@ export class TasksDashboardComponent implements OnInit {
       .delete(task)
       .pipe(take(1))
       .subscribe(
-        (response) => {
+        response => {
           this.loading = false;
 
-          lodash.remove(this.tasks, (t) => t._id === response._id);
+          lodash.remove(this.tasks, t => t._id === response._id);
         },
-        () => (this.loading = false)
+        () => (this.loading = false),
       );
   }
 

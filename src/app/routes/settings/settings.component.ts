@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { take } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/service/auth.service';
 import {
   UpdatePasswordBody,
   UserService,
 } from 'src/app/common/service/user.service';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData,
+} from 'src/app/core/components/confirm-dialog/confirm-dialog.component';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -31,6 +36,7 @@ export class SettingsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private userService: UserService,
     private authService: AuthService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -126,14 +132,47 @@ export class SettingsComponent implements OnInit {
     this.userService
       .updatePassword(data)
       .pipe(take(1))
-      .subscribe(() => {
+      .subscribe(async () => {
         clear();
 
-        Swal.fire({
+        await Swal.fire({
           title: 'Good job!',
           text: 'Your password was sucessfully updated!',
           icon: 'success',
         });
+
+        this.openLogoutDialog();
       }, clear);
+  }
+
+  private openLogoutDialog() {
+    const dialog = this.dialog.open<ConfirmDialogData>(ConfirmDialogComponent, {
+      data: {
+        title: 'Global logout',
+        description: 'Do you want to logout from all of your devices?',
+      },
+    });
+
+    dialog
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(confirm => {
+        if (confirm) {
+          this.logoutFromAllDevices();
+        }
+      });
+  }
+
+  private logoutFromAllDevices() {
+    this.authService
+      .logoutFromAllDevices()
+      .pipe(take(1))
+      .subscribe(() =>
+        Swal.fire({
+          title: 'Good job!',
+          text: 'All of your devices were successfully logged out!',
+          icon: 'success',
+        }),
+      );
   }
 }

@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-export interface InputData {
+export interface ErrorDialogData {
   title: string;
   message: string | string[];
 }
@@ -11,10 +11,10 @@ export interface InputData {
   styleUrls: ['./error-dialog.component.scss'],
 })
 export class ErrorDialogComponent implements OnInit {
-  title: InputData['title'];
-  message: InputData['message'];
+  title: ErrorDialogData['title'];
+  message: ErrorDialogData['message'];
 
-  constructor(@Inject(MAT_DIALOG_DATA) data: InputData) {
+  constructor(@Inject(MAT_DIALOG_DATA) data: ErrorDialogData) {
     this.title = data.title || 'Error';
     this.message =
       data.message instanceof Array ? data.message : [data.message || ''];

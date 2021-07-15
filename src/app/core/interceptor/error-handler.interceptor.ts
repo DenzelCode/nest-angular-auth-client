@@ -9,7 +9,10 @@ import {
 import { Observable } from 'rxjs';
 import { tap, finalize } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import { ErrorDialogComponent } from '../components/error-dialog/error-dialog.component';
+import {
+  ErrorDialogComponent,
+  ErrorDialogData,
+} from '../components/error-dialog/error-dialog.component';
 import { AuthService } from 'src/app/auth/service/auth.service';
 
 @Injectable()
@@ -35,7 +38,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
 
             const error = response.error;
 
-            this.dialog.open(ErrorDialogComponent, {
+            this.dialog.open<ErrorDialogData>(ErrorDialogComponent, {
               data: {
                 title: error.error || 'Error',
                 message: error.message,
