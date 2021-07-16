@@ -26,7 +26,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private recoverService: RecoverService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -36,11 +36,11 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
           this.code = code;
 
           return this.recoverService.validateCode(this.code).pipe(take(1));
-        })
+        }),
       )
       .subscribe(
         () => (this.loading = false),
-        () => this.router.navigate(['/'])
+        () => this.router.navigate(['/']),
       );
   }
 

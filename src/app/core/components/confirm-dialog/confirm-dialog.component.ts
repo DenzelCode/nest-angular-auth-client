@@ -17,7 +17,7 @@ export class ConfirmDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) data: ConfirmDialogData,
-    private dialogRef: MatDialogRef<ConfirmDialogComponent>
+    private dialogRef: MatDialogRef<ConfirmDialogComponent>,
   ) {
     this.title = data?.title || 'Are you sure?';
     this.description =

@@ -20,7 +20,7 @@ export class RegisterComponent {
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   submit() {
@@ -39,7 +39,7 @@ export class RegisterComponent {
           this.registerForm.patchValue({
             password: '',
           });
-        }
+        },
       );
   }
 }

@@ -19,7 +19,7 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   submit() {
@@ -42,7 +42,7 @@ export class LoginComponent {
           this.loginForm.patchValue({
             password: '',
           });
-        }
+        },
       );
   }
 }
