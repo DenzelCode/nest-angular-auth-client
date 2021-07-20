@@ -11,7 +11,7 @@ import { tap, take, mergeMap, catchError } from 'rxjs/operators';
 import { AuthService } from '../service/auth.service';
 
 @Injectable()
-export class AccessTokenInterceptor implements HttpInterceptor {
+export class AuthInterceptor implements HttpInterceptor {
   static skipHeader = 'skipTokenInterceptor';
 
   constructor(private authService: AuthService) {}
@@ -64,19 +64,13 @@ export class AccessTokenInterceptor implements HttpInterceptor {
   }
 
   private handleRequest(request: HttpRequest<unknown>) {
-    const token = localStorage.getItem('accessToken');
+    const token = this.authService.getAccessToken();
 
-    request = request.clone({
-      headers: request.headers.set('Authorization', 'Bearer ' + token),
-    });
-
-    request = request.clone({
-      headers: request.headers.set('Content-Type', 'application/json'),
-    });
-
-    request = request.clone({
-      headers: request.headers.set('Accept', 'application/json'),
-    });
+    if (token) {
+      request = request.clone({
+        headers: request.headers.set('Authorization', `Bearer ${token}`),
+      });
+    }
 
     return request;
   }

@@ -7,7 +7,7 @@ import { RoutesModule } from './routes/routes.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthModule } from './auth/auth.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AccessTokenInterceptor } from './auth/interceptor/access-token.interceptor';
+import { AuthInterceptor } from './auth/interceptor/auth.interceptor';
 import { ErrorHandlerInterceptor } from './core/interceptor/error-handler.interceptor';
 import { CoreModule } from './core/core.module';
 import { AuthService } from './auth/service/auth.service';
@@ -44,7 +44,7 @@ const initialize = (authService: AuthService) => async () => {
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AccessTokenInterceptor,
+      useClass: AuthInterceptor,
       multi: true,
     },
     {
