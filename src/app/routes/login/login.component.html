@@ -34,5 +34,23 @@
         <button mat-button mat-raised-button color="primary">Login</button>
       </mat-card-actions>
     </form>
+    <button
+      mat-button
+      mat-raised-button
+      color="primary"
+      (click)="loginWithFacebook()"
+      class="mr"
+    >
+      Login with Facebook
+    </button>
+
+    <button
+      mat-button
+      mat-raised-button
+      color="primary"
+      (click)="loginWithGoogle()"
+    >
+      Login with Google
+    </button>
   </mat-card>
 </div>

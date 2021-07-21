@@ -6,6 +6,9 @@ import {
   SocialAuthServiceConfig,
   SocialLoginModule,
 } from 'angularx-social-login';
+import { environment } from 'src/environments/environment';
+
+const apps = environment.apps;
 
 @NgModule({
   declarations: [],
@@ -17,11 +20,11 @@ import {
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider('clientId'),
+            provider: new GoogleLoginProvider(apps.google),
           },
           {
             id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider('535472397651204'),
+            provider: new FacebookLoginProvider(apps.facebook),
           },
         ],
       } as SocialAuthServiceConfig,

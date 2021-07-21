@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 import { AuthService } from '../../auth/service/auth.service';
 
 @Component({
@@ -44,5 +45,33 @@ export class LoginComponent {
           });
         },
       );
+  }
+
+  async loginWithFacebook() {
+    try {
+      const observer = await this.authService.loginWithFacebook();
+
+      observer.subscribe(() => this.router.navigate(['/']));
+    } catch (e) {
+      Swal.fire({
+        title: 'Oops...!',
+        text: 'Authentication cancelled',
+        icon: 'error',
+      });
+    }
+  }
+
+  async loginWithGoogle() {
+    try {
+      const observer = await this.authService.loginWithGoogle();
+
+      observer.subscribe(() => this.router.navigate(['/']));
+    } catch (e) {
+      Swal.fire({
+        title: 'Oops...!',
+        text: 'Authentication cancelled',
+        icon: 'error',
+      });
+    }
   }
 }

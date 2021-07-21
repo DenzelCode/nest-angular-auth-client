@@ -6,7 +6,7 @@ import {
   SocialAuthService,
 } from 'angularx-social-login';
 import { BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 export interface TokenResponse {
@@ -56,9 +56,34 @@ export class AuthService {
   }
 
   private async loginWith(providerId: string) {
-    const user = await this.socialService.signIn(providerId);
+    try {
+      const user = await this.socialService.signIn(providerId);
 
-    return user;
+      return this.http
+        .post<TokenResponse>(
+          `${api}/auth/${this.getProviderUri(providerId)}-login`,
+          {
+            accessToken: user.authToken,
+          },
+        )
+        .pipe(
+          take(1),
+          tap(response => this.setTokens(response)),
+        );
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  private getProviderUri(providerId: string) {
+    switch (providerId) {
+      case FacebookLoginProvider.PROVIDER_ID:
+        return 'facebook';
+      case GoogleLoginProvider.PROVIDER_ID:
+        return 'google';
+      default:
+        return undefined;
+    }
   }
 
   register(user: Partial<User>) {
