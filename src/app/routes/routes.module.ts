@@ -20,7 +20,7 @@ import { RecoverModule } from './recover/recover.module';
     SettingsComponent,
   ],
   imports: [
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
     AngularMaterialModule,
     FormsModule,
     ReactiveFormsModule,
