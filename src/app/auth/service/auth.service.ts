@@ -1,5 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import {
+  FacebookLoginProvider,
+  GoogleLoginProvider,
+  SocialAuthService,
+} from 'angularx-social-login';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -31,12 +36,29 @@ export class AuthService {
     return this.user != null;
   }
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private socialService: SocialAuthService,
+  ) {}
 
   login(user: Partial<User>) {
     return this.http
       .post<TokenResponse>(`${api}/auth/login`, user)
       .pipe(tap(response => this.setTokens(response)));
+  }
+
+  loginWithFacebook() {
+    return this.loginWith(FacebookLoginProvider.PROVIDER_ID);
+  }
+
+  loginWithGoogle() {
+    return this.loginWith(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  private async loginWith(providerId: string) {
+    const user = await this.socialService.signIn(providerId);
+
+    return user;
   }
 
   register(user: Partial<User>) {
