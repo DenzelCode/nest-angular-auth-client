@@ -62,7 +62,7 @@ export class SettingsComponent implements OnInit {
       .pipe(take(1))
       .subscribe(
         () => {
-          this.authService.userSubject.next({
+          this.authService.user$.next({
             ...this.authService.user,
             username,
           });
@@ -93,7 +93,7 @@ export class SettingsComponent implements OnInit {
       .pipe(take(1))
       .subscribe(
         () => {
-          this.authService.userSubject.next({
+          this.authService.user$.next({
             ...this.authService.user,
             email,
           });

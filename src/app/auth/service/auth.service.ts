@@ -26,10 +26,10 @@ const { api } = environment;
   providedIn: 'root',
 })
 export class AuthService {
-  userSubject = new BehaviorSubject<User>(null);
+  user$ = new BehaviorSubject<User>(null);
 
   get user(): User {
-    return this.userSubject.getValue();
+    return this.user$.getValue();
   }
 
   get isAuthenticated(): boolean {
@@ -56,23 +56,19 @@ export class AuthService {
   }
 
   private async loginWith(providerId: string) {
-    try {
-      const user = await this.socialService.signIn(providerId);
+    const user = await this.socialService.signIn(providerId);
 
-      return this.http
-        .post<TokenResponse>(
-          `${api}/auth/${this.getProviderUri(providerId)}-login`,
-          {
-            accessToken: user.authToken,
-          },
-        )
-        .pipe(
-          take(1),
-          tap(response => this.setTokens(response)),
-        );
-    } catch (e) {
-      throw e;
-    }
+    return this.http
+      .post<TokenResponse>(
+        `${api}/auth/${this.getProviderUri(providerId)}-login`,
+        {
+          accessToken: user.authToken,
+        },
+      )
+      .pipe(
+        take(1),
+        tap(response => this.setTokens(response)),
+      );
   }
 
   private getProviderUri(providerId: string) {
@@ -99,7 +95,7 @@ export class AuthService {
           skipNotifier: 'true',
         },
       })
-      .pipe(tap(user => this.userSubject.next(user)));
+      .pipe(tap(user => this.user$.next(user)));
   }
 
   loginWithRefreshToken() {
@@ -151,6 +147,6 @@ export class AuthService {
   logout() {
     localStorage.clear();
 
-    this.userSubject.next(null);
+    this.user$.next(null);
   }
 }
