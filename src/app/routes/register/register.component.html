@@ -44,5 +44,24 @@
         <button mat-button mat-raised-button color="primary">Register</button>
       </mat-card-actions>
     </form>
+
+    <button
+      mat-button
+      mat-raised-button
+      color="primary"
+      (click)="registerWithFacebook()"
+      class="mr"
+    >
+      Register with Facebook
+    </button>
+
+    <button
+      mat-button
+      mat-raised-button
+      color="primary"
+      (click)="registerWithGoogle()"
+    >
+      Register with Google
+    </button>
   </mat-card>
 </div>

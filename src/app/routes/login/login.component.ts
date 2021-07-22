@@ -48,30 +48,14 @@ export class LoginComponent {
   }
 
   async loginWithFacebook() {
-    try {
-      const observer = await this.authService.loginWithFacebook();
-
-      observer.subscribe(() => this.router.navigate(['/']));
-    } catch (e) {
-      Swal.fire({
-        title: 'Oops...!',
-        text: 'Authentication cancelled',
-        icon: 'error',
-      });
-    }
+    this.authService.handleSocialLogin(() =>
+      this.authService.loginWithFacebook(),
+    );
   }
 
   async loginWithGoogle() {
-    try {
-      const observer = await this.authService.loginWithGoogle();
-
-      observer.subscribe(() => this.router.navigate(['/']));
-    } catch (e) {
-      Swal.fire({
-        title: 'Oops...!',
-        text: 'Authentication cancelled',
-        icon: 'error',
-      });
-    }
+    this.authService.handleSocialLogin(() =>
+      this.authService.loginWithGoogle(),
+    );
   }
 }

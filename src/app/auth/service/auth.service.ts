@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   FacebookLoginProvider,
   GoogleLoginProvider,
   SocialAuthService,
 } from 'angularx-social-login';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
 
 export interface TokenResponse {
   access_token: string;
@@ -39,6 +41,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private socialService: SocialAuthService,
+    private router: Router,
   ) {}
 
   login(user: Partial<User>) {
@@ -53,6 +56,20 @@ export class AuthService {
 
   loginWithGoogle() {
     return this.loginWith(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  async handleSocialLogin(method: () => Promise<Observable<TokenResponse>>) {
+    try {
+      const observer = await method();
+
+      observer.subscribe(() => this.router.navigate(['/']));
+    } catch (e) {
+      Swal.fire({
+        title: 'Oops...!',
+        text: e.message || 'An error occurred completing the authentication',
+        icon: 'error',
+      });
+    }
   }
 
   private async loginWith(providerId: string) {

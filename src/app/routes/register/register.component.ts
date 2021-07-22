@@ -42,4 +42,16 @@ export class RegisterComponent {
         },
       );
   }
+
+  async registerWithFacebook() {
+    this.authService.handleSocialLogin(() =>
+      this.authService.loginWithFacebook(),
+    );
+  }
+
+  async registerWithGoogle() {
+    this.authService.handleSocialLogin(() =>
+      this.authService.loginWithGoogle(),
+    );
+  }
 }
