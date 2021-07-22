@@ -51,7 +51,7 @@ export class RegisterComponent {
     this.loading = true;
 
     try {
-      this.authService.handleSocialLogin(() =>
+      await this.authService.handleSocialLogin(() =>
         this.authService.loginWithFacebook(),
       );
     } finally {
@@ -67,7 +67,7 @@ export class RegisterComponent {
     this.loading = true;
 
     try {
-      this.authService.handleSocialLogin(() =>
+      await this.authService.handleSocialLogin(() =>
         this.authService.loginWithGoogle(),
       );
     } finally {

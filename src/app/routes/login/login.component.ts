@@ -54,7 +54,7 @@ export class LoginComponent {
     this.loading = true;
 
     try {
-      this.authService.handleSocialLogin(() =>
+      await this.authService.handleSocialLogin(() =>
         this.authService.loginWithFacebook(),
       );
     } finally {
@@ -70,7 +70,7 @@ export class LoginComponent {
     this.loading = true;
 
     try {
-      this.authService.handleSocialLogin(() =>
+      await this.authService.handleSocialLogin(() =>
         this.authService.loginWithGoogle(),
       );
     } finally {
