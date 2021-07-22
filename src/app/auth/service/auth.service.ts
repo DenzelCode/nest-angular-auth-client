@@ -64,9 +64,13 @@ export class AuthService {
 
       observer.subscribe(() => this.router.navigate(['/']));
     } catch (e) {
+      console.log(e);
       Swal.fire({
         title: 'Oops...!',
-        text: e.message || 'An error occurred completing the authentication',
+        text:
+          e.message ||
+          e.details ||
+          'An error occurred completing the authentication',
         icon: 'error',
       });
     }
