@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import Swal from 'sweetalert2';
 import { AuthService } from '../../auth/service/auth.service';
 
 @Component({
