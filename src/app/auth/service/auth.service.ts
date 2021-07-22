@@ -51,11 +51,17 @@ export class AuthService {
   }
 
   loginWithFacebook() {
-    return this.loginWith(FacebookLoginProvider.PROVIDER_ID);
+    return this.loginWith(FacebookLoginProvider.PROVIDER_ID, {
+      scope: 'email,public_profile',
+      return_scopes: true,
+      enable_profile_selector: true,
+    });
   }
 
   loginWithGoogle() {
-    return this.loginWith(GoogleLoginProvider.PROVIDER_ID);
+    return this.loginWith(GoogleLoginProvider.PROVIDER_ID, {
+      scope: 'profile email',
+    });
   }
 
   handleSocialLogin(method: () => Promise<Observable<TokenResponse>>) {
@@ -83,7 +89,7 @@ export class AuthService {
     });
   }
 
-  private async loginWith(providerId: string) {
+  private async loginWith(providerId: string, options?: any) {
     const user = await this.socialService.signIn(providerId);
 
     return this.http
