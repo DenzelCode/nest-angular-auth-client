@@ -64,7 +64,6 @@ export class AuthService {
 
       observer.subscribe(() => this.router.navigate(['/']));
     } catch (e) {
-      console.log(e);
       Swal.fire({
         title: 'Oops...!',
         text:
