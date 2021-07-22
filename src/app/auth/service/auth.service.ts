@@ -58,21 +58,29 @@ export class AuthService {
     return this.loginWith(GoogleLoginProvider.PROVIDER_ID);
   }
 
-  async handleSocialLogin(method: () => Promise<Observable<TokenResponse>>) {
-    try {
-      const observer = await method();
+  handleSocialLogin(method: () => Promise<Observable<TokenResponse>>) {
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        const observer = await method();
 
-      observer.subscribe(() => this.router.navigate(['/']));
-    } catch (e) {
-      Swal.fire({
-        title: 'Oops...!',
-        text:
-          e.message ||
-          e.details ||
-          'An error occurred completing the authentication',
-        icon: 'error',
-      });
-    }
+        observer.subscribe(() => {
+          resolve();
+
+          this.router.navigate(['/']);
+        });
+      } catch (e) {
+        Swal.fire({
+          title: 'Oops...!',
+          text:
+            e.message ||
+            e.details ||
+            'An error occurred completing the authentication',
+          icon: 'error',
+        });
+
+        reject(e);
+      }
+    });
   }
 
   private async loginWith(providerId: string) {

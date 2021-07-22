@@ -44,14 +44,34 @@ export class RegisterComponent {
   }
 
   async registerWithFacebook() {
-    this.authService.handleSocialLogin(() =>
-      this.authService.loginWithFacebook(),
-    );
+    if (this.loading) {
+      return;
+    }
+
+    this.loading = true;
+
+    try {
+      this.authService.handleSocialLogin(() =>
+        this.authService.loginWithFacebook(),
+      );
+    } finally {
+      this.loading = false;
+    }
   }
 
   async registerWithGoogle() {
-    this.authService.handleSocialLogin(() =>
-      this.authService.loginWithGoogle(),
-    );
+    if (this.loading) {
+      return;
+    }
+
+    this.loading = true;
+
+    try {
+      this.authService.handleSocialLogin(() =>
+        this.authService.loginWithGoogle(),
+      );
+    } finally {
+      this.loading = false;
+    }
   }
 }
