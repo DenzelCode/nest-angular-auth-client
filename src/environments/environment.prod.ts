@@ -3,7 +3,8 @@ export const environment = {
   api: 'https://nest-auth.ubbly.club/api',
   socket: 'https://nest-auth.ubbly.club/',
   apps: {
-    facebook: '513024756601831',
-    google: 'clientId',
+    facebook: '535472397651204',
+    google:
+      '331672215174-0hlpm8fhjphiou05ovsd82vglor401ct.apps.googleusercontent.com',
   },
 };
