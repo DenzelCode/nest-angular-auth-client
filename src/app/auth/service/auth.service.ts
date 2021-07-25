@@ -106,6 +106,7 @@ export class AuthService {
           name: user.name,
           accessToken: user.authToken,
           authorizationCode: user.authorizationCode,
+          type: 'web',
         },
       )
       .pipe(
