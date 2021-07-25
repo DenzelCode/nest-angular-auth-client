@@ -7,6 +7,7 @@ import {
   SocialLoginModule,
 } from 'angularx-social-login';
 import { environment } from 'src/environments/environment';
+import { AppleLoginProvider } from './provider/apple-login.provider';
 
 const apps = environment.apps;
 
@@ -25,6 +26,10 @@ const apps = environment.apps;
           {
             id: FacebookLoginProvider.PROVIDER_ID,
             provider: new FacebookLoginProvider(apps.facebook),
+          },
+          {
+            id: AppleLoginProvider.PROVIDER_ID,
+            provider: new AppleLoginProvider(apps.apple),
           },
         ],
       } as SocialAuthServiceConfig,

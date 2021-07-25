@@ -74,4 +74,20 @@ export class RegisterComponent {
       this.loading = false;
     }
   }
+
+  async registerWithApple() {
+    if (this.loading) {
+      return;
+    }
+
+    this.loading = true;
+
+    try {
+      await this.authService.handleSocialLogin(() =>
+        this.authService.loginWithApple(),
+      );
+    } finally {
+      this.loading = false;
+    }
+  }
 }

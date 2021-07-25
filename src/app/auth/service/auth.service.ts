@@ -10,6 +10,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
+import { AppleLoginProvider } from '../provider/apple-login.provider';
 
 export interface TokenResponse {
   access_token: string;
@@ -64,6 +65,12 @@ export class AuthService {
     });
   }
 
+  loginWithApple() {
+    return this.loginWith(AppleLoginProvider.PROVIDER_ID, {
+      scope: 'profile email',
+    });
+  }
+
   handleSocialLogin(method: () => Promise<Observable<TokenResponse>>) {
     return new Promise<void>(async (resolve, reject) => {
       try {
@@ -111,6 +118,8 @@ export class AuthService {
         return 'facebook';
       case GoogleLoginProvider.PROVIDER_ID:
         return 'google';
+      case AppleLoginProvider.PROVIDER_ID:
+        return 'apple';
       default:
         return undefined;
     }

@@ -62,6 +62,22 @@ export class LoginComponent {
     }
   }
 
+  async loginWithApple() {
+    if (this.loading) {
+      return;
+    }
+
+    this.loading = true;
+
+    try {
+      await this.authService.handleSocialLogin(() =>
+        this.authService.loginWithApple(),
+      );
+    } finally {
+      this.loading = false;
+    }
+  }
+
   async loginWithGoogle() {
     if (this.loading) {
       return;
