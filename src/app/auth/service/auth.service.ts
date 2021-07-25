@@ -103,7 +103,9 @@ export class AuthService {
       .post<TokenResponse>(
         `${api}/auth/${this.getProviderUri(providerId)}-login`,
         {
+          name: user.name,
           accessToken: user.authToken,
+          authorizationCode: user.authorizationCode,
         },
       )
       .pipe(

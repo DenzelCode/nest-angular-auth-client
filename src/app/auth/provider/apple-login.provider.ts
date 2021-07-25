@@ -41,7 +41,11 @@ export class AppleLoginProvider extends BaseLoginProvider {
     try {
       const data = await AppleID.auth.signIn();
 
-      return data;
+      return {
+        name: data.name,
+        authorizationCode: data.authorization.code,
+        authToken: data.authorization.id_token,
+      } as SocialUser;
     } catch (err) {
       console.error(err);
 
