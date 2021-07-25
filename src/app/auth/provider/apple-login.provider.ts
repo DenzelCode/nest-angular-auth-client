@@ -8,10 +8,7 @@ export class AppleLoginProvider extends BaseLoginProvider {
 
   protected auth2: any;
 
-  constructor(
-    private app: typeof environment.apps.apple,
-    private _initOptions: any = { scope: 'email name' },
-  ) {
+  constructor(private app: typeof environment.apps.apple) {
     super();
   }
 
