@@ -76,11 +76,14 @@ export class AuthService {
       try {
         const observer = await method();
 
-        observer.subscribe(() => {
-          resolve();
+        return observer.subscribe(
+          () => {
+            resolve();
 
-          this.router.navigate(['/']);
-        });
+            this.router.navigate(['/']);
+          },
+          e => reject(e),
+        );
       } catch (e) {
         Swal.fire({
           title: 'Oops...!',
