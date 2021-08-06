@@ -1,4 +1,4 @@
-import { AngularMaterialModule } from './angular-material/angular-material.module';
+import { MaterialModule } from './shared/material/material.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 
@@ -25,7 +25,7 @@ const initialize = (authService: AuthService) => async () => {
   imports: [
     BrowserModule,
     HttpClientModule,
-    AngularMaterialModule,
+    MaterialModule,
     FeaturesModule,
     BrowserAnimationsModule,
     CoreModule,

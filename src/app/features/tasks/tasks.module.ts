@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AngularMaterialModule } from '../../angular-material/angular-material.module';
+import { MaterialModule } from '../../shared/material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TasksDashboardComponent } from './pages/tasks-dashboard/tasks-dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -12,7 +12,7 @@ import { CoreModule } from 'src/app/core/core.module';
   imports: [
     CommonModule,
     CoreModule,
-    AngularMaterialModule,
+    MaterialModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

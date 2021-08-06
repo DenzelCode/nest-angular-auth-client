@@ -8,7 +8,7 @@ import {
 } from 'angularx-social-login';
 import { environment } from 'src/environments/environment';
 import { AppleLoginProvider } from './provider/apple-login.provider';
-import { AngularMaterialModule } from '../../angular-material/angular-material.module';
+import { MaterialModule } from '../../shared/material/material.module';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -42,7 +42,7 @@ const apps = environment.apps;
   imports: [
     CommonModule,
     SocialLoginModule,
-    AngularMaterialModule,
+    MaterialModule,
     ReactiveFormsModule,
   ],
   exports: [SocialLoginModule, RegisterComponent, LoginComponent],
