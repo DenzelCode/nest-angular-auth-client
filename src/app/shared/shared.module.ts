@@ -4,6 +4,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
 import { MaterialModule } from './material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [ConfirmDialogComponent, ErrorDialogComponent],
@@ -14,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MaterialModule,
     ReactiveFormsModule,
     FormsModule,
+    RouterModule,
   ],
 })
 export class SharedModule {}

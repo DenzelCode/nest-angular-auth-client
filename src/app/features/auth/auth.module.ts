@@ -12,6 +12,7 @@ import { MaterialModule } from '../../shared/material/material.module';
 import { RegisterComponent } from './pages/register/register.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
 
 const apps = environment.apps;
 
@@ -39,12 +40,7 @@ const apps = environment.apps;
       } as SocialAuthServiceConfig,
     },
   ],
-  imports: [
-    CommonModule,
-    SocialLoginModule,
-    MaterialModule,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, SocialLoginModule, SharedModule],
   exports: [SocialLoginModule, RegisterComponent, LoginComponent],
 })
 export class AuthModule {}
