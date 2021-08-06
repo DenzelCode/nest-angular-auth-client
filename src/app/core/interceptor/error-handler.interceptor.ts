@@ -12,8 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import {
   ErrorDialogComponent,
   ErrorDialogData,
-} from '../components/error-dialog/error-dialog.component';
-import { AuthService } from 'src/app/auth/service/auth.service';
+} from '../../shared/components/error-dialog/error-dialog.component';
+import { AuthService } from 'src/app/features/auth/service/auth.service';
 
 @Injectable()
 export class ErrorHandlerInterceptor implements HttpInterceptor {

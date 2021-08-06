@@ -1,5 +1,5 @@
 import { BaseLoginProvider, SocialUser } from 'angularx-social-login';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 
 declare const AppleID: any;
 

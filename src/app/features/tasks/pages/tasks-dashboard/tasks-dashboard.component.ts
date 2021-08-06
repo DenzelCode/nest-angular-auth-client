@@ -5,7 +5,7 @@ import { Task, TaskService } from '../../service/task.service';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
-} from '../../../../core/components/confirm-dialog/confirm-dialog.component';
+} from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import * as lodash from 'lodash';
 import { take } from 'rxjs/operators';
 

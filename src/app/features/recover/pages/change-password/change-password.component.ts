@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { mergeMap, take } from 'rxjs/operators';
-import { RecoverService } from '../recover/service/recover.service';
+import { RecoverService } from '../../service/recover.service';
 
 @Component({
   templateUrl: './change-password.component.html',

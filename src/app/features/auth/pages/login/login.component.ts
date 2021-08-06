@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { AuthService } from '../../auth/service/auth.service';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   templateUrl: './login.component.html',

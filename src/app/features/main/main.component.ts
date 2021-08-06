@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService, User } from 'src/app/auth/service/auth.service';
+import { AuthService, User } from 'src/app/features/auth/service/auth.service';
 
 @Component({
   templateUrl: './main.component.html',

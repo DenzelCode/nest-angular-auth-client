@@ -8,11 +8,15 @@ import {
 } from 'angularx-social-login';
 import { environment } from 'src/environments/environment';
 import { AppleLoginProvider } from './provider/apple-login.provider';
+import { AngularMaterialModule } from '../../angular-material/angular-material.module';
+import { RegisterComponent } from './pages/register/register.component';
+import { LoginComponent } from './pages/login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const apps = environment.apps;
 
 @NgModule({
-  declarations: [],
+  declarations: [RegisterComponent, LoginComponent],
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
@@ -35,7 +39,12 @@ const apps = environment.apps;
       } as SocialAuthServiceConfig,
     },
   ],
-  imports: [CommonModule, SocialLoginModule],
-  exports: [SocialLoginModule],
+  imports: [
+    CommonModule,
+    SocialLoginModule,
+    AngularMaterialModule,
+    ReactiveFormsModule,
+  ],
+  exports: [SocialLoginModule, RegisterComponent, LoginComponent],
 })
 export class AuthModule {}

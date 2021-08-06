@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { take } from 'rxjs/operators';
-import { AuthService } from 'src/app/auth/service/auth.service';
+import { AuthService } from 'src/app/features/auth/service/auth.service';
 import {
   UpdatePasswordBody,
   UserService,
-} from 'src/app/common/service/user.service';
+} from 'src/app/features/user/service/user.service';
 import {
   ConfirmDialogComponent,
   ConfirmDialogData,
-} from 'src/app/core/components/confirm-dialog/confirm-dialog.component';
+} from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 import Swal from 'sweetalert2';
 
 @Component({

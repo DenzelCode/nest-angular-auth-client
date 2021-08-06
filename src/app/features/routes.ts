@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './auth/pages/login/login.component';
 import { MainComponent } from './main/main.component';
-import { RegisterComponent } from './register/register.component';
-import { AuthGuard } from '../auth/guard/auth.guard';
-import { TasksDashboardComponent } from './tasks/components/tasks-dashboard/tasks-dashboard.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
-import { SettingsComponent } from './settings/settings.component';
-import { RecoverComponent } from './recover/components/recover/recover.component';
+import { RegisterComponent } from './auth/pages/register/register.component';
+import { AuthGuard } from './auth/guard/auth.guard';
+import { TasksDashboardComponent } from './tasks/pages/tasks-dashboard/tasks-dashboard.component';
+import { SettingsComponent } from './user/pages/settings/settings.component';
+import { RecoverComponent } from './recover/pages/recover/recover.component';
+import { ChangePasswordComponent } from './recover/pages/change-password/change-password.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
