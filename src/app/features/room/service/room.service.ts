@@ -54,6 +54,6 @@ export class RoomService {
   }
 
   subscribeRoom(room: Room) {
-    this.socket.emit('room:subcribe', room._id);
+    this.socket.emit('room:subscribe', room._id);
   }
 }

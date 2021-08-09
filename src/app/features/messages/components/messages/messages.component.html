@@ -1,41 +1,23 @@
 <div class="chat-container bg-white d-flex flex-column flex-grow-1">
   <div class="position-relative flex-grow-1">
-    <div class="position-absolute h-100 messages">
-      <div *ngFor="let i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit quaerat
-        reiciendis atque aut error natus, voluptas porro ea rerum cumque qui
-        eaque minus! Tempora reiciendis at voluptatum fuga harum autem. Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Fugit quaerat
-        reiciendis atque aut error natus, voluptas porro ea rerum cumque qui
-        eaque minus! Tempora reiciendis at voluptatum fuga harum autem. Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Fugit quaerat
-        reiciendis atque aut error natus, voluptas porro ea rerum cumque qui
-        eaque minus! Tempora reiciendis at voluptatum fuga harum autem.Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Fugit quaerat
-        reiciendis atque aut error natus, voluptas porro ea rerum cumque qui
-        eaque minus! Tempora reiciendis at voluptatum fuga harum autem. Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Fugit quaerat
-        reiciendis atque aut error natus, voluptas porro ea rerum cumque qui
-        eaque minus! Tempora reiciendis at voluptatum fuga harum autem. Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Fugit quaerat
-        reiciendis atque aut error natus, voluptas porro ea rerum cumque qui
-        eaque minus! Tempora reiciendis at voluptatum fuga harum autem.Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Fugit quaerat
-        reiciendis atque aut error natus, voluptas porro ea rerum cumque qui
-        eaque minus! Tempora reiciendis at voluptatum fuga harum autem. Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Fugit quaerat
-        reiciendis atque aut error natus, voluptas porro ea rerum cumque qui
-        eaque minus! Tempora reiciendis at voluptatum fuga harum autem. Lorem
-        ipsum dolor sit, amet consectetur adipisicing elit. Fugit quaerat
-        reiciendis atque aut error natus, voluptas porro ea rerum cumque qui
-        eaque minus! Tempora reiciendis at voluptatum fuga harum autem.
+    <div class="position-absolute h-100 messages w-100" #messagesContainer>
+      <div *ngFor="let message of messages" class="message">
+        <b>{{ message.from.username }}:</b> {{ message.message }}
       </div>
     </div>
   </div>
   <div class="text-container p-2 bg-primary">
-    <mat-form-field class="full-width">
-      <mat-label>Message</mat-label>
-      <textarea type="text" placeholder="Type a message" matInput></textarea>
-    </mat-form-field>
+    <form (ngSubmit)="sendMessage()" [formGroup]="messageForm">
+      <mat-form-field class="full-width">
+        <mat-label>Message</mat-label>
+        <textarea
+          type="text"
+          placeholder="Type a message"
+          matInput
+          formControlName="message"
+          (keydown.enter)="sendMessage()"
+        ></textarea>
+      </mat-form-field>
+    </form>
   </div>
 </div>

@@ -6,4 +6,10 @@
 .messages {
   overflow: auto;
   max-height: 100%;
+
+  .message {
+    word-break: break-word;
+    overflow-wrap: break-all;
+    width: 100%;
+  }
 }

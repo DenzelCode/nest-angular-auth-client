@@ -17,7 +17,11 @@ const { api } = environment;
   providedIn: 'root',
 })
 export class MessageService {
-  constructor(private socket: MainSocket) {}
+  constructor(private socket: MainSocket, private http: HttpClient) {}
+
+  getMessages(type: MessageType, id: string) {
+    return this.http.get<Message[]>(`${api}/message/${type}/${id}`);
+  }
 
   getMessage(type: MessageType) {
     return this.socket.fromEvent(`message:${type}`);
