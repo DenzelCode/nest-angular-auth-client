@@ -1,10 +1,12 @@
-<div *ngIf="room">
-  <mat-toolbar color="primary">
-    <span>{{ room.title }}</span>
-    <button mat-button (click)="leave()">
-      <mat-icon>logout</mat-icon>
-    </button>
-  </mat-toolbar>
-
-  <app-messages [type]="MessageType.Room"></app-messages>
+<div *ngIf="room" class="position-absolute h-100 w-100">
+  <div class="position-relative h-100 w-100">
+    <mat-toolbar class="toolbar" color="primary">
+      <span>{{ room.title }}</span>
+      <span class="spacer"></span>
+      <a mat-button routerLink="/rooms">
+        <mat-icon class="text-white">logout</mat-icon>
+      </a>
+    </mat-toolbar>
+    <app-messages [type]="MessageType.Room"></app-messages>
+  </div>
 </div>

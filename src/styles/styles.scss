@@ -17,3 +17,11 @@ mat-card-footer {
   position: absolute !important;
   z-index: 3;
 }
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.flex-grow {
+  flex: 1 1 0;
+}
