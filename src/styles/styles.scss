@@ -25,3 +25,13 @@ mat-card-footer {
 .flex-grow {
   flex: 1 1 0;
 }
+
+body,
+html,
+app-root,
+ng-component {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+}

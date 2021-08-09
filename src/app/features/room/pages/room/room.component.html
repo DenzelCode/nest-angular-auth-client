@@ -1,12 +1,10 @@
-<div *ngIf="room" class="position-absolute h-100 w-100">
-  <div class="position-relative h-100 w-100">
-    <mat-toolbar class="toolbar" color="primary">
-      <span>{{ room.title }}</span>
-      <span class="spacer"></span>
-      <a mat-button routerLink="/rooms">
-        <mat-icon class="text-white">logout</mat-icon>
-      </a>
-    </mat-toolbar>
-    <app-messages [type]="MessageType.Room"></app-messages>
-  </div>
+<div *ngIf="room" class="d-flex flex-column flex-grow-1">
+  <mat-toolbar class="toolbar" color="primary">
+    <span>{{ room.title }}</span>
+    <span class="spacer"></span>
+    <a mat-button routerLink="/rooms">
+      <mat-icon class="text-white">logout</mat-icon>
+    </a>
+  </mat-toolbar>
+  <app-messages [type]="MessageType.Room" [room]="room"></app-messages>
 </div>

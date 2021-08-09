@@ -18,13 +18,13 @@ export enum MessageType {
 })
 export class MessagesComponent implements OnInit, OnDestroy {
   @Input() type: MessageType;
+  @Input() room?: Room;
+  @Input() to?: User;
+
   messages: Message[];
 
   destroy$ = new Subject();
   MessageType = MessageType;
-
-  room?: Room;
-  to?: User;
 
   user?: User;
 
