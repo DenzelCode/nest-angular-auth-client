@@ -50,9 +50,11 @@ export class UpsertRoomDialogComponent {
     let request = this.roomService.createRoom(roomInput);
 
     if (this.type === ActionType.Update) {
-      request = this.roomService.updateRoom(roomInput);
+      request = this.roomService.updateRoom(this.room._id, roomInput);
     }
 
-    request.pipe(take(1)).subscribe(room => this.dialogRef.close(room));
+    request
+      .pipe(take(1))
+      .subscribe(room => this.dialogRef.close({ ...room, ...roomInput }));
   }
 }

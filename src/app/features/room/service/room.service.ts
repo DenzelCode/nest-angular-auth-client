@@ -26,7 +26,7 @@ export class RoomService {
   }
 
   getPublicRooms() {
-    return this.http.get<Room[]>(`${api}/room/public`).pipe(tap(console.log));
+    return this.http.get<Room[]>(`${api}/room/public`);
   }
 
   getUserRooms() {
@@ -41,8 +41,8 @@ export class RoomService {
     return this.http.delete(`${api}/room/${room._id}`);
   }
 
-  updateRoom(room: Room) {
-    return this.http.put<Room>(`${api}/room/${room._id}`, room);
+  updateRoom(id: string, room: Room) {
+    return this.http.put<Room>(`${api}/room/${id}`, room);
   }
 
   leaveRoom() {

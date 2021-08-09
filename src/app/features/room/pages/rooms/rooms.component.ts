@@ -72,7 +72,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
     this.roomService
       .getRoom(room._id)
       .pipe(take(1), tap(process, process))
-      .subscribe(() => this.router.navigate(['room', room._id]));
+      .subscribe(() => this.router.navigate(['/room', room._id]));
   }
 
   openJoinRoomDialog() {

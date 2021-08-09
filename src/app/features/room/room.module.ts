@@ -6,11 +6,17 @@ import { RoomService } from './service/room.service';
 import { UpsertRoomDialogComponent } from './components/upsert-room-dialog/upsert-room-dialog.component';
 import { JoinRoomDialogComponent } from './components/join-room-dialog/join-room-dialog.component';
 import { RoomComponent } from './pages/room/room.component';
+import { MessagesModule } from '../messages/messages.module';
 
 @NgModule({
-  declarations: [RoomsComponent, UpsertRoomDialogComponent, JoinRoomDialogComponent, RoomComponent],
-  imports: [CommonModule, SharedModule],
+  declarations: [
+    RoomsComponent,
+    UpsertRoomDialogComponent,
+    JoinRoomDialogComponent,
+    RoomComponent,
+  ],
+  imports: [CommonModule, SharedModule, MessagesModule],
   providers: [RoomService],
-  exports: [RoomsComponent],
+  exports: [RoomsComponent, RoomComponent],
 })
 export class RoomModule {}

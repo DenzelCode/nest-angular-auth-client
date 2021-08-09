@@ -15,6 +15,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [],
@@ -33,6 +34,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     MatFormFieldModule,
     MatSlideToggleModule,
     ClipboardModule,
+    MatToolbarModule,
   ],
 })
 export class MaterialModule {}

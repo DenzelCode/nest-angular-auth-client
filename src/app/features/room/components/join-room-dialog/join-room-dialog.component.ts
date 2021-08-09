@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { RoomService } from '../../service/room.service';
 
@@ -18,12 +19,19 @@ export class JoinRoomDialogComponent {
     private formBuilder: FormBuilder,
     private roomService: RoomService,
     private dialog: MatDialogRef<JoinRoomDialogComponent>,
+    private router: Router,
   ) {}
 
   submit() {
+    const code = this.joinForm.value.code.split('/');
+
     this.roomService
-      .joinRoom(this.joinForm.value.code)
+      .getRoom(code[code.length - 1])
       .pipe(take(1))
-      .subscribe(() => this.dialog.close());
+      .subscribe(room => {
+        this.dialog.close();
+
+        this.router.navigate(['/room', room._id]);
+      });
   }
 }

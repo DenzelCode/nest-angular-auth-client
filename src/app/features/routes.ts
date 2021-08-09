@@ -3,11 +3,11 @@ import { LoginComponent } from './auth/pages/login/login.component';
 import { MainComponent } from './main/main.component';
 import { RegisterComponent } from './auth/pages/register/register.component';
 import { AuthGuard } from './auth/guard/auth.guard';
-import { TasksDashboardComponent } from './tasks/pages/tasks-dashboard/tasks-dashboard.component';
 import { SettingsComponent } from './user/pages/settings/settings.component';
 import { RecoverComponent } from './recover/pages/recover/recover.component';
 import { ChangePasswordComponent } from './recover/pages/change-password/change-password.component';
 import { RoomsComponent } from './room/pages/rooms/rooms.component';
+import { RoomComponent } from './room/pages/room/room.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
@@ -46,11 +46,6 @@ export const routes: Routes = [
     },
   },
   {
-    path: 'tasks',
-    component: TasksDashboardComponent,
-    canActivate: [AuthGuard],
-  },
-  {
     path: 'settings',
     component: SettingsComponent,
     canActivate: [AuthGuard],
@@ -62,7 +57,7 @@ export const routes: Routes = [
   },
   {
     path: 'room/:id',
-    component: RoomsComponent,
+    component: RoomComponent,
     canActivate: [AuthGuard],
   },
   { path: '**', redirectTo: '/' },
