@@ -16,7 +16,7 @@
     <h3 matSubheader>Your Rooms</h3>
     <mat-list-item *ngFor="let room of userRooms">
       <mat-icon matListIcon>person</mat-icon>
-      <h4 matLine>{{ room.title }}</h4>
+      <h4 matLine>{{ room.title }} ({{ room.members.length }})</h4>
       <p matLine class="description">{{ room.description }}</p>
       <button mat-button (click)="openUpdateDialog(room)">Edit</button>
       <button mat-button (click)="confirmDelete(room)">Delete</button>
@@ -29,7 +29,7 @@
     <h3 matSubheader>Public Rooms</h3>
     <mat-list-item *ngFor="let room of publicRooms">
       <mat-icon matListIcon>group</mat-icon>
-      <h4 matLine>{{ room.title }}</h4>
+      <h4 matLine>{{ room.title }} ({{ room.members.length }})</h4>
       <p matLine class="description">
         {{ room.owner.username }}
       </p>
