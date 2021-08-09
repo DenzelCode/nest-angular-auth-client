@@ -7,12 +7,12 @@ import {
   ConfirmDialogData,
 } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import * as lodash from 'lodash';
-import { take } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
+import { upsertItem } from '../../../../shared/utils/upsert-item';
 
 @Component({
   templateUrl: './tasks-dashboard.component.html',
   styleUrls: ['./tasks-dashboard.component.scss'],
-  providers: [TaskService],
 })
 export class TasksDashboardComponent implements OnInit {
   createForm = this.formBuilder.group({
@@ -33,17 +33,19 @@ export class TasksDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loading = true;
+
+    const process = () => (this.loading = false);
+
     this.taskService
       .getAll()
-      .pipe(take(1))
+      .pipe(take(1), tap(process, process))
       .subscribe(tasks => {
-        this.loading = false;
-
         this.tasks = tasks;
       });
   }
 
-  create() {
+  submit() {
     if (this.loading) {
       return;
     }
@@ -52,44 +54,24 @@ export class TasksDashboardComponent implements OnInit {
 
     const inputTask = this.createForm.value;
 
-    if (!this.updateTask) {
-      this.taskService
-        .create(inputTask)
-        .pipe(take(1))
-        .subscribe(
-          task => {
-            this.loading = false;
+    let request = this.taskService.create(inputTask);
 
-            this.tasks.push(task);
-
-            this.createForm.patchValue({
-              title: '',
-              description: '',
-            });
-          },
-          () => (this.loading = false),
-        );
-    } else {
-      this.taskService
-        .update(this.updateTask._id, inputTask)
-        .pipe(take(1))
-        .subscribe(
-          task => {
-            this.loading = false;
-
-            const nativeTask = this.tasks.find(t => t._id === task._id);
-
-            if (!nativeTask) {
-              return;
-            }
-
-            Object.assign(nativeTask, inputTask);
-
-            this.backToCreate();
-          },
-          () => (this.loading = false),
-        );
+    if (this.updateTask) {
+      request = this.taskService.update(this.updateTask._id, inputTask);
     }
+
+    const process = () => (this.loading = false);
+
+    request.pipe(take(1), tap(process, process)).subscribe(task => {
+      upsertItem(this.tasks, t => t._id === task._id, inputTask);
+
+      this.backToCreate();
+
+      this.createForm.patchValue({
+        title: '',
+        description: '',
+      });
+    });
   }
 
   updateMode(task: Task) {
@@ -103,11 +85,6 @@ export class TasksDashboardComponent implements OnInit {
 
   backToCreate() {
     this.updateTask = null;
-
-    this.createForm.patchValue({
-      title: '',
-      description: '',
-    });
   }
 
   confirmDelete(task: Task) {
@@ -130,20 +107,13 @@ export class TasksDashboardComponent implements OnInit {
 
     this.loading = true;
 
+    const process = () => (this.loading = false);
+
     this.taskService
       .delete(task)
-      .pipe(take(1))
-      .subscribe(
-        response => {
-          this.loading = false;
-
-          lodash.remove(this.tasks, t => t._id === response._id);
-        },
-        () => (this.loading = false),
+      .pipe(take(1), tap(process, process))
+      .subscribe(response =>
+        lodash.remove(this.tasks, t => t._id === response._id),
       );
-  }
-
-  testSocket() {
-    this.taskService.testSocket();
   }
 }

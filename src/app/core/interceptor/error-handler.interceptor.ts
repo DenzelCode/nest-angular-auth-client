@@ -7,7 +7,7 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap, finalize } from 'rxjs/operators';
+import { tap} from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import {
   ErrorDialogComponent,

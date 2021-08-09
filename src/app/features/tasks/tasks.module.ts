@@ -6,9 +6,13 @@ import { TasksDashboardComponent } from './pages/tasks-dashboard/tasks-dashboard
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { CoreModule } from 'src/app/core/core.module';
+import { TaskService } from './service/task.service';
 
 @NgModule({
   declarations: [TasksDashboardComponent],
+  providers: [
+    TaskService,
+  ],
   imports: [
     CommonModule,
     CoreModule,

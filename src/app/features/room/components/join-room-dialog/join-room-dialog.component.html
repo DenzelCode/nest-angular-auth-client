@@ -1,0 +1,15 @@
+<div>
+  <h1 mat-dialog-title>Join</h1>
+  <form [formGroup]="joinForm" (ngSubmit)="submit()">
+    <mat-form-field class="full-width">
+      <mat-label>Code</mat-label>
+      <input
+        type="text"
+        formControlName="code"
+        placeholder="Type the room code"
+        matInput
+      />
+    </mat-form-field>
+    <button mat-raised-button>Join</button>
+  </form>
+</div>

@@ -6,10 +6,10 @@
 <div class="container">
   <mat-card>
     <h2 mat-card-title>
-      {{ updateTask ? "Edit task " + updateTask.title : "Create task" }}
+      {{ updateTask ? 'Edit task ' + updateTask.title : 'Create task' }}
     </h2>
 
-    <form [formGroup]="createForm" (ngSubmit)="create()">
+    <form [formGroup]="createForm" (ngSubmit)="submit()">
       <mat-form-field class="full-width">
         <mat-label>Title</mat-label>
         <input
@@ -30,7 +30,6 @@
       </mat-form-field>
 
       <mat-card-actions align="end">
-        <a mat-button mat-raised-button (click)="testSocket()">Test Socket</a>
         <a
           routerLink="/"
           mat-button
@@ -42,7 +41,7 @@
           <button mat-button (click)="backToCreate()">Back to create</button>
         </ng-template>
         <button mat-button mat-raised-button color="primary">
-          {{ updateTask ? "Update" : "Create" }}
+          {{ updateTask ? 'Update' : 'Create' }}
         </button>
       </mat-card-actions>
     </form>

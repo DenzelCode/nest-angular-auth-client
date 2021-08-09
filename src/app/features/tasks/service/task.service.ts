@@ -1,6 +1,5 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { MainSocket } from 'src/app/core/socket/main-socket';
 import { environment } from 'src/environments/environment';
 
 export interface Task {
@@ -14,14 +13,8 @@ const { api } = environment;
 @Injectable({
   providedIn: 'root',
 })
-export class TaskService implements OnDestroy {
-  constructor(private httpClient: HttpClient, private socket: MainSocket) {
-    socket.connect();
-  }
-
-  ngOnDestroy() {
-    this.socket.disconnect();
-  }
+export class TaskService {
+  constructor(private httpClient: HttpClient) {}
 
   getAll() {
     return this.httpClient.get<Task[]>(`${api}/task`);
@@ -37,9 +30,5 @@ export class TaskService implements OnDestroy {
 
   delete(task: Task) {
     return this.httpClient.delete<Task>(`${api}/task/${task._id}`);
-  }
-
-  testSocket() {
-    this.socket.emit('test', 'test message');
   }
 }

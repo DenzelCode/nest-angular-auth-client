@@ -7,6 +7,7 @@ import { TasksDashboardComponent } from './tasks/pages/tasks-dashboard/tasks-das
 import { SettingsComponent } from './user/pages/settings/settings.component';
 import { RecoverComponent } from './recover/pages/recover/recover.component';
 import { ChangePasswordComponent } from './recover/pages/change-password/change-password.component';
+import { RoomsComponent } from './room/pages/rooms/rooms.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
@@ -52,6 +53,16 @@ export const routes: Routes = [
   {
     path: 'settings',
     component: SettingsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'rooms',
+    component: RoomsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'room/:id',
+    component: RoomsComponent,
     canActivate: [AuthGuard],
   },
   { path: '**', redirectTo: '/' },

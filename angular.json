@@ -29,11 +29,17 @@
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap-grid.min.css",
+              "./node_modules/bootstrap/scss/bootstrap.scss",
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
+              "src/styles/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "./node_modules/popper.js/dist/umd/popper.min.js",
+              "./node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles", "./node_modules/bootstrap/scss"]
+            },
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,
@@ -99,7 +105,8 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": []
           }

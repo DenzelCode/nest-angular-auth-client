@@ -1,0 +1,28 @@
+<div>
+  <h3 *ngIf="type === ActionType.Create">Create Room</h3>
+  <form [formGroup]="upsertForm" (ngSubmit)="submit()">
+    <mat-form-field class="full-width">
+      <mat-label>Title</mat-label>
+      <input
+        type="text"
+        formControlName="title"
+        placeholder="Type a room title"
+        matInput
+      />
+    </mat-form-field>
+    <mat-slide-toggle
+      class="d-block mb-3"
+      color="primary"
+      formControlName="isPublic"
+    >
+      Public
+    </mat-slide-toggle>
+    <button mat-raised-button>
+      {{ type === ActionType.Create ? 'Create' : 'Update' }}
+    </button>
+  </form>
+</div>
+
+<ng-template #update>
+  <h3>Update Room {{ room.title }}</h3>
+</ng-template>

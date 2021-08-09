@@ -7,6 +7,8 @@ import { RecoverModule } from './recover/recover.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from '../shared/shared.module';
+import { RoomModule } from './room/room.module';
+import { ChatModule } from './chat/chat.module';
 
 @NgModule({
   declarations: [MainComponent],
@@ -17,6 +19,8 @@ import { SharedModule } from '../shared/shared.module';
     RecoverModule,
     UserModule,
     AuthModule,
+    RoomModule,
+    ChatModule,
   ],
   exports: [RouterModule],
 })
