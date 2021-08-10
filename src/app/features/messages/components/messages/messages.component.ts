@@ -73,12 +73,39 @@ export class MessagesComponent implements OnInit, OnDestroy {
         if (
           this.messagesElement.scrollTop >
           this.messagesElement.offsetTop -
-            this.messagesElement.scrollHeight -
-            this.scrollOffset
+          this.messagesElement.scrollHeight -
+          this.scrollOffset
         ) {
           setTimeout(() => this.scrollToLastMessages());
         }
       });
+
+    // Room Messages
+    this.messageService.getRoomLeaveMessages().pipe(takeUntil(this.destroy$)).subscribe((message: Message) => {
+      this.messages.push(message);
+
+      if (
+        this.messagesElement.scrollTop >
+        this.messagesElement.offsetTop -
+        this.messagesElement.scrollHeight -
+        this.scrollOffset
+      ) {
+        setTimeout(() => this.scrollToLastMessages());
+      }
+    })
+
+    this.messageService.getRoomJoinMessages().pipe(takeUntil(this.destroy$)).subscribe((message: Message) => {
+      this.messages.push(message);
+
+      if (
+        this.messagesElement.scrollTop >
+        this.messagesElement.offsetTop -
+        this.messagesElement.scrollHeight -
+        this.scrollOffset
+      ) {
+        setTimeout(() => this.scrollToLastMessages());
+      }
+    })
   }
 
   ngOnDestroy() {
