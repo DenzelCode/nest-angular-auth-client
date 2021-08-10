@@ -28,21 +28,13 @@ export class MessageService {
     return this.socket.fromEvent(`message:${type}`);
   }
 
-  roomMessage(user: User, type: string): Message {
-    const newMessage = {
-      from: null,
-      to: '',
-      message: `${user.username} ${type === 'leave' ? 'left' : 'joined'}`
-    }
-    return newMessage;
+
+  getRoomLeaveEvent() {
+    return this.socket.fromEvent('room:leave');
   }
 
-  getRoomLeaveMessages() {
-    return this.socket.fromEvent('room:leave').pipe(map((user: User) => this.roomMessage(user, 'leave')));
-  }
-
-  getRoomJoinMessages() {
-    return this.socket.fromEvent('room:join').pipe(map((user: User) => this.roomMessage(user, 'join')));
+  getRoomJoinEvent() {
+    return this.socket.fromEvent('room:join');
   }
 
   sendRoomMessage(room: Room, message: string) {
