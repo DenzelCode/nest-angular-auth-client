@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { forkJoin, Observable, Subject, Subscription } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { MainSocket } from '../../../../core/socket/main-socket';
 import { User } from '../../../auth/service/auth.service';
@@ -52,36 +52,38 @@ export class MessagesComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private socket: MainSocket,
     private formBuilder: FormBuilder,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    const messageAction = (message: Message | Message[]) => {
+      Array.isArray(message) ? this.messages = message : this.messages.push(message);
+      this.scrollToLastIfNecessary()
+      return;
+    }
+
     this.messageService
       .getMessages(this.type, this.room?._id || this.to?._id)
       .pipe(take(1))
       .subscribe(messages => {
-        this.messages = messages;
-
-        setTimeout(() => this.scrollToLastMessages());
+        messageAction(messages);
       });
 
     this.messageService
       .getMessage(this.type)
       .pipe(takeUntil(this.destroy$))
       .subscribe((message: Message) => {
-        this.messages.push(message);
-        this.scrollToLastIfNecessary()
+        messageAction(message);
       });
 
     // Room Messages
     this.messageService.getRoomLeaveEvent().pipe(takeUntil(this.destroy$)).pipe(map((user: User) => (this.roomMessage(user, 'leave')))).subscribe((message: Message) => {
-      this.messages.push(message);
-      this.scrollToLastIfNecessary()
+      messageAction(message);
     })
 
     this.messageService.getRoomJoinEvent().pipe(takeUntil(this.destroy$)).pipe(map((user: User) => (this.roomMessage(user, 'join')))).subscribe((message: Message) => {
-      this.messages.push(message);
-      this.scrollToLastIfNecessary()
+      messageAction(message);
     })
+
   }
 
   ngOnDestroy() {
