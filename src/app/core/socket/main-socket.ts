@@ -21,15 +21,17 @@ export class MainSocket extends Socket {
       url: environment.socket,
       options: getOptions(authService),
     });
+
+    this.on('connect', () => this.emit('user:subscribe'));
   }
 
   connect() {
-    if (!this.ioSocket.connected) {
-      this.ioSocket.emit('user:subscribe');
-    }
-
     Object.assign(this.ioSocket?.io?.opts || {}, getOptions(this.authService));
 
     super.connect();
+  }
+
+  onConnect() {
+    return this.fromEvent('connect');
   }
 }

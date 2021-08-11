@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { MainSocket } from '../../../core/socket/main-socket';
 import { User } from '../../auth/service/auth.service';
@@ -18,23 +17,14 @@ const { api } = environment;
   providedIn: 'root',
 })
 export class MessageService {
-  constructor(private socket: MainSocket, private http: HttpClient) { }
+  constructor(private socket: MainSocket, private http: HttpClient) {}
 
   getMessages(type: MessageType, id: string) {
     return this.http.get<Message[]>(`${api}/message/${type}/${id}`);
   }
 
   getMessage(type: MessageType) {
-    return this.socket.fromEvent(`message:${type}`);
-  }
-
-
-  getRoomLeaveEvent() {
-    return this.socket.fromEvent('room:leave');
-  }
-
-  getRoomJoinEvent() {
-    return this.socket.fromEvent('room:join');
+    return this.socket.fromEvent<Message>(`message:${type}`);
   }
 
   sendRoomMessage(room: Room, message: string) {

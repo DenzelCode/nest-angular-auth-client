@@ -1,10 +1,41 @@
-<div *ngIf="room" class="d-flex flex-column flex-grow-1">
-  <mat-toolbar class="toolbar" color="primary">
-    <span>{{ room.title }}</span>
-    <span class="spacer"></span>
-    <a mat-button routerLink="/rooms">
-      <mat-icon class="text-white">logout</mat-icon>
-    </a>
-  </mat-toolbar>
-  <app-messages [type]="MessageType.Room" [room]="room"></app-messages>
+<div *ngIf="room" class="d-flex flex-grow-1">
+  <div
+    class="members bg-white d-flex flex-column position-relative flex-grow-1"
+    [ngClass]="{ hide: !areMembersShown }"
+  >
+    <div class="top-header d-flex align-items-center overflow-hidden">
+      <span class="m-0 px-4 text-nowrap"
+        >Online members ({{ room.members.length }})</span
+      >
+    </div>
+    <div class="position-relative d-flex flex-grow-1">
+      <div class="position-absolute scroll w-100">
+        <a
+          matRipple
+          *ngFor="let member of room.members"
+          class="w-100 px-4 py-3 d-block"
+        >
+          {{ member.username }}
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-column w-100">
+    <mat-toolbar class="toolbar" color="primary">
+      <button
+        mat-icon-button
+        class="me-2"
+        aria-label="Members menu"
+        (click)="areMembersShown = !areMembersShown"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>{{ room.title }}</span>
+      <span class="spacer"></span>
+      <a mat-button routerLink="/rooms">
+        <mat-icon class="text-white">logout</mat-icon>
+      </a>
+    </mat-toolbar>
+    <app-messages [type]="MessageType.Room" [room]="room"></app-messages>
+  </div>
 </div>

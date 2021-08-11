@@ -56,4 +56,16 @@ export class RoomService {
   subscribeRoom(room: Room) {
     this.socket.emit('room:subscribe', room._id);
   }
+
+  getRoomLeaveEvent() {
+    return this.socket.fromEvent<User>('room:leave');
+  }
+
+  getRoomJoinEvent() {
+    return this.socket.fromEvent<User>('room:join');
+  }
+
+  getRoomUpdateEvent() {
+    return this.socket.fromEvent<Room>('room:update');
+  }
 }

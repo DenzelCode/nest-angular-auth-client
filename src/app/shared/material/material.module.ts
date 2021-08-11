@@ -16,6 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatRippleModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [],
@@ -35,6 +36,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatSlideToggleModule,
     ClipboardModule,
     MatToolbarModule,
+    MatRippleModule,
   ],
 })
 export class MaterialModule {}

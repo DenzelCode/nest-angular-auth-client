@@ -5,10 +5,7 @@ import { Router } from '@angular/router';
 import { remove } from 'lodash';
 import { forkJoin, Subject } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
-import {
-  ConfirmDialogComponent,
-  ConfirmDialogData,
-} from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { upsertItem } from '../../../../shared/utils/upsert-item';
 import { AuthService, User } from '../../../auth/service/auth.service';
 import { JoinRoomDialogComponent } from '../../components/join-room-dialog/join-room-dialog.component';

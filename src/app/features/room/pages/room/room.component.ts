@@ -1,23 +1,34 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { remove } from 'lodash';
 import { Subject } from 'rxjs';
-import { mergeMap, takeUntil } from 'rxjs/operators';
+import {
+  catchError,
+  filter,
+  mergeMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 import { MainSocket } from '../../../../core/socket/main-socket';
+import { User } from '../../../auth/service/auth.service';
 import { MessageType } from '../../../messages/components/messages/messages.component';
 import { Room, RoomService } from '../../service/room.service';
+
+interface InternalRoom extends Room {
+  members: User[];
+}
 
 @Component({
   templateUrl: './room.component.html',
   styleUrls: ['./room.component.scss'],
 })
 export class RoomComponent implements OnInit, OnDestroy {
-  destroy$ = new Subject();
-
   roomId: string;
-
-  room: Room;
-
+  room: InternalRoom;
+  destroy$ = new Subject();
   MessageType = MessageType;
+  areMembersShown = true;
 
   constructor(
     private roomService: RoomService,
@@ -27,6 +38,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    // Subscribe to room events
     this.route.params
       .pipe(
         takeUntil(this.destroy$),
@@ -35,17 +47,37 @@ export class RoomComponent implements OnInit, OnDestroy {
 
           return this.roomService.joinRoom(this.roomId);
         }),
-      )
-      .subscribe(
-        room => {
+        take(1),
+        catchError(() => this.router.navigate(['/rooms'])),
+        filter<InternalRoom>(room => typeof room !== 'boolean'),
+        mergeMap(room => {
           this.room = room;
 
           this.socket.connect();
 
-          this.roomService.subscribeRoom(room);
-        },
-        () => this.router.navigate(['/rooms']),
+          return this.socket.onConnect();
+        }),
+        tap(() => this.roomService.subscribeRoom(this.room)),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+
+    this.roomService
+      .getRoomJoinEvent()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => this.room.members.push(user));
+
+    this.roomService
+      .getRoomLeaveEvent()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user =>
+        remove(this.room.members, u => u === user || u._id === user._id),
       );
+
+    this.roomService
+      .getRoomUpdateEvent()
+      .pipe(takeUntil<InternalRoom>(this.destroy$))
+      .subscribe(room => (this.room = room));
   }
 
   ngOnDestroy() {
@@ -53,9 +85,5 @@ export class RoomComponent implements OnInit, OnDestroy {
 
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  leave(){
-    this.router.navigate(['/rooms']);
   }
 }

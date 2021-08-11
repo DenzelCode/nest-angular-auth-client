@@ -7,7 +7,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { forkJoin, Observable, Subject, Subscription } from 'rxjs';
+import { boundMethod } from 'autobind-decorator';
+import { Subject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { MainSocket } from '../../../../core/socket/main-socket';
 import { User } from '../../../auth/service/auth.service';
@@ -39,51 +40,42 @@ export class MessagesComponent implements OnInit, OnDestroy {
     return this.messagesContainer.nativeElement;
   }
 
-  messages: Message[];
+  messages: Message[] = [];
 
   destroy$ = new Subject();
   MessageType = MessageType;
 
   user?: User;
 
-  readonly scrollOffset = 200;
+  private readonly scrollOffset = 200;
 
   constructor(
     private messageService: MessageService,
     private socket: MainSocket,
     private formBuilder: FormBuilder,
-  ) { }
+  ) {}
+
+  get partnerId() {
+    switch (this.type) {
+      case MessageType.Room:
+        return this.room?._id;
+      case MessageType.Direct:
+        return this.to?._id;
+      default:
+        return undefined;
+    }
+  }
 
   ngOnInit(): void {
-    const messageAction = (message: Message | Message[]) => {
-      Array.isArray(message) ? this.messages = message : this.messages.push(message);
-      this.scrollToLastIfNecessary()
-      return;
-    }
-
     this.messageService
-      .getMessages(this.type, this.room?._id || this.to?._id)
+      .getMessages(this.type, this.partnerId)
       .pipe(take(1))
-      .subscribe(messages => {
-        messageAction(messages);
-      });
+      .subscribe(this.handleMessageEvent);
 
     this.messageService
       .getMessage(this.type)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((message: Message) => {
-        messageAction(message);
-      });
-
-    // Room Messages
-    this.messageService.getRoomLeaveEvent().pipe(takeUntil(this.destroy$)).pipe(map((user: User) => (this.roomMessage(user, 'leave')))).subscribe((message: Message) => {
-      messageAction(message);
-    })
-
-    this.messageService.getRoomJoinEvent().pipe(takeUntil(this.destroy$)).pipe(map((user: User) => (this.roomMessage(user, 'join')))).subscribe((message: Message) => {
-      messageAction(message);
-    })
-
+      .subscribe(this.handleMessageEvent);
   }
 
   ngOnDestroy() {
@@ -93,25 +85,28 @@ export class MessagesComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  @boundMethod
+  handleMessageEvent(message: Message | Message[]) {
+    if (Array.isArray(message)) {
+      this.messages.push(...message);
+    } else {
+      this.messages.push(message);
+    }
+
+    this.scrollToLastIfNecessary();
+
+    return;
+  }
+
   scrollToLastIfNecessary() {
+    const element = this.messagesElement;
+
     if (
-      this.messagesElement.scrollTop >
-      this.messagesElement.offsetTop -
-      this.messagesElement.scrollHeight -
-      this.scrollOffset
+      element.scrollTop >
+      element.offsetTop - element.scrollHeight - this.scrollOffset
     ) {
       setTimeout(() => this.scrollToLastMessages());
     }
-
-  }
-
-  roomMessage(user: User, type: string): Message {
-    const newMessage = {
-      from: null,
-      to: '',
-      message: `${user.username} ${type === 'leave' ? 'left' : 'joined'}`
-    }
-    return newMessage;
   }
 
   scrollToLastMessages() {
@@ -124,7 +119,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
   sendMessage() {
     const message = this.messageForm.value.message;
 
-    if (!message.trim()) {
+    if (!message?.trim()) {
       return;
     }
 

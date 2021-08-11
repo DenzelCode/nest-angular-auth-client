@@ -1,3 +1,49 @@
-.toolbar{
+@import 'bootstrap';
 
+$button-background: rgba(0, 0, 0, 0.04);
+$top-height: 64px;
+
+.top-header {
+  height: $top-height;
+  background-color: $button-background;
+  font: 500 20px/32px Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.toolbar {
+  height: $top-height;
+}
+
+.scroll {
+  height: 100%;
+  overflow: auto;
+}
+
+.members {
+  @include media-breakpoint-up(md) {
+    width: 40%;
+  }
+
+  @include media-breakpoint-up(xl) {
+    width: 20%;
+  }
+
+  @include media-breakpoint-down(md) {
+    width: 100%;
+  }
+
+  transition: 0.5s ease width;
+
+  &.hide {
+    width: 0%;
+  }
+
+  a {
+    color: #444;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:nth-child(2n) {
+      background-color: $button-background;
+    }
+  }
 }
