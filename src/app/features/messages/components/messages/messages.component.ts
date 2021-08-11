@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { Sound, SoundService } from 'src/app/shared/services/sound.service';
 import { MainSocket } from '../../../../core/socket/main-socket';
-import { User } from '../../../auth/service/auth.service';
+import { AuthService, User } from '../../../auth/service/auth.service';
 import { Room } from '../../../room/service/room.service';
 import { Message, MessageService } from '../../service/message.service';
 
@@ -45,7 +45,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
   messages: Message[] = [];
   destroy$ = new Subject();
   MessageType = MessageType;
-  user?: User;
+  user: User;
 
   private readonly scrollOffset = 200;
 
@@ -53,8 +53,9 @@ export class MessagesComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private socket: MainSocket,
     private formBuilder: FormBuilder,
-    private soundService: SoundService
-  ) { }
+    private soundService: SoundService,
+    private authService: AuthService,
+  ) {}
 
   get partnerId() {
     switch (this.type) {
@@ -68,6 +69,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.authService.user$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => (this.user = user));
+
     this.updateMessagesSubject
       ?.pipe(takeUntil(this.destroy$))
       .subscribe(this.getMessages);
@@ -100,7 +105,9 @@ export class MessagesComponent implements OnInit, OnDestroy {
     } else {
       this.messages.push(message);
 
-      this.soundService.playSound(Sound.Message);
+      if (message.from._id !== this.user._id) {
+        this.soundService.playSound(Sound.Message);
+      }
     }
 
     this.scrollToLastIfNecessary();

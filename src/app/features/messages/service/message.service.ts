@@ -9,7 +9,7 @@ import { MessageType } from '../components/messages/messages.component';
 export interface Message {
   message: string;
   room?: string;
-  from?: string;
+  from?: User;
 }
 const { api } = environment;
 
@@ -17,7 +17,7 @@ const { api } = environment;
   providedIn: 'root',
 })
 export class MessageService {
-  constructor(private socket: MainSocket, private http: HttpClient) { }
+  constructor(private socket: MainSocket, private http: HttpClient) {}
 
   getMessages(type: MessageType, id: string) {
     return this.http.get<Message[]>(`${api}/message/${type}/${id}`);
@@ -40,5 +40,4 @@ export class MessageService {
       message,
     });
   }
-
 }
