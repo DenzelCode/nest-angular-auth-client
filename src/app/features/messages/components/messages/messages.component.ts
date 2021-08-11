@@ -10,6 +10,7 @@ import { FormBuilder } from '@angular/forms';
 import { boundMethod } from 'autobind-decorator';
 import { Subject } from 'rxjs';
 import { map, take, takeUntil } from 'rxjs/operators';
+import { playSound } from 'src/app/shared/utils/play-sound';
 import { MainSocket } from '../../../../core/socket/main-socket';
 import { User } from '../../../auth/service/auth.service';
 import { Room } from '../../../room/service/room.service';
@@ -54,7 +55,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private socket: MainSocket,
     private formBuilder: FormBuilder,
-  ) {}
+  ) { }
 
   get partnerId() {
     switch (this.type) {
@@ -104,6 +105,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
     }
 
     this.scrollToLastIfNecessary();
+    playSound('message-tone')
 
     return;
   }
