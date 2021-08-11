@@ -1,6 +1,6 @@
 <div class="chat-container d-flex flex-column flex-grow-1">
   <div class="position-relative flex-grow-1">
-    <div class="position-absolute h-100 messages" #messagesContainer>
+    <div class="position-absolute h-100 messages w-100" #messagesContainer>
       <div *ngFor="let message of messages" class="message fs-5 p-2">
         <b *ngIf="message.from">{{ message.from.username }}:</b>
         {{ message.message }}
