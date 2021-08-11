@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { boundMethod } from 'autobind-decorator';
 import { Socket } from 'ngx-socket-io';
 import { AuthService } from 'src/app/features/auth/service/auth.service';
 import { environment } from '../../../environments/environment';
@@ -23,15 +24,22 @@ export class MainSocket extends Socket {
     });
 
     this.on('connect', () => this.emit('user:subscribe'));
+
+    this.ioSocket.io.on('reconnect_attempt', this.updateAccessToken);
   }
 
   connect() {
-    Object.assign(this.ioSocket?.io?.opts || {}, getOptions(this.authService));
+    this.updateAccessToken();
 
     super.connect();
   }
 
   onConnect() {
     return this.fromEvent('connect');
+  }
+
+  @boundMethod
+  updateAccessToken() {
+    Object.assign(this.ioSocket?.io?.opts || {}, getOptions(this.authService));
   }
 }

@@ -9,8 +9,8 @@ import {
 import { FormBuilder } from '@angular/forms';
 import { boundMethod } from 'autobind-decorator';
 import { Subject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
-import { playSound } from 'src/app/shared/utils/play-sound';
+import { take, takeUntil } from 'rxjs/operators';
+import { Sound, SoundService } from 'src/app/shared/services/sound.service';
 import { MainSocket } from '../../../../core/socket/main-socket';
 import { User } from '../../../auth/service/auth.service';
 import { Room } from '../../../room/service/room.service';
@@ -43,10 +43,8 @@ export class MessagesComponent implements OnInit, OnDestroy {
   }
 
   messages: Message[] = [];
-
   destroy$ = new Subject();
   MessageType = MessageType;
-
   user?: User;
 
   private readonly scrollOffset = 200;
@@ -55,22 +53,21 @@ export class MessagesComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private socket: MainSocket,
     private formBuilder: FormBuilder,
+    private soundService: SoundService
   ) { }
 
   get partnerId() {
     switch (this.type) {
       case MessageType.Room:
-        return this.room?._id;
+        return this.room._id;
       case MessageType.Direct:
-        return this.to?._id;
+        return this.to._id;
       default:
         return undefined;
     }
   }
 
   ngOnInit(): void {
-    this.getMessages();
-
     this.updateMessagesSubject
       ?.pipe(takeUntil(this.destroy$))
       .subscribe(this.getMessages);
@@ -99,13 +96,14 @@ export class MessagesComponent implements OnInit, OnDestroy {
   @boundMethod
   handleMessageEvent(message: Message | Message[]) {
     if (Array.isArray(message)) {
-      this.messages.push(...message);
+      this.messages = message;
     } else {
       this.messages.push(message);
+
+      this.soundService.playSound(Sound.Message);
     }
 
     this.scrollToLastIfNecessary();
-    playSound('message-tone')
 
     return;
   }

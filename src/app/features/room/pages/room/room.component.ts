@@ -59,9 +59,9 @@ export class RoomComponent implements OnInit, OnDestroy {
           return this.socket.onConnect();
         }),
         tap(() => {
-          this.roomService.subscribeRoom(this.room);
-
           this.updateMessages$.next();
+
+          this.roomService.subscribeRoom(this.room);
         }),
         takeUntil(this.destroy$),
       )
@@ -90,6 +90,7 @@ export class RoomComponent implements OnInit, OnDestroy {
 
     this.destroy$.next();
     this.destroy$.complete();
+
     this.updateMessages$.complete();
   }
 }
