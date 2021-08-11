@@ -88,7 +88,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(take(1))
       .subscribe((updatedRoom: Room) => {
-        if (room.isPublic) {
+        if (updatedRoom.isPublic) {
           upsertItem(this.publicRooms, r => r._id === room._id, updatedRoom);
         }
 

@@ -53,8 +53,12 @@ export class UpsertRoomDialogComponent {
       request = this.roomService.updateRoom(this.room._id, roomInput);
     }
 
-    request
-      .pipe(take(1))
-      .subscribe(room => this.dialogRef.close({ ...room, ...roomInput }));
+    request.pipe(take(1)).subscribe(room =>
+      this.dialogRef.close({
+        ...room,
+        title: roomInput.title,
+        isPublic: roomInput.isPublic,
+      }),
+    );
   }
 }
