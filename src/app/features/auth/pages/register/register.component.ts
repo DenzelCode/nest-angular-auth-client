@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { AuthService } from 'src/app/features/auth/service/auth.service';
 
@@ -18,7 +17,6 @@ export class RegisterComponent {
   loading = false;
 
   constructor(
-    private router: Router,
     private formBuilder: FormBuilder,
     private authService: AuthService,
   ) {}
@@ -32,7 +30,7 @@ export class RegisterComponent {
       .register(user)
       .pipe(take(1))
       .subscribe(
-        () => this.router.navigate(['/']),
+        () => this.authService.redirectToCallback(),
         () => {
           this.loading = false;
 

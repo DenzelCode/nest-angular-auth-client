@@ -26,6 +26,8 @@ export class AuthGuard implements CanActivate {
       (requireAuth === false && !isAuthenticated);
 
     if (!isAccessAllowed) {
+      this.authService.setLoginCallbackUrl(state.url);
+
       if (redirect) {
         if (redirect instanceof Array) {
           this.router.navigate([...redirect]);
@@ -33,11 +35,13 @@ export class AuthGuard implements CanActivate {
           this.router.navigate([redirect]);
         }
 
-        return isAccessAllowed;
+        return false;
       }
 
       if (this.router.routerState.snapshot.url === '') {
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
+
+        return false;
       }
     }
 

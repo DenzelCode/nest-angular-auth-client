@@ -7,7 +7,7 @@ import {
   SocialAuthService,
 } from 'angularx-social-login';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { mergeMap, take, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { AppleLoginProvider } from '../provider/apple-login.provider';
@@ -49,7 +49,7 @@ export class AuthService {
   login(user: Partial<User>) {
     return this.http
       .post<TokenResponse>(`${api}/auth/login`, user)
-      .pipe(tap(response => this.setTokens(response)));
+      .pipe(mergeMap(response => this.setTokens(response)));
   }
 
   loginWithFacebook() {
@@ -72,7 +72,7 @@ export class AuthService {
     });
   }
 
-  handleSocialLogin(method: () => Promise<Observable<TokenResponse>>) {
+  handleSocialLogin(method: () => Promise<Observable<User>>) {
     return new Promise<void>(async (resolve, reject) => {
       try {
         const observer = await method();
@@ -81,7 +81,7 @@ export class AuthService {
           () => {
             resolve();
 
-            this.router.navigate(['/']);
+            this.redirectToCallback();
           },
           e => reject(e),
         );
@@ -115,7 +115,7 @@ export class AuthService {
       )
       .pipe(
         take(1),
-        tap(response => this.setTokens(response)),
+        mergeMap(tokens => this.setTokens(tokens)),
       );
   }
 
@@ -135,7 +135,7 @@ export class AuthService {
   register(user: Partial<User>) {
     return this.http
       .post<TokenResponse>(`${api}/auth/register`, user)
-      .pipe(tap(response => this.setTokens(response)));
+      .pipe(mergeMap(response => this.setTokens(response)));
   }
 
   getProfile() {
@@ -167,13 +167,13 @@ export class AuthService {
   logoutFromAllDevices() {
     return this.http
       .delete<TokenResponse>(`${api}/auth/logout-from-all-devices`)
-      .pipe(tap(response => this.setTokens(response)));
+      .pipe(mergeMap(tokens => this.setTokens(tokens)));
   }
 
   async setTokens(response: TokenResponse) {
     this.setRefreshToken(response.refresh_token);
 
-    await this.setAccessToken(response.access_token);
+    return this.setAccessToken(response.access_token);
   }
 
   getAccessToken() {
@@ -183,7 +183,7 @@ export class AuthService {
   async setAccessToken(token: string) {
     localStorage.setItem('accessToken', token);
 
-    await this.getProfile().toPromise();
+    return this.getProfile().toPromise();
   }
 
   getRefreshToken() {
@@ -192,6 +192,24 @@ export class AuthService {
 
   setRefreshToken(token: string) {
     localStorage.setItem('refreshToken', token);
+  }
+
+  getLoginCallbackUrl() {
+    return localStorage.getItem('loginCallbackUrl');
+  }
+
+  setLoginCallbackUrl(url: string) {
+    localStorage.setItem('loginCallbackUrl', url);
+  }
+
+  async redirectToCallback() {
+    const output = await this.router.navigate([
+      this.getLoginCallbackUrl() || '/',
+    ]);
+
+    this.setLoginCallbackUrl(null);
+
+    return output;
   }
 
   logout() {
