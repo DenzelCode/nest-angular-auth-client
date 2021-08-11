@@ -17,7 +17,7 @@ const { api } = environment;
   providedIn: 'root',
 })
 export class MessageService {
-  constructor(private socket: MainSocket, private http: HttpClient) {}
+  constructor(private socket: MainSocket, private http: HttpClient) { }
 
   getMessages(type: MessageType, id: string) {
     return this.http.get<Message[]>(`${api}/message/${type}/${id}`);
@@ -40,4 +40,5 @@ export class MessageService {
       message,
     });
   }
+
 }
