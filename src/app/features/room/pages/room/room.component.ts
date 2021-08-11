@@ -29,7 +29,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   destroy$ = new Subject();
   updateMessages$ = new Subject();
   MessageType = MessageType;
-  areMembersShown = true;
+  areMembersShown = false;
 
   constructor(
     private roomService: RoomService,
