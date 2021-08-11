@@ -27,6 +27,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   roomId: string;
   room: InternalRoom;
   destroy$ = new Subject();
+  updateMessages$ = new Subject();
   MessageType = MessageType;
   areMembersShown = true;
 
@@ -57,7 +58,11 @@ export class RoomComponent implements OnInit, OnDestroy {
 
           return this.socket.onConnect();
         }),
-        tap(() => this.roomService.subscribeRoom(this.room)),
+        tap(() => {
+          this.roomService.subscribeRoom(this.room);
+
+          this.updateMessages$.next();
+        }),
         takeUntil(this.destroy$),
       )
       .subscribe();
@@ -85,5 +90,6 @@ export class RoomComponent implements OnInit, OnDestroy {
 
     this.destroy$.next();
     this.destroy$.complete();
+    this.updateMessages$.complete();
   }
 }

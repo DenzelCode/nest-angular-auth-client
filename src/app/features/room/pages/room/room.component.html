@@ -36,6 +36,10 @@
         <mat-icon class="text-white">logout</mat-icon>
       </a>
     </mat-toolbar>
-    <app-messages [type]="MessageType.Room" [room]="room"></app-messages>
+    <app-messages
+      [type]="MessageType.Room"
+      [room]="room"
+      [updateMessagesSubject]="updateMessages$"
+    ></app-messages>
   </div>
 </div>

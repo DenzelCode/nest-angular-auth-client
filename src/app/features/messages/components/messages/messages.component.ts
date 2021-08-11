@@ -29,6 +29,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
   @Input() type: MessageType;
   @Input() room?: Room;
   @Input() to?: User;
+  @Input() updateMessagesSubject: Subject<void>;
 
   messageForm = this.formBuilder.group({
     message: '',
@@ -67,10 +68,11 @@ export class MessagesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.messageService
-      .getMessages(this.type, this.partnerId)
-      .pipe(take(1))
-      .subscribe(this.handleMessageEvent);
+    this.getMessages();
+
+    this.updateMessagesSubject
+      ?.pipe(takeUntil(this.destroy$))
+      .subscribe(this.getMessages);
 
     this.messageService
       .getMessage(this.type)
@@ -83,6 +85,14 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  @boundMethod
+  getMessages() {
+    return this.messageService
+      .getMessages(this.type, this.partnerId)
+      .pipe(take(1))
+      .subscribe(this.handleMessageEvent);
   }
 
   @boundMethod
