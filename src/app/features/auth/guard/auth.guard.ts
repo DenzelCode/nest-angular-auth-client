@@ -22,11 +22,13 @@ export class AuthGuard implements CanActivate {
     const { isAuthenticated } = this.authService;
 
     const isAccessAllowed =
-      ((requireAuth == null || requireAuth === true) && isAuthenticated) ||
+      ((requireAuth == null || requireAuth) && isAuthenticated) ||
       (requireAuth === false && !isAuthenticated);
 
     if (!isAccessAllowed) {
-      this.authService.setLoginCallbackUrl(state.url);
+      if (requireAuth == null || requireAuth) {
+        this.authService.setLoginCallbackUrl(state.url);
+      }
 
       if (redirect) {
         if (redirect instanceof Array) {
