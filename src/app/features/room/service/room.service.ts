@@ -57,15 +57,23 @@ export class RoomService {
     this.socket.emit('room:subscribe', room._id);
   }
 
-  getRoomLeaveEvent() {
+  onLeaveEvent() {
     return this.socket.fromEvent<User>('room:leave');
   }
 
-  getRoomJoinEvent() {
+  onJoinEvent() {
     return this.socket.fromEvent<User>('room:join');
   }
 
-  getRoomUpdateEvent() {
+  onUpdateEvent() {
     return this.socket.fromEvent<Room>('room:update');
+  }
+
+  onDeleteEvent() {
+    return this.socket.fromEvent<Room>('room:delete');
+  }
+
+  onDeleteMessagesEvent() {
+    return this.socket.fromEvent<Room>('room:delete_messages');
   }
 }

@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { boundMethod } from 'autobind-decorator';
+import { remove } from 'lodash';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { Sound, SoundService } from 'src/app/shared/services/sound.service';
@@ -45,7 +46,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
     return this.messagesContainer.nativeElement;
   }
 
-  messages: Message[] = [];
+  @Input() messages: Message[] = [];
   destroy$ = new Subject();
   MessageType = MessageType;
   user: User;
@@ -115,7 +116,8 @@ export class MessagesComponent implements OnInit, OnDestroy {
       .getMessages(this.type, this.partnerId)
       .pipe(take(1))
       .subscribe(messages => {
-        this.messages = messages;
+        remove(this.messages, () => true);
+        this.messages.push(...messages);
 
         this.scrollToLastIfNecessary();
       });

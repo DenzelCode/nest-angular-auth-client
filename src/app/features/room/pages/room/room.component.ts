@@ -13,6 +13,7 @@ import {
 import { MainSocket } from '../../../../core/socket/main-socket';
 import { User } from '../../../auth/service/auth.service';
 import { MessageType } from '../../../messages/components/messages/messages.component';
+import { Message } from '../../../messages/service/message.service';
 import { Room, RoomService } from '../../service/room.service';
 
 interface InternalRoom extends Room {
@@ -30,6 +31,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   updateMessages$ = new Subject();
   MessageType = MessageType;
   areMembersShown = false;
+  messages: Message[] = [];
 
   constructor(
     private roomService: RoomService,
@@ -68,21 +70,31 @@ export class RoomComponent implements OnInit, OnDestroy {
       .subscribe();
 
     this.roomService
-      .getRoomJoinEvent()
+      .onJoinEvent()
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => this.room.members.push(user));
 
     this.roomService
-      .getRoomLeaveEvent()
+      .onLeaveEvent()
       .pipe(takeUntil(this.destroy$))
       .subscribe(user =>
         remove(this.room.members, u => u === user || u._id === user._id),
       );
 
     this.roomService
-      .getRoomUpdateEvent()
+      .onUpdateEvent()
       .pipe(takeUntil<InternalRoom>(this.destroy$))
       .subscribe(room => (this.room = room));
+
+    this.roomService
+      .onDeleteEvent()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.router.navigate(['/rooms']));
+
+    this.roomService
+      .onDeleteMessagesEvent()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => remove(this.messages, () => true));
   }
 
   ngOnDestroy() {
