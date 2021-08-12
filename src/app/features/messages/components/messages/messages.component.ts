@@ -11,6 +11,7 @@ import { boundMethod } from 'autobind-decorator';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { Sound, SoundService } from 'src/app/shared/services/sound.service';
+import { HttpError } from '../../../../core/interceptor/error-handler.interceptor';
 import { MainSocket } from '../../../../core/socket/main-socket';
 import { AuthService, User } from '../../../auth/service/auth.service';
 import { Room } from '../../../room/service/room.service';
@@ -144,16 +145,20 @@ export class MessagesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.messageForm.patchValue({
-      message: '',
-    });
+    const callback = (response: boolean | HttpError) => {
+      if (typeof response !== 'object') {
+        this.messageForm.patchValue({
+          message: '',
+        });
+      }
+    };
 
     if (this.type === MessageType.Room) {
-      this.messageService.sendRoomMessage(this.room, message);
+      this.messageService.sendRoomMessage(this.room, message, callback);
 
       return;
     }
 
-    this.messageService.sendDirectMessage(this.to, message);
+    this.messageService.sendDirectMessage(this.to, message, callback);
   }
 }

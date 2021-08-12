@@ -27,17 +27,30 @@ export class MessageService {
     return this.socket.fromEvent<Message>(`message:${type}`);
   }
 
-  sendRoomMessage(room: Room, message: string) {
-    return this.socket.emit(`message:room`, {
-      roomId: room._id,
-      message,
-    });
+  sendRoomMessage<T>(
+    room: Room,
+    message: string,
+    callback?: (data: T) => void,
+  ) {
+    return this.socket.emit(
+      `message:room`,
+      {
+        roomId: room._id,
+        message,
+      },
+      callback,
+    );
   }
 
-  sendDirectMessage(to: User, message: string) {
+  sendDirectMessage<T>(
+    to: User,
+    message: string,
+    callback?: (data: T) => void,
+  ) {
     return this.socket.emit(`message:direct`, {
       to: to._id,
       message,
+      callback,
     });
   }
 }

@@ -23,10 +23,15 @@ export class JoinRoomDialogComponent {
   ) {}
 
   submit() {
-    const code = this.joinForm.value.code.split('/');
+    const array = this.joinForm.value.code.split('/');
+    const code = array[array.length - 1];
+
+    if (!code?.trim()) {
+      return;
+    }
 
     this.roomService
-      .getRoom(code[code.length - 1])
+      .getRoom(code)
       .pipe(take(1))
       .subscribe(room => {
         this.dialog.close();

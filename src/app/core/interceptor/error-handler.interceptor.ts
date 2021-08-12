@@ -7,13 +7,19 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap} from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import {
   ErrorDialogComponent,
   ErrorDialogData,
 } from '../../shared/components/error-dialog/error-dialog.component';
 import { AuthService } from 'src/app/features/auth/service/auth.service';
+
+export interface HttpError {
+  statusCode: number;
+  message: string;
+  error?: string;
+}
 
 @Injectable()
 export class ErrorHandlerInterceptor implements HttpInterceptor {
@@ -36,18 +42,20 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
               return;
             }
 
-            const error = response.error;
-
-            this.dialog.open<ErrorDialogData>(ErrorDialogComponent, {
-              data: {
-                title: error.error || 'Error',
-                message: error.message,
-              },
-              width: '350px',
-            });
+            this.handleError(response.error);
           }
         },
       ),
     );
+  }
+
+  handleError(err: HttpError) {
+    this.dialog.open<ErrorDialogData>(ErrorDialogComponent, {
+      data: {
+        title: err.error || 'Error',
+        message: err.message,
+      },
+      width: '350px',
+    });
   }
 }
