@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { boundMethod } from 'autobind-decorator';
 import { Socket } from 'ngx-socket-io';
+import { take } from 'rxjs/operators';
 import { AuthService } from 'src/app/features/auth/service/auth.service';
 import { environment } from '../../../environments/environment';
 
@@ -25,7 +26,20 @@ export class MainSocket extends Socket {
 
     this.on('connect', () => this.emit('user:subscribe'));
 
-    this.ioSocket.io.on('reconnect_attempt', this.updateAccessToken);
+    const io = this.ioSocket.io;
+
+    io.on('reconnect_attempt', this.updateAccessToken);
+
+    this.ioSocket.on('disconnect', (reason: string) => {
+      if (reason !== 'io server disconnect') {
+        return;
+      }
+
+      this.authService
+        .loginWithRefreshToken()
+        .pipe(take(1))
+        .subscribe(() => this.connect());
+    });
   }
 
   connect() {

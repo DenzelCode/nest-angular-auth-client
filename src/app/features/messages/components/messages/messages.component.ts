@@ -81,6 +81,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
       .getMessage(this.type)
       .pipe(takeUntil(this.destroy$))
       .subscribe(this.handleMessageEvent);
+
+    if (!this.updateMessagesSubject) {
+      this.getMessages();
+    }
   }
 
   ngOnDestroy() {
@@ -95,19 +99,19 @@ export class MessagesComponent implements OnInit, OnDestroy {
     return this.messageService
       .getMessages(this.type, this.partnerId)
       .pipe(take(1))
-      .subscribe(this.handleMessageEvent);
+      .subscribe(messages => {
+        this.messages = messages;
+
+        this.scrollToLastIfNecessary();
+      });
   }
 
   @boundMethod
-  handleMessageEvent(message: Message | Message[]) {
-    if (Array.isArray(message)) {
-      this.messages = message;
-    } else {
-      this.messages.push(message);
+  handleMessageEvent(message: Message) {
+    this.messages.push(message);
 
-      if (message.from._id !== this.user._id) {
-        this.soundService.playSound(Sound.Message);
-      }
+    if (message.from._id !== this.user._id) {
+      this.soundService.playSound(Sound.Message);
     }
 
     this.scrollToLastIfNecessary();

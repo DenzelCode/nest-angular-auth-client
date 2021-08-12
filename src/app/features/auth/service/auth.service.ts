@@ -77,7 +77,7 @@ export class AuthService {
       try {
         const observer = await method();
 
-        return observer.subscribe(
+        return observer.pipe(take(1)).subscribe(
           () => {
             resolve();
 
@@ -161,7 +161,7 @@ export class AuthService {
           },
         },
       )
-      .pipe(tap(response => this.setTokens(response)));
+      .pipe(mergeMap(response => this.setTokens(response)));
   }
 
   logoutFromAllDevices() {
