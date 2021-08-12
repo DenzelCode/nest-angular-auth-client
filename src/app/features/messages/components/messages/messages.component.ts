@@ -159,23 +159,36 @@ export class MessagesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const callback = (response: boolean | HttpError) => {
-      if (typeof response !== 'object') {
-        this.messageForm.patchValue({
-          message: '',
-        });
-      }
-    };
+    if (!this.isConnected) {
+      this.handleMessageCallback();
+    }
 
     switch (this.type) {
       case MessageType.Room:
-        this.messageService.sendRoomMessage(this.room, message, callback);
+        this.messageService.sendRoomMessage(
+          this.room,
+          message,
+          this.handleMessageCallback,
+        );
         break;
       case MessageType.Direct:
-        this.messageService.sendDirectMessage(this.to, message, callback);
+        this.messageService.sendDirectMessage(
+          this.to,
+          message,
+          this.handleMessageCallback,
+        );
         break;
       default:
         break;
+    }
+  }
+
+  @boundMethod
+  handleMessageCallback(response?: boolean | HttpError) {
+    if (typeof response !== 'object') {
+      this.messageForm.patchValue({
+        message: '',
+      });
     }
   }
 }
