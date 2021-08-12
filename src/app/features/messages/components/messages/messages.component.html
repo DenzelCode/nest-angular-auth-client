@@ -1,5 +1,20 @@
 <div class="chat-container d-flex flex-column flex-grow-1">
   <div class="position-relative flex-grow-1">
+    <div
+      class="
+        position-absolute
+        h-100
+        w-100
+        d-flex
+        align-items-center
+        justify-content-center
+        z-10
+      "
+      *ngIf="!isConnected"
+    >
+      <mat-spinner class="position-absolute" diameter="60"></mat-spinner>
+      <h1 class="mt-6">Connecting</h1>
+    </div>
     <div class="position-absolute h-100 messages w-100" #messagesContainer>
       <div *ngFor="let message of messages" class="message fs-5 p-2">
         <b *ngIf="message.from">{{ message.from.username }}:</b>

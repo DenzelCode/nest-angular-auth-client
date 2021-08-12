@@ -37,6 +37,8 @@ export class MessagesComponent implements OnInit, OnDestroy {
     message: '',
   });
 
+  isConnected = false;
+
   @ViewChild('messagesContainer') messagesContainer: ElementRef<HTMLDivElement>;
 
   get messagesElement() {
@@ -70,6 +72,18 @@ export class MessagesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.socket.connect();
+
+    this.socket
+      .onConnect()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => (this.isConnected = true));
+
+    this.socket
+      .onDisconnect()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => (this.isConnected = false));
+
     this.authService.user$
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => (this.user = user));
@@ -153,12 +167,15 @@ export class MessagesComponent implements OnInit, OnDestroy {
       }
     };
 
-    if (this.type === MessageType.Room) {
-      this.messageService.sendRoomMessage(this.room, message, callback);
-
-      return;
+    switch (this.type) {
+      case MessageType.Room:
+        this.messageService.sendRoomMessage(this.room, message, callback);
+        break;
+      case MessageType.Direct:
+        this.messageService.sendDirectMessage(this.to, message, callback);
+        break;
+      default:
+        break;
     }
-
-    this.messageService.sendDirectMessage(this.to, message, callback);
   }
 }
