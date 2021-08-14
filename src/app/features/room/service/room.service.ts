@@ -68,8 +68,4 @@ export class RoomService {
   onDeleteEvent() {
     return this.socket.fromEvent<Room>('room:delete');
   }
-
-  onDeleteMessagesEvent() {
-    return this.socket.fromEvent<Room>('room:delete_messages');
-  }
 }

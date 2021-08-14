@@ -22,7 +22,7 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     request = this.handleRequest(request);
 
-    if (request.headers.has('skipTokenInterceptor')) {
+    if (request.headers.has(AuthInterceptor.skipHeader)) {
       return next.handle(request);
     }
 
@@ -57,7 +57,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private skipRequest(request: HttpRequest<unknown>) {
     request = request.clone({
-      headers: request.headers.set('skipTokenInterceptor', 'true'),
+      headers: request.headers.set(AuthInterceptor.skipHeader, 'true'),
     });
 
     return this.handleRequest(request);

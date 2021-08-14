@@ -101,6 +101,18 @@ export class MessagesComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(this.handleMessageEvent);
 
+    this.messageService
+      .onDeleteMessagesEvent(this.type)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => remove(this.messages, () => true));
+
+    this.messageService
+      .onDeleteMessageEvent(this.type)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(messageId =>
+        remove(this.messages, message => message._id === messageId),
+      );
+
     if (!this.updateMessagesSubject) {
       this.getMessages();
     }
@@ -216,6 +228,6 @@ export class MessagesComponent implements OnInit, OnDestroy {
     this.messageService
       .deleteMessage(this.type, message)
       .pipe(take(1))
-      .subscribe(() => remove(this.messages, msg => msg._id === message._id));
+      .subscribe();
   }
 }

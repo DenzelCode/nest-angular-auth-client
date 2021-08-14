@@ -10,6 +10,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { mergeMap, take, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
+import { ErrorHandlerInterceptor } from '../../../core/interceptor/error-handler.interceptor';
+import { AuthInterceptor } from '../interceptor/auth.interceptor';
 import { AppleLoginProvider } from '../provider/apple-login.provider';
 
 export interface TokenResponse {
@@ -142,7 +144,7 @@ export class AuthService {
     return this.http
       .get<User>(`${api}/auth/me`, {
         headers: {
-          skipNotifier: 'true',
+          [ErrorHandlerInterceptor.skipHeader]: 'true',
         },
       })
       .pipe(tap(user => this.user$.next(user)));
@@ -157,7 +159,7 @@ export class AuthService {
         },
         {
           headers: {
-            skipTokenInterceptor: 'true',
+            [AuthInterceptor.skipHeader]: 'true',
           },
         },
       )

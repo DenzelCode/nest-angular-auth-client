@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { MainSocket } from '../../../core/socket/main-socket';
+import { AuthInterceptor } from '../../auth/interceptor/auth.interceptor';
 import { User } from '../../auth/service/auth.service';
 import { Room } from '../../room/service/room.service';
 import { MessageType } from '../components/messages/messages.component';
@@ -64,8 +65,16 @@ export class MessageService {
         to: message.to,
       },
       headers: {
-        skipTokenInterceptor: 'true',
+        [AuthInterceptor.skipHeader]: 'true',
       },
     });
+  }
+
+  onDeleteMessagesEvent(type: MessageType) {
+    return this.socket.fromEvent<void>(`${type}:delete_messages`);
+  }
+
+  onDeleteMessageEvent(type: MessageType) {
+    return this.socket.fromEvent<string>(`${type}:delete_message`);
   }
 }

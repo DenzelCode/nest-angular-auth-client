@@ -90,11 +90,6 @@ export class RoomComponent implements OnInit, OnDestroy {
       .onDeleteEvent()
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.router.navigate(['/rooms']));
-
-    this.roomService
-      .onDeleteMessagesEvent()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => remove(this.messages, () => true));
   }
 
   ngOnDestroy() {
