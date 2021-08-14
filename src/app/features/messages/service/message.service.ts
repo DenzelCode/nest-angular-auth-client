@@ -63,6 +63,9 @@ export class MessageService {
         roomId: message.room,
         to: message.to,
       },
+      headers: {
+        skipTokenInterceptor: 'true',
+      },
     });
   }
 }
