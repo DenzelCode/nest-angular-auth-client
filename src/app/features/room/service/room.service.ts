@@ -45,10 +45,6 @@ export class RoomService {
     return this.http.put<Room>(`${api}/room/${id}`, room);
   }
 
-  leaveRoom() {
-    return this.http.delete<Room>(`${api}/room`);
-  }
-
   joinRoom(roomId: string) {
     return this.http.post<Room>(`${api}/room/join`, { roomId });
   }
