@@ -122,7 +122,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
         remove(this.messages, () => true);
         this.messages.push(...messages);
 
-        this.scrollToLastIfNecessary();
+        this.scrollToLastMessages();
       });
   }
 
@@ -144,17 +144,19 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
     if (
       element.scrollTop >
-      element.offsetTop - element.scrollHeight - this.scrollOffset
+      element.scrollHeight - element.offsetHeight - this.scrollOffset
     ) {
-      setTimeout(() => this.scrollToLastMessages());
+      this.scrollToLastMessages();
     }
   }
 
   scrollToLastMessages() {
-    this.messagesElement.scrollTo({
-      top: this.messagesElement.scrollHeight,
-      behavior: 'smooth',
-    });
+    setTimeout(() =>
+      this.messagesElement.scrollTo({
+        top: this.messagesElement.scrollHeight,
+        behavior: 'smooth',
+      }),
+    );
   }
 
   sendMessage() {
