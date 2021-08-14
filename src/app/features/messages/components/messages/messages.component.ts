@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { boundMethod } from 'autobind-decorator';
 import { remove } from 'lodash';
 import { Subject } from 'rxjs';
@@ -14,6 +15,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { Sound, SoundService } from 'src/app/shared/services/sound.service';
 import { HttpError } from '../../../../core/interceptor/error-handler.interceptor';
 import { MainSocket } from '../../../../core/socket/main-socket';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AuthService, User } from '../../../auth/service/auth.service';
 import { Room } from '../../../room/service/room.service';
 import { Message, MessageService } from '../../service/message.service';
@@ -59,6 +61,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private soundService: SoundService,
     private authService: AuthService,
+    private dialog: MatDialog,
   ) {}
 
   get partnerId() {
@@ -192,5 +195,25 @@ export class MessagesComponent implements OnInit, OnDestroy {
         message: '',
       });
     }
+  }
+
+  confirmDeleteMessage(message: Message) {
+    const dialog = this.dialog.open(ConfirmDialogComponent);
+
+    dialog
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(confirm => {
+        if (confirm) {
+          this.deleteMessage(message);
+        }
+      });
+  }
+
+  deleteMessage(message: Message) {
+    this.messageService
+      .deleteMessage(this.type, message)
+      .pipe(take(1))
+      .subscribe(() => remove(this.messages, msg => msg._id === message._id));
   }
 }

@@ -12,6 +12,10 @@
     word-break: break-word;
     overflow-wrap: break-all;
 
+    &:first-child {
+      margin-top: 1rem;
+    }
+
     &:last-child {
       margin-bottom: 1rem;
     }
@@ -24,17 +28,35 @@
       display: inline-flex;
     }
 
-    .bubble {
-      box-shadow: 2px 2px 5px 0 rgba($color: #000000, $alpha: 0.2);
-      border-radius: 0.5rem;
+    .bubble-container {
+      .delete {
+        display: none;
+      }
+
+      &:hover,
+      &:focus {
+        .delete {
+          display: flex;
+        }
+      }
+
+      .bubble {
+        box-shadow: 2px 2px 5px 0 rgba($color: #000000, $alpha: 0.2);
+        border-radius: 0.5rem;
+      }
     }
 
     &.me {
       align-items: flex-end;
 
-      .bubble {
-        background-color: map-get($theme-colors, 'primary');
-        color: #fff;
+      .bubble-container {
+        flex-direction: row-reverse;
+
+        .bubble {
+          background-color: map-get($theme-colors, 'primary');
+          border-top-right-radius: 0;
+          color: #fff;
+        }
       }
     }
 
@@ -43,7 +65,7 @@
 
       .bubble {
         background-color: rgba($color: #000000, $alpha: 0.03);
-        // color: #fff;
+        border-top-left-radius: 0;
       }
     }
   }

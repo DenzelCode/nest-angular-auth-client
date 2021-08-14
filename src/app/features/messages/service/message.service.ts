@@ -7,7 +7,9 @@ import { Room } from '../../room/service/room.service';
 import { MessageType } from '../components/messages/messages.component';
 
 export interface Message {
+  _id: string;
   message: string;
+  to: string;
   room?: string;
   from?: User;
 }
@@ -51,6 +53,16 @@ export class MessageService {
       to: to._id,
       message,
       callback,
+    });
+  }
+
+  deleteMessage(type: MessageType, message: Message) {
+    return this.http.delete(`${api}/message/${type}`, {
+      body: {
+        messageId: message._id,
+        roomId: message.room,
+        to: message.to,
+      },
     });
   }
 }

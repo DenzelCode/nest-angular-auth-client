@@ -25,8 +25,19 @@
         [ngClass]="[message.from._id === user._id ? 'me' : 'partner']"
       >
         <span>{{ message.from.username }}</span>
-        <div class="bubble p-3">
-          {{ message.message }}
+        <div class="bubble-container d-flex align-items-center">
+          <div class="bubble p-3">
+            {{ message.message }}
+          </div>
+          <mat-icon
+            *ngIf="
+              message.from._id === user._id || room?.owner._id === user._id
+            "
+            role="button"
+            class="delete"
+            (click)="confirmDeleteMessage(message)"
+            >delete</mat-icon
+          >
         </div>
       </div>
     </div>
