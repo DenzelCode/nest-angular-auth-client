@@ -15,22 +15,32 @@
       <mat-spinner class="position-absolute" diameter="60"></mat-spinner>
       <h1 class="mt-6">Connecting</h1>
     </div>
-    <div class="position-absolute h-100 messages w-100" #messagesContainer>
-      <div *ngFor="let message of messages" class="message fs-5 p-2">
-        <b *ngIf="message.from">{{ message.from.username }}:</b>
-        {{ message.message }}
+    <div
+      class="position-absolute h-100 messages w-100 d-flex flex-column"
+      #messagesContainer
+    >
+      <div
+        *ngFor="let message of messages"
+        class="message fs-5 p-2 d-flex flex-column"
+        [ngClass]="[message.from._id === user._id ? 'me' : 'partner']"
+      >
+        <span>{{ message.from.username }}</span>
+        <div class="bubble p-3">
+          {{ message.message }}
+        </div>
       </div>
     </div>
   </div>
-  <div class="text-container p-2">
+  <div class="text-container bg-white p-2">
     <form (ngSubmit)="sendMessage()" [formGroup]="messageForm">
-      <mat-form-field class="full-width">
+      <mat-form-field class="full-width fs-4">
         <mat-label>Message</mat-label>
         <textarea
           type="text"
           placeholder="Type a message"
           matInput
           formControlName="message"
+          rows="2"
           (keydown.enter)="sendMessage()"
         ></textarea>
       </mat-form-field>
