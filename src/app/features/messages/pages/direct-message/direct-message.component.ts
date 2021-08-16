@@ -10,7 +10,6 @@ import {
   takeUntil,
   tap,
 } from 'rxjs/operators';
-import { MainSocket } from '../../../../core/socket/main-socket';
 import { User } from '../../../auth/service/auth.service';
 import { UserService } from '../../../user/service/user.service';
 import { MessageType } from '../../components/messages/messages.component';
