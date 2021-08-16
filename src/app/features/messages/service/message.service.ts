@@ -74,7 +74,7 @@ export class MessageService {
   }
 
   onDeleteMessagesEvent(type: MessageType) {
-    return this.socket.fromEvent<void>(`${type}:delete_messages`);
+    return this.socket.fromEvent<Room | User>(`${type}:delete_messages`);
   }
 
   onDeleteMessageEvent(type: MessageType) {

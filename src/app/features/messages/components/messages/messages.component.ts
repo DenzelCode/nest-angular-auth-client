@@ -108,7 +108,13 @@ export class MessagesComponent implements OnInit, OnDestroy {
     this.messageService
       .onDeleteMessagesEvent(this.type)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => remove(this.messages, () => true));
+      .subscribe(object => {
+        if (!this.isCurrentSection(object._id)) {
+          return;
+        }
+
+        remove(this.messages, () => true);
+      });
 
     this.messageService
       .onDeleteMessageEvent(this.type)
@@ -144,6 +150,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
   @boundMethod
   handleMessageEvent(message: Message) {
+    if (!this.isCurrentSection(message.from._id, message.to, message.room)) {
+      return;
+    }
+
     this.messages.push(message);
 
     if (message.from._id !== this.user._id) {
@@ -153,6 +163,13 @@ export class MessagesComponent implements OnInit, OnDestroy {
     this.scrollToLastIfNecessary();
 
     return;
+  }
+
+  isCurrentSection(...ids: string[]) {
+    return ids.find(
+      id =>
+        this.room?._id === id || this.to?._id === id || this.user._id === id,
+    );
   }
 
   scrollToLastIfNecessary() {
