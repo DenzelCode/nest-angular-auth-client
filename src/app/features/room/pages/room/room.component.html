@@ -14,7 +14,7 @@
           matRipple
           *ngFor="let member of room.members"
           class="w-100 px-4 py-3 d-block"
-          [routerLink]="'/direct-message/' + member.username"
+          [routerLink]="['/direct-message', member.username]"
         >
           {{ member.username }}
         </a>

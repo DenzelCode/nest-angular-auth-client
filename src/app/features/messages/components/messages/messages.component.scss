@@ -20,8 +20,10 @@
       margin-bottom: 1rem;
     }
 
-    span {
+    & > a {
       font-size: 1rem;
+      color: #444;
+      text-decoration: none;
     }
 
     * {
