@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { SharedModule } from '../shared/shared.module';
 import { RoomModule } from './room/room.module';
 import { MessagesModule } from './messages/messages.module';
+import { NotificationModule } from './notification/notification.module';
 
 @NgModule({
   declarations: [MainComponent],
@@ -19,6 +20,7 @@ import { MessagesModule } from './messages/messages.module';
     AuthModule,
     RoomModule,
     MessagesModule,
+    NotificationModule,
   ],
   exports: [RouterModule],
 })

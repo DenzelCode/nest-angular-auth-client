@@ -13,6 +13,7 @@ import { AuthService } from './features/auth/service/auth.service';
 import { APP_BASE_HREF } from '@angular/common';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { SharedModule } from './shared/shared.module';
 
 const initialize = (authService: AuthService) => async () => {
   if (authService.getAccessToken()) {
@@ -26,16 +27,14 @@ const initialize = (authService: AuthService) => async () => {
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    HttpClientModule,
     MaterialModule,
+    SharedModule,
     FeaturesModule,
     BrowserAnimationsModule,
     CoreModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-      // Register the ServiceWorker as soon as the app is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
+      enabled: true,
+      registrationStrategy: 'registerWhenStable:30000',
     }),
   ],
   providers: [

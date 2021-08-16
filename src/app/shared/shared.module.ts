@@ -5,10 +5,17 @@ import { ErrorDialogComponent } from './components/error-dialog/error-dialog.com
 import { MaterialModule } from './material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [ConfirmDialogComponent, ErrorDialogComponent],
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule,
+  ],
   exports: [
     ConfirmDialogComponent,
     ErrorDialogComponent,
@@ -16,6 +23,7 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     FormsModule,
     RouterModule,
+    HttpClientModule,
   ],
 })
 export class SharedModule {}
