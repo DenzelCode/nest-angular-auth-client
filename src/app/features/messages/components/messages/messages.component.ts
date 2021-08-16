@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { boundMethod } from 'autobind-decorator';
 import { remove } from 'lodash';
 import { Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { Sound, SoundService } from 'src/app/shared/services/sound.service';
 import { HttpError } from '../../../../core/interceptor/error-handler.interceptor';
 import { MainSocket } from '../../../../core/socket/main-socket';
@@ -102,19 +102,23 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
     this.messageService
       .getMessage(this.type)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(
+          message =>
+            this.isCurrentSection(message.from._id, message.to, message.room) &&
+            !this.messages.some(msg => msg._id === message._id),
+        ),
+      )
       .subscribe(this.handleMessageEvent);
 
     this.messageService
       .onDeleteMessagesEvent(this.type)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(object => {
-        if (!this.isCurrentSection(object._id)) {
-          return;
-        }
-
-        remove(this.messages, () => true);
-      });
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(object => this.isCurrentSection(object._id)),
+      )
+      .subscribe(() => remove(this.messages, () => true));
 
     this.messageService
       .onDeleteMessageEvent(this.type)
@@ -150,13 +154,6 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
   @boundMethod
   handleMessageEvent(message: Message) {
-    if (
-      !this.isCurrentSection(message.from._id, message.to, message.room) ||
-      this.messages.find(msg => msg._id === message._id)
-    ) {
-      return;
-    }
-
     this.messages.push(message);
 
     if (message.from._id !== this.user._id) {
@@ -168,8 +165,8 @@ export class MessagesComponent implements OnInit, OnDestroy {
     return;
   }
 
-  isCurrentSection(...ids: string[]) {
-    return ids.find(
+  isCurrentSection(...objectIds: string[]) {
+    return objectIds.some(
       id =>
         this.room?._id === id || this.to?._id === id || this.user._id === id,
     );
