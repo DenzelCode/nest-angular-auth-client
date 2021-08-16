@@ -28,7 +28,6 @@ export class RoomComponent implements OnInit, OnDestroy {
   roomId: string;
   room: InternalRoom;
   destroy$ = new Subject();
-  updateMessages$ = new Subject();
   MessageType = MessageType;
   areMembersShown = false;
   messages: Message[] = [];
@@ -56,15 +55,9 @@ export class RoomComponent implements OnInit, OnDestroy {
         mergeMap(room => {
           this.room = room;
 
-          this.socket.connect();
-
           return this.socket.onConnect();
         }),
-        tap(() => {
-          this.updateMessages$.next();
-
-          this.roomService.subscribeRoom(this.room);
-        }),
+        tap(() => this.roomService.subscribeRoom(this.room)),
         takeUntil(this.destroy$),
       )
       .subscribe();
@@ -93,11 +86,7 @@ export class RoomComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.socket.disconnect();
-
     this.destroy$.next();
     this.destroy$.complete();
-
-    this.updateMessages$.complete();
   }
 }

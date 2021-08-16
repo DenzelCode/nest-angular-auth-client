@@ -1,0 +1,9 @@
+<div class="p-5 d-flex flex-column flex-grow-1" *ngIf="to">
+  <h1 class="fw-bold">Chatting with {{ to.username }}</h1>
+  <app-messages
+    [type]="MessageType.Direct"
+    [to]="to"
+    [messages]="messages"
+    [updateMessages$]="updateMessages$"
+  ></app-messages>
+</div>

@@ -8,6 +8,7 @@ import { RecoverComponent } from './recover/pages/recover/recover.component';
 import { ChangePasswordComponent } from './recover/pages/change-password/change-password.component';
 import { RoomsComponent } from './room/pages/rooms/rooms.component';
 import { RoomComponent } from './room/pages/room/room.component';
+import { DirectMessageComponent } from './messages/pages/direct-message/direct-message.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
@@ -58,6 +59,11 @@ export const routes: Routes = [
   {
     path: 'room/:id',
     component: RoomComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'direct-message/:username',
+    component: DirectMessageComponent,
     canActivate: [AuthGuard],
   },
   { path: '**', redirectTo: '/' },

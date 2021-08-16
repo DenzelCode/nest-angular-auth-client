@@ -34,7 +34,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
   @Input() type: MessageType;
   @Input() room?: Room;
   @Input() to?: User;
-  @Input() updateMessagesSubject: Subject<void>;
+  @Input() updateMessages$: Subject<void>;
 
   messageForm = this.formBuilder.group({
     message: '',
@@ -81,7 +81,11 @@ export class MessagesComponent implements OnInit, OnDestroy {
     this.socket
       .onConnect()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => (this.isConnected = true));
+      .subscribe(() => {
+        this.isConnected = true;
+
+        this.getMessages();
+      });
 
     this.socket
       .onDisconnect()
@@ -92,7 +96,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => (this.user = user));
 
-    this.updateMessagesSubject
+    this.updateMessages$
       ?.pipe(takeUntil(this.destroy$))
       .subscribe(this.getMessages);
 
@@ -113,7 +117,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
         remove(this.messages, message => message._id === messageId),
       );
 
-    if (!this.updateMessagesSubject) {
+    if (!this.updateMessages$) {
       this.getMessages();
     }
   }

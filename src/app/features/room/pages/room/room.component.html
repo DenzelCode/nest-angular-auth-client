@@ -14,6 +14,7 @@
           matRipple
           *ngFor="let member of room.members"
           class="w-100 px-4 py-3 d-block"
+          [routerLink]="'/direct-message/' + member.username"
         >
           {{ member.username }}
         </a>
@@ -40,7 +41,7 @@
       [type]="MessageType.Room"
       [room]="room"
       [messages]="messages"
-      [updateMessagesSubject]="updateMessages$"
+      [updateMessages$]="updateMessages$"
     ></app-messages>
   </div>
 </div>

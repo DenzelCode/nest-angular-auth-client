@@ -50,11 +50,14 @@ export class MessageService {
     message: string,
     callback?: (data: T) => void,
   ) {
-    return this.socket.emit(`message:direct`, {
-      to: to._id,
-      message,
+    return this.socket.emit(
+      `message:direct`,
+      {
+        to: to._id,
+        message,
+      },
       callback,
-    });
+    );
   }
 
   deleteMessage(type: MessageType, message: Message) {
