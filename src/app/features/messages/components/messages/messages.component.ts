@@ -150,7 +150,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
   @boundMethod
   handleMessageEvent(message: Message) {
-    if (!this.isCurrentSection(message.from._id, message.to, message.room)) {
+    if (
+      !this.isCurrentSection(message.from._id, message.to, message.room) ||
+      this.messages.find(msg => msg._id === message._id)
+    ) {
       return;
     }
 
