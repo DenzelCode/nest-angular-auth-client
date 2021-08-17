@@ -34,13 +34,18 @@ export class NotificationService {
     return this.http.get<Config>(`${api}/notification/config`);
   }
 
+  setupEnvironment() {
+    return this.requestSubscription().pipe(
+      mergeMap(subscription =>
+        this.subscriptionService.registerSubscription(subscription),
+      ),
+    );
+  }
+
   requestSubscription() {
     return this.getConfig().pipe(
       mergeMap(({ webPublicKey: serverPublicKey }) =>
         this.swPush.requestSubscription({ serverPublicKey }),
-      ),
-      mergeMap(subscription =>
-        this.subscriptionService.registerSubscription(subscription),
       ),
     );
   }

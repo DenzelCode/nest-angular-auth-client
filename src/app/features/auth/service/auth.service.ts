@@ -11,6 +11,8 @@ import { mergeMap, take, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { ErrorHandlerInterceptor } from '../../../core/interceptor/error-handler.interceptor';
+import { NotificationService } from '../../notification/service/notification.service';
+import { SubscriptionService } from '../../user/service/subscription.service';
 import { AuthInterceptor } from '../interceptor/auth.interceptor';
 import { AppleLoginProvider } from '../provider/apple-login.provider';
 
@@ -46,6 +48,8 @@ export class AuthService {
     private http: HttpClient,
     private socialService: SocialAuthService,
     private router: Router,
+    private notificationService: NotificationService,
+    private subscriptionService: SubscriptionService,
   ) {}
 
   login(user: Partial<User>) {
@@ -169,7 +173,10 @@ export class AuthService {
   logoutFromAllDevices() {
     return this.http
       .delete<TokenResponse>(`${api}/auth/logout-from-all-devices`)
-      .pipe(mergeMap(tokens => this.setTokens(tokens)));
+      .pipe(
+        mergeMap(tokens => this.setTokens(tokens)),
+        tap(() => this.notificationService.setupEnvironment()),
+      );
   }
 
   async setTokens(response: TokenResponse) {
@@ -215,6 +222,8 @@ export class AuthService {
   }
 
   logout() {
+    this.subscriptionService.delete().pipe(take(1)).subscribe();
+
     localStorage.clear();
 
     this.user$.next(null);

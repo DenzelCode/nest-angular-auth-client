@@ -22,7 +22,7 @@ export class PushNotificationComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         filter<User>(user => user != null),
-        mergeMap(() => this.notificationService.requestSubscription()),
+        mergeMap(() => this.notificationService.setupEnvironment()),
       )
       .subscribe();
 
