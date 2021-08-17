@@ -31,7 +31,7 @@ const initialize = (authService: AuthService) => async () => {
     FeaturesModule,
     BrowserAnimationsModule,
     CoreModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {
+    ServiceWorkerModule.register('custom-service-worker.js', {
       enabled: true,
       registrationStrategy: 'registerWhenStable:30000',
     }),

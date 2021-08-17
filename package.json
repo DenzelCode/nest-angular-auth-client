@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:worker": "ng build; http-server -p 8080 -c-1 dist/task",
     "build": "ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
@@ -45,6 +46,7 @@
     "@types/lodash": "^4.14.168",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
+    "http-server": "^13.0.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~6.3.4",
