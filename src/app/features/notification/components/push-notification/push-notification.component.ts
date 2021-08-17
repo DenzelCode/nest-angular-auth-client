@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { filter, mergeMap, takeUntil } from 'rxjs/operators';
 import { AuthService, User } from '../../../auth/service/auth.service';
+import { SubscriptionService } from '../../../user/service/subscription.service';
 import { NotificationService } from '../../service/notification.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class PushNotificationComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private notificationService: NotificationService,
+    private subscriptionService: SubscriptionService,
   ) {}
 
   ngOnInit() {
@@ -22,7 +24,7 @@ export class PushNotificationComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         filter<User>(user => user != null),
-        mergeMap(() => this.notificationService.setupEnvironment()),
+        mergeMap(() => this.subscriptionService.requestSubscription()),
       )
       .subscribe();
 
