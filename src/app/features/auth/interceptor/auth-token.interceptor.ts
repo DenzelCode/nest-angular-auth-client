@@ -11,7 +11,7 @@ import { tap, take, mergeMap, catchError } from 'rxjs/operators';
 import { AuthService } from '../service/auth.service';
 
 @Injectable()
-export class AuthInterceptor implements HttpInterceptor {
+export class AuthTokenInterceptor implements HttpInterceptor {
   static skipHeader = 'skipTokenInterceptor';
 
   constructor(private authService: AuthService) {}
@@ -22,7 +22,7 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     request = this.handleRequest(request);
 
-    if (request.headers.has(AuthInterceptor.skipHeader)) {
+    if (request.headers.has(AuthTokenInterceptor.skipHeader)) {
       return next.handle(request);
     }
 
@@ -57,7 +57,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private skipRequest(request: HttpRequest<unknown>) {
     request = request.clone({
-      headers: request.headers.set(AuthInterceptor.skipHeader, 'true'),
+      headers: request.headers.set(AuthTokenInterceptor.skipHeader, 'true'),
     });
 
     return this.handleRequest(request);

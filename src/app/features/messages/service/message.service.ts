@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { MainSocket } from '../../../core/socket/main-socket';
-import { AuthInterceptor } from '../../auth/interceptor/auth.interceptor';
+import { AuthTokenInterceptor } from '../../auth/interceptor/auth-token.interceptor';
 import { User } from '../../auth/service/auth.service';
 import { Room } from '../../room/service/room.service';
 import { MessageType } from '../components/messages/messages.component';
@@ -68,7 +68,7 @@ export class MessageService {
         to: message.to,
       },
       headers: {
-        [AuthInterceptor.skipHeader]: 'true',
+        [AuthTokenInterceptor.skipHeader]: 'true',
       },
     });
   }

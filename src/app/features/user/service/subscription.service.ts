@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { of } from 'rxjs';
 import { mergeMap, take } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { AuthInterceptor } from '../../auth/interceptor/auth.interceptor';
+import { ErrorDialogInterceptor } from '../../../core/interceptor/error-dialog.interceptor';
+import { AuthTokenInterceptor } from '../../auth/interceptor/auth-token.interceptor';
 import { NotificationService } from '../../notification/service/notification.service';
 
 const { api } = environment;
@@ -29,9 +31,19 @@ export class SubscriptionService {
   }
 
   delete() {
+    const subscription = this.notificationService.getSubscription();
+
+    if (!subscription) {
+      return of();
+    }
+
     return this.http.delete(`${api}/subscription/web`, {
       body: {
-        subscription: this.notificationService.getSubscription(),
+        subscription,
+      },
+      headers: {
+        [AuthTokenInterceptor.skipHeader]: 'true',
+        [ErrorDialogInterceptor.skipHeader]: 'true',
       },
     });
   }

@@ -14,7 +14,7 @@ import {
   ErrorDialogData,
 } from '../../shared/components/error-dialog/error-dialog.component';
 import { AuthService } from 'src/app/features/auth/service/auth.service';
-import { AuthInterceptor } from '../../features/auth/interceptor/auth.interceptor';
+import { AuthTokenInterceptor } from '../../features/auth/interceptor/auth-token.interceptor';
 
 export interface HttpError {
   statusCode: number;
@@ -23,8 +23,8 @@ export interface HttpError {
 }
 
 @Injectable()
-export class ErrorHandlerInterceptor implements HttpInterceptor {
-  static skipHeader = 'skipNotifier';
+export class ErrorDialogInterceptor implements HttpInterceptor {
+  static skipHeader = 'errorDialog';
 
   constructor(private dialog: MatDialog, private authService: AuthService) {}
 
@@ -32,7 +32,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
-    if (request.headers.has(ErrorHandlerInterceptor.skipHeader)) {
+    if (request.headers.has(ErrorDialogInterceptor.skipHeader)) {
       return next.handle(request);
     }
 
@@ -44,7 +44,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
             if (
               response.status === 401 &&
               this.authService.getRefreshToken() &&
-              !request.headers.has(AuthInterceptor.skipHeader)
+              !request.headers.has(AuthTokenInterceptor.skipHeader)
             ) {
               return;
             }

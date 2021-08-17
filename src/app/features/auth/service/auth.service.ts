@@ -10,9 +10,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { mergeMap, take, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
-import { ErrorHandlerInterceptor } from '../../../core/interceptor/error-handler.interceptor';
+import { ErrorDialogInterceptor } from '../../../core/interceptor/error-dialog.interceptor';
 import { SubscriptionService } from '../../user/service/subscription.service';
-import { AuthInterceptor } from '../interceptor/auth.interceptor';
+import { AuthTokenInterceptor } from '../interceptor/auth-token.interceptor';
 import { AppleLoginProvider } from '../provider/apple-login.provider';
 
 export interface TokenResponse {
@@ -146,7 +146,7 @@ export class AuthService {
     return this.http
       .get<User>(`${api}/auth/me`, {
         headers: {
-          [ErrorHandlerInterceptor.skipHeader]: 'true',
+          [ErrorDialogInterceptor.skipHeader]: 'true',
         },
       })
       .pipe(tap(user => this.user$.next(user)));
@@ -161,7 +161,7 @@ export class AuthService {
         },
         {
           headers: {
-            [AuthInterceptor.skipHeader]: 'true',
+            [AuthTokenInterceptor.skipHeader]: 'true',
           },
         },
       )
@@ -220,15 +220,17 @@ export class AuthService {
   }
 
   logout() {
+    const callback = () => {
+      sessionStorage.clear();
+
+      localStorage.clear();
+
+      this.user$.next(null);
+    };
+
     this.subscriptionService
       .delete()
       .pipe(take(1))
-      .subscribe(() => {
-        sessionStorage.clear();
-
-        localStorage.clear();
-
-        this.user$.next(null);
-      });
+      .subscribe(callback, callback);
   }
 }

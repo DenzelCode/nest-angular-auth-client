@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
-  ErrorHandlerInterceptor,
+  ErrorDialogInterceptor,
   HttpError,
-} from './core/interceptor/error-handler.interceptor';
+} from './core/interceptor/error-dialog.interceptor';
 import { MainSocket } from './core/socket/main-socket';
 
 @Component({
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
   destroy$ = new Subject();
 
   constructor(
-    private errorHandler: ErrorHandlerInterceptor,
+    private errorHandler: ErrorDialogInterceptor,
     private socket: MainSocket,
   ) {}
 

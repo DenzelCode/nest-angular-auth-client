@@ -13,7 +13,7 @@ import { remove } from 'lodash';
 import { Subject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { Sound, SoundService } from 'src/app/shared/services/sound.service';
-import { HttpError } from '../../../../core/interceptor/error-handler.interceptor';
+import { HttpError } from '../../../../core/interceptor/error-dialog.interceptor';
 import { MainSocket } from '../../../../core/socket/main-socket';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { AuthService, User } from '../../../auth/service/auth.service';

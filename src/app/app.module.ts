@@ -6,8 +6,8 @@ import { AppComponent } from './app.component';
 import { FeaturesModule } from './features/features.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from './features/auth/interceptor/auth.interceptor';
-import { ErrorHandlerInterceptor } from './core/interceptor/error-handler.interceptor';
+import { AuthTokenInterceptor } from './features/auth/interceptor/auth-token.interceptor';
+import { ErrorDialogInterceptor } from './core/interceptor/error-dialog.interceptor';
 import { CoreModule } from './core/core.module';
 import { AuthService } from './features/auth/service/auth.service';
 import { APP_BASE_HREF } from '@angular/common';
@@ -46,12 +46,12 @@ const initialize = (authService: AuthService) => async () => {
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
+      useClass: AuthTokenInterceptor,
       multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: ErrorHandlerInterceptor,
+      useClass: ErrorDialogInterceptor,
       multi: true,
     },
   ],

@@ -4,7 +4,7 @@ import { SwPush, SwUpdate } from '@angular/service-worker';
 import { of } from 'rxjs';
 import { catchError, mergeMap, tap, timeout } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { AuthInterceptor } from '../../auth/interceptor/auth.interceptor';
+import { AuthTokenInterceptor } from '../../auth/interceptor/auth-token.interceptor';
 
 interface Config {
   webPublicKey: string;
