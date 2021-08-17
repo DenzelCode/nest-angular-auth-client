@@ -169,7 +169,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
     return objectIds.some(
       id =>
         (this.room && this.room._id === id) ||
-        (this.to && this.to?._id === id) ||
+        (this.to && this.to._id === id) ||
         this.user._id === id,
     );
   }
