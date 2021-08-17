@@ -35,7 +35,9 @@
           </div>
           <mat-icon
             *ngIf="
-              message.from._id === user._id || room?.owner._id === user._id
+              type === MessageType.Direct ||
+              message.from._id === user._id ||
+              room?.owner._id === user._id
             "
             role="button"
             class="delete"
