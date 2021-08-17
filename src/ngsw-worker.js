@@ -2479,6 +2479,7 @@ ${msgIdle}`,
       });
     }
     handlePush(data) {
+      let _a, _b;
       return __awaiter(this, void 0, void 0, function* () {
         yield this.broadcast({
           type: 'PUSH',
@@ -2488,11 +2489,46 @@ ${msgIdle}`,
           return;
         }
 
-        let matchingClient = yield this.getLastFocusedMatchingClient(
-          this.scope,
-        );
+        const action = data.action;
+        const notification = data.notification;
+        const notificationAction =
+          action === '' || action === undefined ? 'default' : action;
+        const onActionClick =
+          (_a =
+            notification === null || notification === void 0
+              ? void 0
+              : notification.data) === null || _a === void 0
+            ? void 0
+            : _a.onActionClick[notificationAction];
+        const urlToOpen = new URL(
+          (_b =
+            onActionClick === null || onActionClick === void 0
+              ? void 0
+              : onActionClick.url) !== null && _b !== void 0
+            ? _b
+            : '',
+          this.scope.registration.scope,
+        ).href;
 
-        if (matchingClient && matchingClient.focused) {
+        let client;
+
+        const clients = yield this.getClients(this.scope);
+
+        let urlFound = false;
+
+        if (urlToOpen) {
+          for (var i = 0; i < clients.length; i++) {
+            if (clients[i].url == urlToOpen) {
+              urlFound = true;
+
+              client = clients[i];
+
+              break;
+            }
+          }
+        }
+
+        if (urlFound && client && client.focused) {
           return;
         }
 
@@ -2579,6 +2615,13 @@ ${msgIdle}`,
         const windowClients = yield scope.clients.matchAll({ type: 'window' });
         // As per the spec windowClients are `sorted in the most recently focused order`
         return windowClients[0];
+      });
+    }
+    getClients(scope) {
+      return __awaiter(this, void 0, void 0, function* () {
+        const windowClients = yield scope.clients.matchAll({ type: 'window' });
+        // As per the spec windowClients are `sorted in the most recently focused order`
+        return windowClients;
       });
     }
     reportStatus(client, promise, nonce) {
