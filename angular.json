@@ -31,7 +31,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/worker",
-              "src/custom-service-worker.js",
+              "src/ngsw-worker.js",
               "src/manifest.webmanifest"
             ],
             "styles": [
@@ -114,7 +114,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/worker",
-              "src/custom-service-worker.js",
+              "src/ngsw-worker.js",
               "src/manifest.webmanifest"
             ],
             "styles": [
