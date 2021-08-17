@@ -13,7 +13,6 @@ import { NotificationModule } from './notification/notification.module';
 @NgModule({
   declarations: [MainComponent],
   imports: [
-    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
     SharedModule,
     RecoverModule,
     UserModule,
@@ -21,7 +20,8 @@ import { NotificationModule } from './notification/notification.module';
     RoomModule,
     MessagesModule,
     NotificationModule,
+    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
   ],
-  exports: [RouterModule],
+  exports: [RouterModule, NotificationModule],
 })
 export class FeaturesModule {}

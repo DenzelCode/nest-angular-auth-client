@@ -1,22 +1,20 @@
 import { Injectable } from '@angular/core';
 
-export enum Sound{
+export enum Sound {
   Message = 'message-tone',
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SoundService {
-
-  constructor() { }
+  constructor() {}
 
   playSound(sound: Sound) {
-    const path = `assets/tones/${sound}.mp3`
+    const path = `assets/tones/${sound}.mp3`;
 
     if (sound) {
-      new Audio(path).play()
+      new Audio(path).play();
     }
-
   }
 }

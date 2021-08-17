@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { SwPush } from '@angular/service-worker';
+import { SwPush, SwUpdate } from '@angular/service-worker';
+import { mergeMap, tap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { SubscriptionService } from '../../user/service/subscription.service';
 
 interface Config {
-  publicKey: string;
+  webPublicKey: string;
 }
 
 const { api } = environment;
@@ -13,22 +15,41 @@ const { api } = environment;
   providedIn: 'root',
 })
 export class NotificationService {
-  constructor(private http: HttpClient, private swPush: SwPush) {}
+  updateAvailable$ = this.swUpdate.available.pipe(
+    tap(async () => {
+      await this.swUpdate.activateUpdate();
 
-  getPublicKey() {
+      document.location.reload();
+    }),
+  );
+
+  constructor(
+    private http: HttpClient,
+    private swPush: SwPush,
+    private swUpdate: SwUpdate,
+    private subscriptionService: SubscriptionService,
+  ) {}
+
+  getConfig() {
     return this.http.get<Config>(`${api}/notification/config`);
   }
 
   requestSubscription() {
-    return new Promise<PushSubscription>((resolve, reject) =>
-      this.getPublicKey().subscribe(async ({ publicKey }) => {
-        this.swPush
-          .requestSubscription({
-            serverPublicKey: publicKey,
-          })
-          .then(resolve)
-          .catch(reject);
-      }),
+    return this.getConfig().pipe(
+      mergeMap(({ webPublicKey: serverPublicKey }) =>
+        this.swPush.requestSubscription({ serverPublicKey }),
+      ),
+      mergeMap(subscription =>
+        this.subscriptionService.registerSubscription(subscription),
+      ),
     );
+  }
+
+  async checkForUpdates() {
+    try {
+      await this.swUpdate.checkForUpdate();
+    } catch (e) {
+      console.error('An error occured checking service worker updates', e);
+    }
   }
 }
