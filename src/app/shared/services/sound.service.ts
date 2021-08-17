@@ -14,7 +14,9 @@ export class SoundService {
     const path = `assets/tones/${sound}.mp3`;
 
     if (sound) {
-      new Audio(path).play();
+      const audio = new Audio(path);
+      audio.muted = false;
+      audio.play();
     }
   }
 }

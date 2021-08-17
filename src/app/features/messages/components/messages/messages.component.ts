@@ -106,8 +106,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         filter(
           message =>
-            this.isCurrentSection(message.to, message.room) &&
-            !this.messages.some(msg => msg._id === message._id),
+            this.isCurrentSection(
+              message.to !== this.user._id ? message.to : message.from._id,
+              message.room,
+            ) && !this.messages.some(msg => msg._id === message._id),
         ),
       )
       .subscribe(this.handleMessageEvent);
