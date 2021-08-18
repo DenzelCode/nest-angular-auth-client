@@ -4,11 +4,11 @@ import { MainComponent } from './main/main.component';
 import { RegisterComponent } from './auth/pages/register/register.component';
 import { AuthGuard } from './auth/guard/auth.guard';
 import { SettingsComponent } from './user/pages/settings/settings.component';
-import { RecoverComponent } from './recover/pages/recover/recover.component';
-import { ChangePasswordComponent } from './recover/pages/change-password/change-password.component';
+import { ChangePasswordComponent } from './user/pages/recover-change-password/recover-change-password.component';
 import { RoomsComponent } from './room/pages/rooms/rooms.component';
 import { RoomComponent } from './room/pages/room/room.component';
 import { DirectMessageComponent } from './messages/pages/direct-message/direct-message.component';
+import { RecoverComponent } from './user/pages/recover/recover.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },

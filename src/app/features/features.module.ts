@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { routes } from './routes';
 import { MainComponent } from './main/main.component';
-import { RecoverModule } from './recover/recover.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from '../shared/shared.module';
@@ -14,7 +13,6 @@ import { NotificationModule } from './notification/notification.module';
   declarations: [MainComponent],
   imports: [
     SharedModule,
-    RecoverModule,
     UserModule,
     AuthModule,
     RoomModule,
