@@ -30,9 +30,13 @@
     <mat-list-item *ngFor="let room of publicRooms">
       <mat-icon matListIcon>group</mat-icon>
       <h4 matLine>{{ room.title }} ({{ room.members.length }})</h4>
-      <p matLine class="description">
+      <a
+        matLine
+        class="description"
+        [routerLink]="['/direct-message', room.owner.username]"
+      >
         {{ room.owner.username }}
-      </p>
+      </a>
       <div *ngIf="room.owner === user._id || room.owner._id === user._id">
         <button mat-button (click)="openUpdateDialog(room)">Edit</button>
 
