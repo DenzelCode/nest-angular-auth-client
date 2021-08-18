@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { remove } from 'lodash';
 import { Subject } from 'rxjs';
@@ -31,12 +31,14 @@ export class RoomComponent implements OnInit, OnDestroy {
   MessageType = MessageType;
   areMembersShown = false;
   messages: Message[] = [];
+  updateMessages$ = new Subject();
 
   constructor(
     private roomService: RoomService,
     private route: ActivatedRoute,
     private socket: MainSocket,
     private router: Router,
+    private changeDetector: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -47,17 +49,22 @@ export class RoomComponent implements OnInit, OnDestroy {
         mergeMap(params => {
           this.roomId = params.id;
 
-          return this.roomService.joinRoom(this.roomId);
+          return this.roomService.joinRoom(this.roomId).pipe(take(1));
         }),
-        take(1),
         catchError(() => this.router.navigate(['/rooms'])),
         filter<InternalRoom>(room => typeof room !== 'boolean'),
         mergeMap(room => {
           this.room = room;
 
+          this.changeDetector.detectChanges();
+
           return this.socket.onConnect();
         }),
-        tap(() => this.roomService.subscribeRoom(this.room)),
+        tap(() => {
+          this.roomService.subscribeRoom(this.room);
+
+          this.updateMessages$.next();
+        }),
         takeUntil(this.destroy$),
       )
       .subscribe();

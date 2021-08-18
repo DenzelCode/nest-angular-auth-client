@@ -1,5 +1,5 @@
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import {
@@ -30,6 +30,7 @@ export class DirectMessageComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
+    private changeDetector: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -39,12 +40,17 @@ export class DirectMessageComponent implements OnInit, OnDestroy {
         mergeMap(params => {
           this.toName = params.username;
 
-          return this.userService.getUser(this.toName);
+          return this.userService.getUser(this.toName).pipe(take(1));
         }),
-        take(1),
         catchError(() => this.router.navigate(['/'])),
         filter<User>(user => typeof user !== 'boolean'),
-        tap(user => (this.to = user)),
+        tap(user => {
+          this.to = user;
+
+          this.changeDetector.detectChanges();
+
+          this.updateMessages$.next();
+        }),
       )
       .subscribe();
   }
@@ -52,5 +58,7 @@ export class DirectMessageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+
+    this.updateMessages$.complete();
   }
 }
