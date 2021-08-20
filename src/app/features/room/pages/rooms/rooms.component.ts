@@ -22,6 +22,7 @@ import { Room, RoomService } from '../../service/room.service';
 export class RoomsComponent implements OnInit, OnDestroy {
   publicRooms: Room[] = [];
   userRooms: Room[] = [];
+  memberRooms: Room[] = [];
   user: User;
 
   loading = false;
@@ -44,11 +45,13 @@ export class RoomsComponent implements OnInit, OnDestroy {
     forkJoin({
       userRooms: this.roomService.getUserRooms().pipe(take(1)),
       publicRooms: this.roomService.getPublicRooms().pipe(take(1)),
+      memberRooms: this.roomService.getRoomsByMember().pipe(take(1)),
     })
       .pipe(tap(process, process))
-      .subscribe(({ userRooms, publicRooms }) => {
+      .subscribe(({ userRooms, publicRooms, memberRooms }) => {
         this.publicRooms = publicRooms;
         this.userRooms = userRooms;
+        this.memberRooms = memberRooms;
       });
 
     this.authService.user$
@@ -70,6 +73,30 @@ export class RoomsComponent implements OnInit, OnDestroy {
       .getRoom(room._id)
       .pipe(take(1), tap(process, process))
       .subscribe(() => this.router.navigate(['/room', room._id]));
+  }
+
+  confirmLeaveRoom(room: Room) {
+    const dialog = this.dialog.open(ConfirmDialogComponent);
+
+    dialog
+      .afterClosed()
+      .pipe(take(1))
+      .subscribe(confirm => {
+        if (confirm) {
+          this.leaveRoom(room);
+        }
+      });
+  }
+
+  leaveRoom(room: Room) {
+    this.loading = true;
+
+    const process = () => (this.loading = false);
+
+    this.roomService
+      .leaveRoom(room._id)
+      .pipe(take(1), tap(process, process))
+      .subscribe(() => remove(this.memberRooms, r => r._id === room._id));
   }
 
   openJoinRoomDialog() {

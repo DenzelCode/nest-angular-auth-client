@@ -3,16 +3,22 @@
     class="members bg-white d-flex flex-column position-relative flex-grow-1"
     [ngClass]="{ hide: !areMembersShown }"
   >
-    <div class="top-header d-flex align-items-center overflow-hidden">
+    <div
+      class="top-header d-flex align-items-center overflow-hidden"
+      role="button"
+      (click)="showTotalMembers = !showTotalMembers"
+    >
       <span class="m-0 px-4 text-nowrap"
-        >Online members ({{ room.members.length }})</span
+        >{{ showTotalMembers ? 'All' : 'Online' }} members ({{
+          (showTotalMembers ? room.members : onlineMembers).length
+        }})</span
       >
     </div>
     <div class="position-relative d-flex flex-grow-1">
       <div class="position-absolute scroll w-100">
         <a
           matRipple
-          *ngFor="let member of room.members"
+          *ngFor="let member of showTotalMembers ? room.members : onlineMembers"
           class="w-100 px-4 py-3 d-block"
           [routerLink]="['/direct-message', member.username]"
         >

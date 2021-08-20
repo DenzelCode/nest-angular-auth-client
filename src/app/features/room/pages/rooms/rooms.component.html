@@ -26,6 +26,29 @@
   </mat-list>
 
   <mat-list>
+    <h3 matSubheader>Rooms you are in</h3>
+    <mat-list-item *ngFor="let room of memberRooms">
+      <mat-icon matListIcon>group</mat-icon>
+      <h4 matLine>{{ room.title }} ({{ room.members.length }})</h4>
+      <a
+        matLine
+        class="description"
+        [routerLink]="['/direct-message', room.owner.username]"
+      >
+        {{ room.owner.username }}
+      </a>
+      <div *ngIf="room.owner === user._id || room.owner._id === user._id">
+        <button mat-button (click)="openUpdateDialog(room)">Edit</button>
+
+        <button mat-button (click)="confirmDelete(room)">Delete</button>
+      </div>
+      <button mat-button (click)="copyUrl(room)">Copy</button>
+      <button mat-button (click)="confirmLeaveRoom(room)">Leave</button>
+      <button mat-button (click)="joinRoom(room)">Join</button>
+    </mat-list-item>
+  </mat-list>
+
+  <mat-list>
     <h3 matSubheader>Public Rooms</h3>
     <mat-list-item *ngFor="let room of publicRooms">
       <mat-icon matListIcon>group</mat-icon>

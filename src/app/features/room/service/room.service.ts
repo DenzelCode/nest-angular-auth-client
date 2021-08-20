@@ -29,6 +29,10 @@ export class RoomService {
     return this.http.get<Room[]>(`${api}/room/public`);
   }
 
+  getRoomsByMember() {
+    return this.http.get<Room[]>(`${api}/room/member`);
+  }
+
   getUserRooms() {
     return this.http.get<Room[]>(`${api}/room`);
   }
@@ -38,7 +42,7 @@ export class RoomService {
   }
 
   deleteRoom(room: Room) {
-    return this.http.delete(`${api}/room/${room._id}`);
+    return this.http.delete(`${api}/room/delete/${room._id}`);
   }
 
   updateRoom(id: string, room: Room) {
@@ -47,6 +51,10 @@ export class RoomService {
 
   joinRoom(roomId: string) {
     return this.http.post<Room>(`${api}/room/join`, { roomId });
+  }
+
+  leaveRoom(roomId: string) {
+    return this.http.delete<Room>(`${api}/room/leave/${roomId}`);
   }
 
   subscribeRoom(room: Room) {

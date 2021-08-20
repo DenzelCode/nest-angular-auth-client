@@ -143,7 +143,6 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
   @boundMethod
   getMessages() {
-    console.log(this.partnerId);
     return this.messageService
       .getMessages(this.type, this.partnerId)
       .pipe(take(1))
