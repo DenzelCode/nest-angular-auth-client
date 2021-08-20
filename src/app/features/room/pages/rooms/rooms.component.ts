@@ -6,7 +6,7 @@ import { remove } from 'lodash';
 import { forkJoin, Subject } from 'rxjs';
 import { take, takeUntil, tap } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { upsertItem } from '../../../../shared/utils/upsert-item';
+import { updateItem } from '../../../../shared/utils/upsert-item';
 import { AuthService, User } from '../../../auth/service/auth.service';
 import { JoinRoomDialogComponent } from '../../components/join-room-dialog/join-room-dialog.component';
 import {
@@ -115,11 +115,9 @@ export class RoomsComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(take(1))
       .subscribe((updatedRoom: Room) => {
-        if (updatedRoom.isPublic) {
-          upsertItem(this.publicRooms, r => r._id === room._id, updatedRoom);
-        }
-
-        upsertItem(this.userRooms, r => r._id === room._id, updatedRoom);
+        updateItem(this.publicRooms, r => r._id === room._id, updatedRoom);
+        updateItem(this.memberRooms, r => r._id === room._id, updatedRoom);
+        updateItem(this.userRooms, r => r._id === room._id, updatedRoom);
       });
   }
 
@@ -170,6 +168,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
 
         remove(this.userRooms, r => r._id === room._id);
         remove(this.publicRooms, r => r._id === room._id);
+        remove(this.memberRooms, r => r._id === room._id);
       });
   }
 
