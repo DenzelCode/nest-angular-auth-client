@@ -77,7 +77,10 @@ export class RoomComponent implements OnInit, OnDestroy {
       .subscribe();
 
     interval(5000)
-      .pipe(mergeMap(() => this.roomService.getRoom(this.roomId)))
+      .pipe(
+        takeUntil(this.destroy$),
+        mergeMap(() => this.roomService.getRoom(this.roomId)),
+      )
       .subscribe(
         room => (this.room = room as InternalRoom),
         () => this.router.navigate(['/rooms']),
