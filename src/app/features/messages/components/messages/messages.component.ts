@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { boundMethod } from 'autobind-decorator';
 import { remove } from 'lodash';
 import { Subject, timer } from 'rxjs';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { filter, mergeMap, take, takeUntil, tap } from 'rxjs/operators';
 import { Sound, SoundService } from 'src/app/shared/services/sound.service';
 import { HttpError } from '../../../../core/interceptor/error-dialog.interceptor';
 import { MainSocket } from '../../../../core/socket/main-socket';
@@ -54,6 +54,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
   MessageType = MessageType;
   user: User;
   firstMessage: Message;
+
+  typing: User[] = [];
+
+  isTyping = false;
 
   private readonly limit = 30;
 
@@ -110,7 +114,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
       .subscribe(this.getMessages);
 
     this.messageService
-      .getMessage(this.type)
+      .onMessage(this.type)
       .pipe(
         takeUntil(this.destroy$),
         filter(
@@ -142,6 +146,30 @@ export class MessagesComponent implements OnInit, OnDestroy {
       .getFirstMessage(this.type, this.partnerId)
       .pipe(take(1))
       .subscribe(message => (this.firstMessage = message));
+
+    this.messageService
+      .onTyping(this.type, this.partnerId)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(
+          ({ user, room }) =>
+            this.isCurrentSection(user._id, room?._id) &&
+            this.user._id !== user._id,
+        ),
+        tap(({ user }) => {
+          this.typing.push(user);
+
+          this.changeDetector.detectChanges();
+
+          this.scrollToLastIfNecessary();
+        }),
+        mergeMap(({ user }) =>
+          timer(5000).pipe(
+            tap(() => remove(this.typing, u => u._id === user._id)),
+          ),
+        ),
+      )
+      .subscribe();
   }
 
   ngOnDestroy() {
@@ -190,6 +218,8 @@ export class MessagesComponent implements OnInit, OnDestroy {
   handleMessageEvent(message: Message) {
     this.messages.push(message);
 
+    remove(this.typing, user => user._id === message.from._id);
+
     if (message.from._id !== this.user._id) {
       this.soundService.playSound(Sound.Message);
     }
@@ -230,6 +260,18 @@ export class MessagesComponent implements OnInit, OnDestroy {
     });
 
     timer(1000).subscribe(() => (this.scrolledToLast = true));
+  }
+
+  sendTyping() {
+    if (this.isTyping) {
+      return;
+    }
+
+    this.messageService.sendTyping(this.type, this.partnerId);
+
+    this.isTyping = true;
+
+    timer(5000).subscribe(() => (this.isTyping = false));
   }
 
   sendMessage() {

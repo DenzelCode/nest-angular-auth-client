@@ -45,6 +45,21 @@
           >
         </div>
       </div>
+
+      <div
+        *ngFor="let userTyping of typing"
+        class="message fs-5 p-2 d-flex flex-column"
+        [ngClass]="[userTyping._id === user._id ? 'me' : 'partner']"
+      >
+        <a
+          role="button"
+          [routerLink]="['/direct-message', userTyping.username]"
+          >{{ userTyping.username }}</a
+        >
+        <div class="bubble-container d-flex align-items-center">
+          <div class="bubble p-3">...</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="text-container bg-white p-2">
@@ -57,6 +72,7 @@
           matInput
           formControlName="message"
           rows="2"
+          (keydown)="sendTyping()"
           (keydown.enter)="sendMessage()"
         ></textarea>
       </mat-form-field>

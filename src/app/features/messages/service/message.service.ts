@@ -15,6 +15,12 @@ export interface Message {
   from?: User;
   createdAt?: string;
 }
+
+export interface TypingResponse {
+  room?: Room;
+  user: User;
+}
+
 const { api } = environment;
 
 @Injectable({
@@ -39,7 +45,7 @@ export class MessageService {
     return this.http.get<Message>(`${api}/message/${type}-first-message/${id}`);
   }
 
-  getMessage(type: MessageType) {
+  onMessage(type: MessageType) {
     return this.socket.fromEvent<Message>(`message:${type}`);
   }
 
@@ -73,6 +79,10 @@ export class MessageService {
     );
   }
 
+  sendTyping(type: MessageType, id: string) {
+    return this.socket.emit(`message:${type}:typing`, id);
+  }
+
   deleteMessage(type: MessageType, message: Message) {
     return this.http.delete(`${api}/message/${type}`, {
       body: {
@@ -92,5 +102,9 @@ export class MessageService {
 
   onDeleteMessageEvent(type: MessageType) {
     return this.socket.fromEvent<string>(`${type}:delete_message`);
+  }
+
+  onTyping(type: MessageType, id: string) {
+    return this.socket.fromEvent<TypingResponse>(`message:${type}:typing`);
   }
 }
