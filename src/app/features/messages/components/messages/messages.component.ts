@@ -165,11 +165,8 @@ export class MessagesComponent implements OnInit, OnDestroy {
   }
 
   getPreviousMessages() {
-    if (this.messages[0]?._id === this.firstMessage?._id) {
-      return;
-    }
+    const startingScrollHeight = this.messagesElement.scrollHeight;
 
-    console.log(this.messages[0].createdAt);
     this.messageService
       .getMessages(
         this.type,
@@ -179,6 +176,13 @@ export class MessagesComponent implements OnInit, OnDestroy {
       )
       .subscribe(messages => {
         this.messages.splice(0, 0, ...messages);
+
+        this.changeDetector.detectChanges();
+
+        this.messagesElement.scrollTo(
+          0,
+          this.messagesElement.scrollHeight - startingScrollHeight,
+        );
       });
   }
 
@@ -269,7 +273,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
   }
 
   onScroll(e: Event) {
-    if (!this.scrolledToLast) {
+    if (
+      !this.scrolledToLast ||
+      this.messages[0]?._id === this.firstMessage?._id
+    ) {
       return;
     }
 
