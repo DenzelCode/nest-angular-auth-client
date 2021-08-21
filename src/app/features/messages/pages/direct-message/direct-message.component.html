@@ -1,6 +1,8 @@
 <div class="d-flex flex-column flex-grow-1" *ngIf="to">
   <div class="d-flex p-4 justify-content-between">
-    <h1 class="fw-bold">Chatting with {{ to.username }}</h1>
+    <h1 class="fw-bold">
+      Chatting with {{ to.username }} ({{ to.online ? 'Online' : 'Offline' }})
+    </h1>
     <a mat-button routerLink="/">
       <mat-icon>logout</mat-icon>
     </a>

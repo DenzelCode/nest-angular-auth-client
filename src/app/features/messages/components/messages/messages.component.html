@@ -30,9 +30,7 @@
           >{{ message.from.username }}</a
         >
         <div class="bubble-container d-flex align-items-center">
-          <div class="bubble p-3">
-            {{ message.message }}
-          </div>
+          <div class="bubble p-3">{{ message.message }}</div>
           <mat-icon
             *ngIf="
               type === MessageType.Direct ||

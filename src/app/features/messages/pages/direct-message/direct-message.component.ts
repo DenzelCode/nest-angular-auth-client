@@ -1,7 +1,7 @@
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { interval, Subject } from 'rxjs';
 import {
   catchError,
   filter,
@@ -51,6 +51,18 @@ export class DirectMessageComponent implements OnInit, OnDestroy {
 
           this.updateMessages$.next();
         }),
+      )
+      .subscribe();
+
+    interval(5000)
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(() => this.to != null),
+        mergeMap(() => this.userService.getUser(this.toName).pipe(take(1))),
+        tap(
+          user => (this.to = user),
+          () => this.router.navigate(['/rooms']),
+        ),
       )
       .subscribe();
   }
