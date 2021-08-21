@@ -13,6 +13,7 @@ export interface Message {
   to: string;
   room?: string;
   from?: User;
+  createdAt?: string;
 }
 const { api } = environment;
 
@@ -22,8 +23,20 @@ const { api } = environment;
 export class MessageService {
   constructor(private socket: MainSocket, private http: HttpClient) {}
 
-  getMessages(type: MessageType, id: string) {
-    return this.http.get<Message[]>(`${api}/message/${type}/${id}`);
+  getMessages(type: MessageType, id: string, limit: number, before?: string) {
+    const params = { limit, before };
+
+    for (const key of Object.keys(params)) {
+      if (!params[key]) {
+        delete params[key];
+      }
+    }
+
+    return this.http.get<Message[]>(`${api}/message/${type}/${id}`, { params });
+  }
+
+  getFirstMessage(type: MessageType, id: string) {
+    return this.http.get<Message>(`${api}/message/${type}-first-message/${id}`);
   }
 
   getMessage(type: MessageType) {

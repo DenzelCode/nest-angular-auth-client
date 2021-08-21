@@ -18,6 +18,7 @@
     <div
       class="position-absolute h-100 messages w-100 d-flex flex-column"
       #messagesContainer
+      (scroll)="onScroll($event)"
     >
       <div
         *ngFor="let message of messages"

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
@@ -10,7 +11,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { boundMethod } from 'autobind-decorator';
 import { remove } from 'lodash';
-import { Subject } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { Sound, SoundService } from 'src/app/shared/services/sound.service';
 import { HttpError } from '../../../../core/interceptor/error-dialog.interceptor';
@@ -35,6 +36,9 @@ export class MessagesComponent implements OnInit, OnDestroy {
   @Input() room?: Room;
   @Input() to?: User;
   @Input() updateMessages$: Subject<void>;
+  @Input() messages: Message[] = [];
+
+  @ViewChild('messagesContainer') messagesContainer: ElementRef<HTMLDivElement>;
 
   messageForm = this.formBuilder.group({
     message: '',
@@ -42,18 +46,20 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
   isConnected = false;
 
-  @ViewChild('messagesContainer') messagesContainer: ElementRef<HTMLDivElement>;
-
   get messagesElement() {
     return this.messagesContainer.nativeElement;
   }
 
-  @Input() messages: Message[] = [];
   destroy$ = new Subject();
   MessageType = MessageType;
   user: User;
+  firstMessage: Message;
+
+  private readonly limit = 30;
 
   private readonly scrollOffset = 200;
+
+  scrolledToLast = false;
 
   constructor(
     private messageService: MessageService,
@@ -62,6 +68,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
     private soundService: SoundService,
     private authService: AuthService,
     private dialog: MatDialog,
+    private changeDetector: ChangeDetectorRef,
   ) {}
 
   get partnerId() {
@@ -84,7 +91,9 @@ export class MessagesComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.isConnected = true;
 
-        this.getMessages();
+        if (!this.updateMessages$) {
+          this.getMessages();
+        }
       });
 
     this.socket
@@ -129,9 +138,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
         remove(this.messages, message => message._id === messageId),
       );
 
-    if (!this.updateMessages$) {
-      this.getMessages();
-    }
+    this.messageService
+      .getFirstMessage(this.type, this.partnerId)
+      .pipe(take(1))
+      .subscribe(message => (this.firstMessage = message));
   }
 
   ngOnDestroy() {
@@ -143,14 +153,32 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
   @boundMethod
   getMessages() {
-    return this.messageService
-      .getMessages(this.type, this.partnerId)
+    this.messageService
+      .getMessages(this.type, this.partnerId, this.limit)
       .pipe(take(1))
       .subscribe(messages => {
         remove(this.messages, () => true);
         this.messages.push(...messages);
 
         this.scrollToLastMessages();
+      });
+  }
+
+  getPreviousMessages() {
+    if (this.messages[0]?._id === this.firstMessage?._id) {
+      return;
+    }
+
+    console.log(this.messages[0].createdAt);
+    this.messageService
+      .getMessages(
+        this.type,
+        this.partnerId,
+        this.limit,
+        this.messages[0].createdAt,
+      )
+      .subscribe(messages => {
+        this.messages.splice(0, 0, ...messages);
       });
   }
 
@@ -183,17 +211,21 @@ export class MessagesComponent implements OnInit, OnDestroy {
       element.scrollTop >
       element.scrollHeight - element.offsetHeight - this.scrollOffset
     ) {
+      this.scrolledToLast = false;
+
       this.scrollToLastMessages();
     }
   }
 
   scrollToLastMessages() {
-    setTimeout(() =>
-      this.messagesElement.scrollTo({
-        top: this.messagesElement.scrollHeight,
-        behavior: 'smooth',
-      }),
-    );
+    this.changeDetector.detectChanges();
+
+    this.messagesElement.scrollTo({
+      top: this.messagesElement.scrollHeight,
+      behavior: 'smooth',
+    });
+
+    timer(1000).subscribe(() => (this.scrolledToLast = true));
   }
 
   sendMessage() {
@@ -233,6 +265,18 @@ export class MessagesComponent implements OnInit, OnDestroy {
       this.messageForm.patchValue({
         message: '',
       });
+    }
+  }
+
+  onScroll(e: Event) {
+    if (!this.scrolledToLast) {
+      return;
+    }
+
+    const element = e.target as HTMLDivElement;
+
+    if (element.scrollTop <= 5) {
+      this.getPreviousMessages();
     }
   }
 
