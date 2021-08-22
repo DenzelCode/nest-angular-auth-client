@@ -139,7 +139,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
       .onDeleteMessageEvent(this.type)
       .pipe(takeUntil(this.destroy$))
       .subscribe(messageId => {
-        if (messageId === this.firstMessage?._id) {
+        if (
+          messageId === this.firstMessage?._id &&
+          this.messages.some(message => message._id === messageId)
+        ) {
           this.firstMessage = this.messages[0];
         }
 
