@@ -143,7 +143,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
           messageId === this.firstMessage?._id &&
           this.messages.some(message => message._id === messageId)
         ) {
-          this.firstMessage = this.messages[0];
+          this.firstMessage = this.messages[1];
         }
 
         remove(this.messages, message => message._id === messageId);
