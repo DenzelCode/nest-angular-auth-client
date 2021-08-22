@@ -60,8 +60,8 @@ export class MessagesComponent implements OnInit, OnDestroy {
   isTyping = false;
 
   private readonly limit = 30;
-
   private readonly scrollOffset = 200;
+  private readonly typingTimeout = 5000;
 
   scrolledToLast = false;
 
@@ -157,14 +157,23 @@ export class MessagesComponent implements OnInit, OnDestroy {
             this.user._id !== user._id,
         ),
         tap(({ user }) => {
-          this.typing.push(user);
+          if (!this.typing.some(u => u._id === user._id)) {
+            this.typing.push(user);
+          }
 
           this.changeDetector.detectChanges();
 
           this.scrollToLastIfNecessary();
         }),
         mergeMap(({ user }) =>
-          timer(5000).pipe(
+          timer(this.typingTimeout).pipe(
+            takeUntil(
+              this.messageService
+                .onTyping(this.type, this.partnerId)
+                .pipe(
+                  filter(({ user: typingUser }) => user._id === typingUser._id),
+                ),
+            ),
             tap(() => remove(this.typing, u => u._id === user._id)),
           ),
         ),
@@ -271,7 +280,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
     this.isTyping = true;
 
-    timer(5000).subscribe(() => (this.isTyping = false));
+    timer(this.typingTimeout - 1000).subscribe(() => (this.isTyping = false));
   }
 
   sendMessage() {

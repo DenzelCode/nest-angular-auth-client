@@ -30,6 +30,28 @@
       display: inline-flex;
     }
 
+    .typing {
+      span {
+        height: 15px;
+        width: 15px;
+        float: left;
+        margin: 0 1px;
+        background-color: #9e9ea1;
+        display: block;
+        border-radius: 50%;
+        opacity: 0.4;
+        @for $i from 1 through 3 {
+          &:nth-of-type(#{$i}) {
+            animation: 1s blink infinite ($i * 0.3333s);
+          }
+        }
+      }
+
+      .bubble {
+        white-space: initial;
+      }
+    }
+
     .bubble-container {
       .delete {
         display: none;
@@ -80,4 +102,10 @@
 
 .z-10 {
   z-index: 10;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 1;
+  }
 }
