@@ -5,7 +5,7 @@ export const updateItem = <T>(
 ) => {
   const item = arr.find(predicate);
 
-  if (item) {
+  if (!item) {
     return;
   }
 
