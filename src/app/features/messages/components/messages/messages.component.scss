@@ -21,7 +21,7 @@
     }
 
     & > a {
-      font-size: 1rem;
+      font-size: 0.8rem;
       color: #444;
       text-decoration: none;
     }
@@ -32,8 +32,8 @@
 
     .typing {
       span {
-        height: 15px;
-        width: 15px;
+        height: 1rem;
+        width: 1rem;
         float: left;
         margin: 0 1px;
         background-color: #9e9ea1;
@@ -68,6 +68,7 @@
         box-shadow: 2px 2px 5px 0 rgba($color: #000000, $alpha: 0.2);
         border-radius: 0.5rem;
         white-space: pre-wrap;
+        font-size: 1rem;
       }
     }
 

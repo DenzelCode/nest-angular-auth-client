@@ -225,6 +225,10 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
   @boundMethod
   handleMessageEvent(message: Message) {
+    if (message.from._id === this.user._id) {
+      this.isTyping = false;
+    }
+
     this.messages.push(message);
 
     remove(this.typing, user => user._id === message.from._id);

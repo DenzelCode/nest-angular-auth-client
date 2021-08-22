@@ -22,7 +22,7 @@
     >
       <div
         *ngFor="let message of messages"
-        class="message fs-5 p-2 d-flex flex-column"
+        class="message p-2 d-flex flex-column"
         [ngClass]="[message.from._id === user._id ? 'me' : 'partner']"
       >
         <a
@@ -31,9 +31,7 @@
           >{{ message.from.username }}</a
         >
         <div class="bubble-container d-flex align-items-center">
-          <div class="bubble p-3">
-            {{ message.message }}
-          </div>
+          <div class="bubble p-3">{{ message.message }}</div>
           <mat-icon
             *ngIf="
               type === MessageType.Direct ||
@@ -50,7 +48,7 @@
 
       <div
         *ngFor="let userTyping of typing"
-        class="message fs-5 p-2 d-flex flex-column"
+        class="message p-2 d-flex flex-column"
         [ngClass]="[userTyping._id === user._id ? 'me' : 'partner']"
       >
         <a
