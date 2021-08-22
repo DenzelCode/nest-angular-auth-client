@@ -139,20 +139,18 @@ export class MessagesComponent implements OnInit, OnDestroy {
       .onDeleteMessageEvent(this.type)
       .pipe(takeUntil(this.destroy$))
       .subscribe(messageId => {
-        if (
-          messageId === this.firstMessage?._id &&
-          this.messages.some(message => message._id === messageId)
-        ) {
-          this.firstMessage = this.messages[1];
+        if (messageId === this.firstMessage?._id) {
+          if (this.messages.some(message => message._id === messageId)) {
+            this.firstMessage = this.messages[1];
+          } else {
+            this.updateFirstMessage();
+          }
         }
 
         remove(this.messages, message => message._id === messageId);
       });
 
-    this.messageService
-      .getFirstMessage(this.type, this.partnerId)
-      .pipe(take(1))
-      .subscribe(message => (this.firstMessage = message));
+    this.updateFirstMessage();
 
     this.messageService
       .onTyping(this.type, this.partnerId)
@@ -210,6 +208,13 @@ export class MessagesComponent implements OnInit, OnDestroy {
 
         this.scrollToLastMessages();
       });
+  }
+
+  updateFirstMessage() {
+    this.messageService
+      .getFirstMessage(this.type, this.partnerId)
+      .pipe(take(1))
+      .subscribe(message => (this.firstMessage = message));
   }
 
   getPreviousMessages() {
