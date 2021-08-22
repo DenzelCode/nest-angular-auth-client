@@ -67,8 +67,12 @@
     </div>
   </div>
   <div class="text-container bg-white p-2">
-    <form (ngSubmit)="sendMessage()" [formGroup]="messageForm">
-      <mat-form-field class="full-width fs-4">
+    <form
+      (ngSubmit)="sendMessage()"
+      [formGroup]="messageForm"
+      class="d-flex align-items-center"
+    >
+      <mat-form-field class="full-width fs-4 me-2">
         <mat-label>Message</mat-label>
         <textarea
           type="text"
@@ -80,6 +84,11 @@
           (keydown.enter)="sendMessage()"
         ></textarea>
       </mat-form-field>
+      <div class="d-flex justify-content-center">
+        <button mat-icon-button color="primary">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
     </form>
   </div>
 </div>
