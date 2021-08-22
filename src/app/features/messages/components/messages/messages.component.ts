@@ -138,9 +138,13 @@ export class MessagesComponent implements OnInit, OnDestroy {
     this.messageService
       .onDeleteMessageEvent(this.type)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(messageId =>
-        remove(this.messages, message => message._id === messageId),
-      );
+      .subscribe(messageId => {
+        if (messageId === this.firstMessage?._id) {
+          this.firstMessage = this.messages[0];
+        }
+
+        remove(this.messages, message => message._id === messageId);
+      });
 
     this.messageService
       .getFirstMessage(this.type, this.partnerId)
@@ -171,7 +175,11 @@ export class MessagesComponent implements OnInit, OnDestroy {
               this.messageService
                 .onTyping(this.type, this.partnerId)
                 .pipe(
-                  filter(({ user: typingUser }) => user._id === typingUser._id),
+                  filter(
+                    ({ user: typingUser, room }) =>
+                      this.isCurrentSection(user._id, room?._id) &&
+                      user._id === typingUser._id,
+                  ),
                 ),
             ),
             tap(() => remove(this.typing, u => u._id === user._id)),
