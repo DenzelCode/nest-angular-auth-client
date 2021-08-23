@@ -48,7 +48,7 @@
 
     <form [formGroup]="settingsForm" (ngSubmit)="updatePassword()">
       <h3>Password</h3>
-      <mat-form-field class="full-width">
+      <mat-form-field class="full-width" *ngIf="!user.isSocial">
         <mat-label>Current Password</mat-label>
         <input
           type="password"

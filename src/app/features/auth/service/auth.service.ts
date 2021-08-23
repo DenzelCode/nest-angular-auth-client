@@ -26,6 +26,7 @@ export interface User {
   password: string;
   email: string;
   online: boolean;
+  isSocial: boolean;
 }
 
 const { api } = environment;
