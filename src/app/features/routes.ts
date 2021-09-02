@@ -1,20 +1,20 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './auth/pages/login/login.component';
+import { LoginPageComponent } from './auth/pages/login-page/login-page.component';
 import { MainComponent } from './main/main.component';
-import { RegisterComponent } from './auth/pages/register/register.component';
+import { RegisterPageComponent } from './auth/pages/register-page/register-page.component';
 import { AuthGuard } from './auth/guard/auth.guard';
-import { SettingsComponent } from './user/pages/settings/settings.component';
-import { ChangePasswordComponent } from './user/pages/recover-change-password/recover-change-password.component';
-import { RoomsComponent } from './room/pages/rooms/rooms.component';
-import { RoomComponent } from './room/pages/room/room.component';
-import { DirectMessageComponent } from './messages/pages/direct-message/direct-message.component';
-import { RecoverComponent } from './user/pages/recover/recover.component';
+import { SettingsPageComponent } from './user/pages/settings-page/settings-page.component';
+import { RecoverChangePasswordPageComponent } from './user/pages/recover-change-password-page/recover-change-password-page.component';
+import { RoomsPageComponent } from './room/pages/rooms-page/rooms-page.component';
+import { RoomPageComponent } from './room/pages/room-page/room-page.component';
+import { RecoverPageComponent } from './user/pages/recover-page/recover-page.component';
+import { DirectMessagePageComponent } from './messages/pages/direct-message-page/direct-message-page.component';
 
 export const routes: Routes = [
   { path: '', component: MainComponent },
   {
     path: 'login',
-    component: LoginComponent,
+    component: LoginPageComponent,
     canActivate: [AuthGuard],
     data: {
       requireAuth: false,
@@ -22,7 +22,7 @@ export const routes: Routes = [
   },
   {
     path: 'register',
-    component: RegisterComponent,
+    component: RegisterPageComponent,
     canActivate: [AuthGuard],
     data: {
       requireAuth: false,
@@ -31,7 +31,7 @@ export const routes: Routes = [
   {
     path: 'recover',
     pathMatch: 'full',
-    component: RecoverComponent,
+    component: RecoverPageComponent,
     canActivate: [AuthGuard],
     data: {
       requireAuth: false,
@@ -40,7 +40,7 @@ export const routes: Routes = [
   {
     path: 'recover/:code',
     pathMatch: 'full',
-    component: ChangePasswordComponent,
+    component: RecoverChangePasswordPageComponent,
     canActivate: [AuthGuard],
     data: {
       requireAuth: false,
@@ -48,22 +48,22 @@ export const routes: Routes = [
   },
   {
     path: 'settings',
-    component: SettingsComponent,
+    component: SettingsPageComponent,
     canActivate: [AuthGuard],
   },
   {
     path: 'rooms',
-    component: RoomsComponent,
+    component: RoomsPageComponent,
     canActivate: [AuthGuard],
   },
   {
     path: 'room/:id',
-    component: RoomComponent,
+    component: RoomPageComponent,
     canActivate: [AuthGuard],
   },
   {
     path: 'direct-message/:username',
-    component: DirectMessageComponent,
+    component: DirectMessagePageComponent,
     canActivate: [AuthGuard],
   },
   { path: '**', redirectTo: '/' },

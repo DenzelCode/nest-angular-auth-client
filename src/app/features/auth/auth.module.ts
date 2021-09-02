@@ -9,15 +9,15 @@ import {
 import { environment } from 'src/environments/environment';
 import { AppleLoginProvider } from './provider/apple-login.provider';
 import { MaterialModule } from '../../shared/material/material.module';
-import { RegisterComponent } from './pages/register/register.component';
-import { LoginComponent } from './pages/login/login.component';
+import { RegisterPageComponent } from './pages/register-page/register-page.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 
 const apps = environment.apps;
 
 @NgModule({
-  declarations: [RegisterComponent, LoginComponent],
+  declarations: [RegisterPageComponent, LoginPageComponent],
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
@@ -41,6 +41,6 @@ const apps = environment.apps;
     },
   ],
   imports: [CommonModule, SocialLoginModule, SharedModule],
-  exports: [SocialLoginModule, RegisterComponent, LoginComponent],
+  exports: [SocialLoginModule, RegisterPageComponent, LoginPageComponent],
 })
 export class AuthModule {}

@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { take } from 'rxjs/operators';
-import { AuthService } from 'src/app/features/auth/service/auth.service';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss'],
+  templateUrl: './login-page.component.html',
+  styleUrls: ['./login-page.component.scss'],
 })
-export class RegisterComponent {
-  registerForm = this.formBuilder.group({
+export class LoginPageComponent {
+  loginForm = this.formBuilder.group({
     username: '',
     password: '',
-    email: '',
   });
 
   loading = false;
@@ -22,26 +21,30 @@ export class RegisterComponent {
   ) {}
 
   submit() {
+    if (this.loading) {
+      return;
+    }
+
     this.loading = true;
 
-    const user = this.registerForm.value;
+    const user = this.loginForm.value;
 
     this.authService
-      .register(user)
+      .login(user)
       .pipe(take(1))
       .subscribe(
         () => this.authService.redirectToCallback(),
         () => {
           this.loading = false;
 
-          this.registerForm.patchValue({
+          this.loginForm.patchValue({
             password: '',
           });
         },
       );
   }
 
-  async registerWithFacebook() {
+  async loginWithFacebook() {
     if (this.loading) {
       return;
     }
@@ -57,23 +60,7 @@ export class RegisterComponent {
     }
   }
 
-  async registerWithGoogle() {
-    if (this.loading) {
-      return;
-    }
-
-    this.loading = true;
-
-    try {
-      await this.authService.handleSocialLogin(() =>
-        this.authService.loginWithGoogle(),
-      );
-    } finally {
-      this.loading = false;
-    }
-  }
-
-  async registerWithApple() {
+  async loginWithApple() {
     if (this.loading) {
       return;
     }
@@ -83,6 +70,22 @@ export class RegisterComponent {
     try {
       await this.authService.handleSocialLogin(() =>
         this.authService.loginWithApple(),
+      );
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async loginWithGoogle() {
+    if (this.loading) {
+      return;
+    }
+
+    this.loading = true;
+
+    try {
+      await this.authService.handleSocialLogin(() =>
+        this.authService.loginWithGoogle(),
       );
     } finally {
       this.loading = false;

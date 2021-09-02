@@ -21,10 +21,10 @@ interface InternalRoom extends Room {
 }
 
 @Component({
-  templateUrl: './room.component.html',
-  styleUrls: ['./room.component.scss'],
+  templateUrl: './room-page.component.html',
+  styleUrls: ['./room-page.component.scss'],
 })
-export class RoomComponent implements OnInit, OnDestroy {
+export class RoomPageComponent implements OnInit, OnDestroy {
   roomId: string;
   room: InternalRoom;
   destroy$ = new Subject();

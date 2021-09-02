@@ -16,10 +16,10 @@ import {
 import { Room, RoomService } from '../../service/room.service';
 
 @Component({
-  templateUrl: './rooms.component.html',
-  styleUrls: ['./rooms.component.scss'],
+  templateUrl: './rooms-page.component.html',
+  styleUrls: ['./rooms-page.component.scss'],
 })
-export class RoomsComponent implements OnInit, OnDestroy {
+export class RoomsPageComponent implements OnInit, OnDestroy {
   publicRooms: Room[] = [];
   userRooms: Room[] = [];
   memberRooms: Room[] = [];

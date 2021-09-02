@@ -7,10 +7,10 @@ import { mergeMap, take } from 'rxjs/operators';
 import { RecoverService } from '../../service/recover.service';
 
 @Component({
-  templateUrl: './recover-change-password.component.html',
-  styleUrls: ['./recover-change-password.component.scss'],
+  templateUrl: './recover-change-password-page.component.html',
+  styleUrls: ['./recover-change-password-page.component.scss'],
 })
-export class ChangePasswordComponent implements OnInit, OnDestroy {
+export class RecoverChangePasswordPageComponent implements OnInit, OnDestroy {
   changePasswordForm = this.formBuilder.group({
     password: '',
     confirmPassword: '',

@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RoomsComponent } from './pages/rooms/rooms.component';
+import { RoomsPageComponent } from './pages/rooms-page/rooms-page.component';
 import { SharedModule } from '../../shared/shared.module';
 import { RoomService } from './service/room.service';
 import { UpsertRoomDialogComponent } from './components/upsert-room-dialog/upsert-room-dialog.component';
 import { JoinRoomDialogComponent } from './components/join-room-dialog/join-room-dialog.component';
-import { RoomComponent } from './pages/room/room.component';
+import { RoomPageComponent } from './pages/room-page/room-page.component';
 import { MessagesModule } from '../messages/messages.module';
 
 @NgModule({
   declarations: [
-    RoomsComponent,
+    RoomsPageComponent,
     UpsertRoomDialogComponent,
     JoinRoomDialogComponent,
-    RoomComponent,
+    RoomPageComponent,
   ],
   imports: [CommonModule, SharedModule, MessagesModule],
   providers: [RoomService],
-  exports: [RoomsComponent, RoomComponent],
+  exports: [RoomsPageComponent, RoomPageComponent],
 })
 export class RoomModule {}

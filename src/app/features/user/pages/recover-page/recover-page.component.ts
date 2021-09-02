@@ -5,10 +5,10 @@ import Swal from 'sweetalert2';
 import { RecoverService } from '../../service/recover.service';
 
 @Component({
-  templateUrl: './recover.component.html',
-  styleUrls: ['./recover.component.scss'],
+  templateUrl: './recover-page.component.html',
+  styleUrls: ['./recover-page.component.scss'],
 })
-export class RecoverComponent {
+export class RecoverPageComponent {
   recoverForm = this.formBuilder.group({
     email: '',
   });

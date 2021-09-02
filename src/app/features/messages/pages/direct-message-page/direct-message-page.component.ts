@@ -15,10 +15,10 @@ import { UserService } from '../../../user/service/user.service';
 import { MessageType } from '../../components/messages/messages.component';
 
 @Component({
-  templateUrl: './direct-message.component.html',
-  styleUrls: ['./direct-message.component.scss'],
+  templateUrl: './direct-message-page.component.html',
+  styleUrls: ['./direct-message-page.component.scss'],
 })
-export class DirectMessageComponent implements OnInit, OnDestroy {
+export class DirectMessagePageComponent implements OnInit, OnDestroy {
   MessageType = MessageType;
   updateMessages$ = new Subject();
   messages: Message[] = [];

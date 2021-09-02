@@ -14,10 +14,10 @@ import {
 import Swal from 'sweetalert2';
 
 @Component({
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss'],
+  templateUrl: './settings-page.component.html',
+  styleUrls: ['./settings-page.component.scss'],
 })
-export class SettingsComponent implements OnInit {
+export class SettingsPageComponent implements OnInit {
   settingsForm = this.formBuilder.group({
     username: '',
     email: '',

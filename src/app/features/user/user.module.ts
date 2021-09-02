@@ -1,13 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SettingsComponent } from './pages/settings/settings.component';
+import { SettingsPageComponent } from './pages/settings-page/settings-page.component';
 import { SharedModule } from '../../shared/shared.module';
-import { RecoverComponent } from './pages/recover/recover.component';
-import { ChangePasswordComponent } from './pages/recover-change-password/recover-change-password.component';
+import { RecoverPageComponent } from './pages/recover-page/recover-page.component';
+import { RecoverChangePasswordPageComponent } from './pages/recover-change-password-page/recover-change-password-page.component';
 
 @NgModule({
-  declarations: [SettingsComponent, RecoverComponent, ChangePasswordComponent],
+  declarations: [
+    SettingsPageComponent,
+    RecoverPageComponent,
+    RecoverChangePasswordPageComponent,
+  ],
   imports: [CommonModule, SharedModule],
-  exports: [SettingsComponent, RecoverComponent, ChangePasswordComponent],
+  exports: [
+    SettingsPageComponent,
+    RecoverPageComponent,
+    RecoverChangePasswordPageComponent,
+  ],
 })
 export class UserModule {}
