@@ -1,0 +1,21 @@
+<mat-list-item>
+  <mat-icon matListIcon>person</mat-icon>
+  <h4 matLine>{{ room.title }} ({{ room.members.length }})</h4>
+  <a
+    matLine
+    class="description"
+    *ngIf="!isOwner && !isString(room.owner)"
+    [routerLink]="['/direct-message', $any(room.owner).username]"
+  >
+    {{ $any(room.owner).username }}
+  </a>
+  <button mat-button class="text-primary" (click)="joinRoom()">Join</button>
+</mat-list-item>
+
+<div class="mb-2 d-flex">
+  <button mat-button (click)="copyUrl()">Copy</button>
+  <div *ngIf="isOwner">
+    <button mat-button (click)="openUpdateDialog()">Edit</button>
+    <button mat-button (click)="confirmDelete()">Delete</button>
+  </div>
+</div>

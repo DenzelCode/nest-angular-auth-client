@@ -7,6 +7,7 @@ import { UpsertRoomDialogComponent } from './components/upsert-room-dialog/upser
 import { JoinRoomDialogComponent } from './components/join-room-dialog/join-room-dialog.component';
 import { RoomPageComponent } from './pages/room-page/room-page.component';
 import { MessagesModule } from '../messages/messages.module';
+import { RoomItemComponent } from './components/room-item/room-item.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { MessagesModule } from '../messages/messages.module';
     UpsertRoomDialogComponent,
     JoinRoomDialogComponent,
     RoomPageComponent,
+    RoomItemComponent,
   ],
   imports: [CommonModule, SharedModule, MessagesModule],
   providers: [RoomService],

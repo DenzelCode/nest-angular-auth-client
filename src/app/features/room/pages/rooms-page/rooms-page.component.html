@@ -13,41 +13,30 @@
   </mat-card>
 
   <mat-list>
-    <h3 matSubheader>Your Rooms</h3>
+    <h3 matSubheader>Your ooms</h3>
     <div *ngFor="let room of userRooms">
-      <mat-list-item>
-        <mat-icon matListIcon>person</mat-icon>
-        <h4 matLine>{{ room.title }} ({{ room.members.length }})</h4>
-        <p matLine class="description">{{ room.description }}</p>
-
-        <button mat-button (click)="joinRoom(room)">Join</button>
-      </mat-list-item>
-
-      <div class="mb-2">
-        <button mat-button (click)="openUpdateDialog(room)">Edit</button>
-        <button mat-button (click)="confirmDelete(room)">Delete</button>
-        <button mat-button (click)="copyUrl(room)">Copy</button>
-      </div>
+      <app-room-item
+        [memberRooms]="memberRooms"
+        [userRooms]="userRooms"
+        [publicRooms]="publicRooms"
+        [room]="room"
+        [user]="user"
+      ></app-room-item>
 
       <mat-divider></mat-divider>
     </div>
   </mat-list>
 
   <mat-list>
-    <h3 matSubheader>Rooms you are in</h3>
+    <h3 matSubheader>Joined Rooms</h3>
     <div *ngFor="let room of memberRooms">
-      <mat-list-item>
-        <mat-icon matListIcon>group</mat-icon>
-        <h4 matLine>{{ room.title }} ({{ room.members.length }})</h4>
-        <a
-          matLine
-          class="description"
-          [routerLink]="['/direct-message', room.owner.username]"
-        >
-          {{ room.owner.username }}
-        </a>
-        <button mat-button (click)="joinRoom(room)">Join</button>
-      </mat-list-item>
+      <app-room-item
+        [memberRooms]="memberRooms"
+        [userRooms]="userRooms"
+        [publicRooms]="publicRooms"
+        [room]="room"
+        [user]="user"
+      ></app-room-item>
 
       <mat-divider></mat-divider>
     </div>
@@ -56,18 +45,13 @@
   <mat-list>
     <h3 matSubheader>Public Rooms</h3>
     <div *ngFor="let room of publicRooms">
-      <mat-list-item>
-        <mat-icon matListIcon>group</mat-icon>
-        <h4 matLine>{{ room.title }} ({{ room.members.length }})</h4>
-        <a
-          matLine
-          class="description"
-          [routerLink]="['/direct-message', room.owner.username]"
-        >
-          {{ room.owner.username }}
-        </a>
-        <button mat-button (click)="joinRoom(room)">Join</button>
-      </mat-list-item>
+      <app-room-item
+        [memberRooms]="memberRooms"
+        [userRooms]="userRooms"
+        [publicRooms]="publicRooms"
+        [room]="room"
+        [user]="user"
+      ></app-room-item>
 
       <mat-divider></mat-divider>
     </div>

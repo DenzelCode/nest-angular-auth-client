@@ -64,63 +64,6 @@ export class RoomsPageComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  joinRoom(room: Room) {
-    this.loading = true;
-
-    const process = () => (this.loading = false);
-
-    this.roomService
-      .getRoom(room._id)
-      .pipe(take(1), tap(process, process))
-      .subscribe(() => this.router.navigate(['/room', room._id]));
-  }
-
-  confirmLeaveRoom(room: Room) {
-    const dialog = this.dialog.open(ConfirmDialogComponent);
-
-    dialog
-      .afterClosed()
-      .pipe(take(1))
-      .subscribe(confirm => {
-        if (confirm) {
-          this.leaveRoom(room);
-        }
-      });
-  }
-
-  leaveRoom(room: Room) {
-    this.loading = true;
-
-    const process = () => (this.loading = false);
-
-    this.roomService
-      .leaveRoom(room._id)
-      .pipe(take(1), tap(process, process))
-      .subscribe(() => remove(this.memberRooms, r => r._id === room._id));
-  }
-
-  openJoinRoomDialog() {
-    this.dialog.open(JoinRoomDialogComponent);
-  }
-
-  openUpdateDialog(room: Room) {
-    const dialog = this.dialog.open(UpsertRoomDialogComponent, {
-      data: {
-        type: ActionType.Update,
-        room,
-      },
-    });
-
-    dialog
-      .afterClosed()
-      .pipe(take(1))
-      .subscribe((updatedRoom: Room) => {
-        updateItem(this.publicRooms, r => r._id === room._id, updatedRoom);
-        updateItem(this.memberRooms, r => r._id === room._id, updatedRoom);
-        updateItem(this.userRooms, r => r._id === room._id, updatedRoom);
-      });
-  }
-
   openCreateDialog() {
     const dialog = this.dialog.open(UpsertRoomDialogComponent, {
       data: {
@@ -140,39 +83,7 @@ export class RoomsPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  confirmDelete(room: Room) {
-    const dialog = this.dialog.open(ConfirmDialogComponent);
-
-    dialog
-      .afterClosed()
-      .pipe(take(1))
-      .subscribe(confirm => {
-        if (confirm) {
-          this.delete(room);
-        }
-      });
-  }
-
-  delete(room: Room) {
-    if (this.loading) {
-      return;
-    }
-
-    this.loading = true;
-
-    this.roomService
-      .deleteRoom(room)
-      .pipe(take(1))
-      .subscribe(() => {
-        this.loading = false;
-
-        remove(this.userRooms, r => r._id === room._id);
-        remove(this.publicRooms, r => r._id === room._id);
-        remove(this.memberRooms, r => r._id === room._id);
-      });
-  }
-
-  copyUrl(room: Room) {
-    this.clipboard.copy(`${window.location.origin}/room/${room._id}`);
+  openJoinRoomDialog() {
+    this.dialog.open(JoinRoomDialogComponent);
   }
 }

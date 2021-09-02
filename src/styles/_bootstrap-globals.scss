@@ -1,1 +1,12 @@
 @import 'functions', 'variables', 'mixins';
+
+$theme-colors: (
+  'primary': #1266f1,
+  'secondary': #b23cfd,
+  'success': #00b74a,
+  'danger': #f93154,
+  'warning': #ffa900,
+  'info': #39c0ed,
+  'light': #fbfbfb,
+  'dark': #262626,
+);
