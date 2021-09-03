@@ -12,6 +12,10 @@
     word-break: break-word;
     overflow-wrap: break-all;
 
+    & > i {
+      font-size: 0.8rem;
+    }
+
     &:first-child {
       margin-top: 1rem;
     }

@@ -26,6 +26,10 @@ export enum MessageType {
   Room = 'room',
 }
 
+interface LocalMessage extends Message {
+  createdAtDate: Date;
+}
+
 @Component({
   selector: 'app-messages',
   templateUrl: './messages.component.html',
@@ -36,7 +40,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
   @Input() room?: Room;
   @Input() to?: User;
   @Input() updateMessages$: Subject<void>;
-  @Input() messages: Message[] = [];
+  @Input() messages: LocalMessage[] = [];
 
   @ViewChild('messagesContainer') messagesContainer: ElementRef<HTMLDivElement>;
 
@@ -204,7 +208,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe(messages => {
         remove(this.messages, () => true);
-        this.messages.push(...messages);
+        this.messages.push(...messages.map(this.convertToLocalMessage));
 
         this.scrollToLastMessages();
       });
@@ -228,7 +232,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
         this.messages[0].createdAt,
       )
       .subscribe(messages => {
-        this.messages.splice(0, 0, ...messages);
+        this.messages.splice(0, 0, ...messages.map(this.convertToLocalMessage));
 
         this.changeDetector.detectChanges();
 
@@ -245,7 +249,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
       this.isTyping = false;
     }
 
-    this.messages.push(message);
+    this.messages.push(this.convertToLocalMessage(message));
 
     remove(this.typing, user => user._id === message.from._id);
 
@@ -376,5 +380,12 @@ export class MessagesComponent implements OnInit, OnDestroy {
       .deleteMessage(this.type, message)
       .pipe(take(1))
       .subscribe();
+  }
+
+  private convertToLocalMessage(message: Message): LocalMessage {
+    return {
+      ...message,
+      createdAtDate: new Date(message.createdAt),
+    };
   }
 }
