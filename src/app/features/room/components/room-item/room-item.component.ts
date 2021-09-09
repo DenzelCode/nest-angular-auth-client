@@ -1,5 +1,5 @@
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { remove } from 'lodash';
@@ -18,7 +18,7 @@ import {
   templateUrl: './room-item.component.html',
   styleUrls: ['./room-item.component.scss'],
 })
-export class RoomItemComponent {
+export class RoomItemComponent implements OnInit {
   @Input() room: Room;
   @Input() user: User;
   @Input() publicRooms: Room[] = [];
@@ -26,6 +26,8 @@ export class RoomItemComponent {
   @Input() memberRooms: Room[] = [];
 
   loading = false;
+  isOwner = false;
+  isMember = false;
 
   constructor(
     private roomService: RoomService,
@@ -34,11 +36,12 @@ export class RoomItemComponent {
     private router: Router,
   ) {}
 
-  get isOwner() {
-    return (
+  ngOnInit() {
+    this.isOwner =
       this.room.owner === this.user._id ||
-      (this.room.owner as User)._id === this.user._id
-    );
+      (this.room.owner as User)._id === this.user._id;
+
+    this.isMember = this.memberRooms.some(e => e._id === this.room._id);
   }
 
   openUpdateDialog() {

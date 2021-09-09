@@ -18,4 +18,9 @@
     <button mat-button (click)="openUpdateDialog()">Edit</button>
     <button mat-button (click)="confirmDelete()">Delete</button>
   </div>
+  <div *ngIf="isMember">
+    <button mat-button (click)="confirmLeaveRoom()" class="text-danger">
+      Leave
+    </button>
+  </div>
 </div>
