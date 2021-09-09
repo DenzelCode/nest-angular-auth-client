@@ -27,7 +27,10 @@ export class RoomItemComponent implements OnInit {
 
   loading = false;
   isOwner = false;
-  isMember = false;
+
+  get isMember() {
+    return this.memberRooms.some(e => e._id === this.room._id);
+  }
 
   constructor(
     private roomService: RoomService,
@@ -40,8 +43,6 @@ export class RoomItemComponent implements OnInit {
     this.isOwner =
       this.room.owner === this.user._id ||
       (this.room.owner as User)._id === this.user._id;
-
-    this.isMember = this.memberRooms.some(e => e._id === this.room._id);
   }
 
   openUpdateDialog() {
