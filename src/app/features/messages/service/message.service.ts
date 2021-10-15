@@ -84,7 +84,7 @@ export class MessageService {
   }
 
   deleteMessage(type: MessageType, message: Message) {
-    return this.http.delete(`${api}/message/${type}`, {
+    return this.http.delete<Message>(`${api}/message/${type}`, {
       body: {
         messageId: message._id,
         roomId: message.room,
