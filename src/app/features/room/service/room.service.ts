@@ -85,7 +85,7 @@ export class RoomService {
 
   getRoomWithSortedMembers(room: Room) {
     room.members = room.members.sort((a: any, b: any) =>
-      a.online ? -1 : b.online ? 1 : 0,
+      a.online === b.online ? 0 : a.online ? -1 : b.online ? 1 : 0,
     );
 
     return room;
