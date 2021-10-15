@@ -91,7 +91,13 @@ export class RoomPageComponent implements OnInit, OnDestroy {
     this.roomService
       .onJoinEvent()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(user => this.room.members.push(user));
+      .subscribe(user => {
+        this.room.members.push(user);
+
+        this.room = this.roomService.getRoomWithSortedMembers(
+          this.room,
+        ) as InternalRoom;
+      });
 
     this.roomService
       .onLeaveEvent()

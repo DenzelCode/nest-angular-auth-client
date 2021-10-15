@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { MainSocket } from '../../../core/socket/main-socket';
 import { User } from '../../auth/service/auth.service';
@@ -22,7 +22,9 @@ export class RoomService {
   constructor(private socket: MainSocket, private http: HttpClient) {}
 
   getRoom(roomId: string) {
-    return this.http.get<Room>(`${api}/room/id/${roomId}`);
+    return this.http
+      .get<Room>(`${api}/room/id/${roomId}`)
+      .pipe(map(this.getRoomWithSortedMembers));
   }
 
   getPublicRooms() {
@@ -70,10 +72,20 @@ export class RoomService {
   }
 
   onUpdateEvent() {
-    return this.socket.fromEvent<Room>('room:update');
+    return this.socket
+      .fromEvent<Room>('room:update')
+      .pipe(map(this.getRoomWithSortedMembers));
   }
 
   onDeleteEvent() {
     return this.socket.fromEvent<Room>('room:delete');
+  }
+
+  getRoomWithSortedMembers(room: Room) {
+    room.members = room.members.sort((a: any, b: any) =>
+      typeof a === 'string' ? 0 : a.online ? 1 : b.online ? -1 : 0,
+    );
+
+    return room;
   }
 }

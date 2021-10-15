@@ -135,7 +135,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
       .onDeleteMessagesEvent(this.type)
       .pipe(
         takeUntil(this.destroy$),
-        filter(object => this.isCurrentSection(object._id)),
+        filter(id => this.isCurrentSection(id)),
       )
       .subscribe(() => remove(this.messages, () => true));
 
