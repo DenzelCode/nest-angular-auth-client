@@ -23,10 +23,10 @@ export class JoinRoomDialogComponent {
   ) {}
 
   submit() {
-    const array = this.joinForm.value.code.split('/');
+    const array = this.joinForm.value.code.trim().split('/');
     const code = array[array.length - 1];
 
-    if (!code?.trim()) {
+    if (!code) {
       return;
     }
 
