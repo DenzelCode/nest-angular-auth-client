@@ -19,10 +19,21 @@
         <a
           matRipple
           *ngFor="let member of showTotalMembers ? room.members : onlineMembers"
-          class="w-100 px-4 py-3 d-block"
+          class="
+            w-100
+            px-4
+            py-3
+            d-flex
+            align-items-center
+            justify-content-between
+          "
           [routerLink]="['/direct-message', member.username]"
         >
-          {{ member.username }}
+          <span>{{ member.username }}</span>
+          <div
+            class="circle"
+            [ngClass]="member.online ? 'online' : 'offline'"
+          ></div>
         </a>
       </div>
     </div>

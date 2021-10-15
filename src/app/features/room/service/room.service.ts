@@ -52,7 +52,9 @@ export class RoomService {
   }
 
   joinRoom(roomId: string) {
-    return this.http.post<Room>(`${api}/room/join`, { roomId });
+    return this.http
+      .post<Room>(`${api}/room/join`, { roomId })
+      .pipe(map(this.getRoomWithSortedMembers));
   }
 
   leaveRoom(roomId: string) {
@@ -83,7 +85,7 @@ export class RoomService {
 
   getRoomWithSortedMembers(room: Room) {
     room.members = room.members.sort((a: any, b: any) =>
-      typeof a === 'string' ? 0 : a.online ? 1 : b.online ? -1 : 0,
+      a.online ? -1 : b.online ? 1 : 0,
     );
 
     return room;

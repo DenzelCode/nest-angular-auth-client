@@ -45,5 +45,25 @@ $top-height: 64px;
     &:nth-child(2n) {
       background-color: $button-background;
     }
+
+    span {
+      width: 100%;
+      display: inline-block;
+    }
+
+    .circle {
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      border-radius: 50%;
+
+      &.online {
+        background-color: map-get($theme-colors, 'success');
+      }
+
+      &.offline {
+        background-color: map-get($theme-colors, 'danger');
+      }
+    }
   }
 }
