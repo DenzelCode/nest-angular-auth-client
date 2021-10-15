@@ -318,24 +318,12 @@ export class MessagesComponent implements OnInit, OnDestroy {
       this.handleMessageCallback();
     }
 
-    switch (this.type) {
-      case MessageType.Room:
-        this.messageService.sendRoomMessage(
-          this.room,
-          message,
-          this.handleMessageCallback,
-        );
-        break;
-      case MessageType.Direct:
-        this.messageService.sendDirectMessage(
-          this.to,
-          message,
-          this.handleMessageCallback,
-        );
-        break;
-      default:
-        break;
-    }
+    this.messageService.sendMessage(
+      this.type,
+      this.partnerId,
+      message,
+      this.handleMessageCallback,
+    );
   }
 
   @boundMethod
