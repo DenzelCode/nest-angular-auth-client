@@ -1,4 +1,4 @@
-## Angular client for NestJS Authentication (Login, Register, Google Login, Facebook Login, Apple Login)
+## Angular client for NestJS Authentication (Messages, Rooms, Login, Register, Google Login, Facebook Login, Apple Login)
 
 To use this client, get the [server](https://github.com/DenzelCode/nest-auth) up and running.
 
